@@ -4,7 +4,7 @@ import { global_search } from "../../allapi/api";
 import SearchIcon from "@mui/icons-material/Search";
 import { useNavigate } from "react-router-dom";
 
-const GlobalSearch: React.FC = () => {
+const MobSearchPage: React.FC = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(false);
@@ -29,7 +29,7 @@ const GlobalSearch: React.FC = () => {
   };
 
   return (
-    <div className="relative w-full max-w-xl hidden sm:block">
+    <div className="absolute top-[7rem] px-[1rem] w-full max-w-xl block sm:hidden">
       <div className="flex items-center space-x-2">
         <input
           type="text"
@@ -50,4 +50,4 @@ const GlobalSearch: React.FC = () => {
   );
 };
 
-export default GlobalSearch;
+export default MobSearchPage;

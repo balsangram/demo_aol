@@ -12,7 +12,9 @@ import {
   toggleSemidark,
 } from "./store/themeConfigSlice";
 import store from "./store";
-import { requestForToken } from "../firebase-messaging"; // adjust the path if needed
+import { requestForToken } from "../firebase-messaging"; // Adjust path
+
+// import { requestForToken } from "../firebase-messaging"; // adjust the path if needed
 
 function App({ children }: PropsWithChildren) {
   const themeConfig = useSelector((state: IRootState) => state.themeConfig);
@@ -52,8 +54,9 @@ function App({ children }: PropsWithChildren) {
     themeConfig.locale,
     themeConfig.semidark,
   ]);
+  // function App() {
   useEffect(() => {
-    requestForToken(); // 👈 Call FCM token request
+    requestForToken(); // Get token on app load
   }, []);
 
   return (
@@ -67,8 +70,9 @@ function App({ children }: PropsWithChildren) {
       >
         {children}
       </div>
+      {/* <FirebaseToastContainer /> */}
     </>
   );
 }
-
+// }
 export default App;

@@ -72,7 +72,7 @@ const Header = () => {
             : ""
         }`}
       >
-        <div className="shadow-sm bg-white">
+        <div className="shadow-sm bg-white z-[4]">
           <div className="relative flex lg:justify-between w-full items-center px-5 py-2.5 dark:bg-black">
             {/* Menu Button */}
             <div className="lg:w-[33%]">
@@ -129,6 +129,9 @@ const Header = () => {
                         >
                           <strong>{note.title || "Untitled"}</strong>
                           <div>{note.body || "No content"}</div>
+                          <div className="w-full flex flex-row-reverse">
+                            {note.time || "No time"}{" "}
+                          </div>
                         </li>
                       ))}
                     </ul>
@@ -141,7 +144,7 @@ const Header = () => {
               )}
 
               {/* 🔍 Search */}
-              <div className="w-full flex abs">
+              <div className="w-full flex abs ">
                 <GlobalSearch />
               </div>
             </div>

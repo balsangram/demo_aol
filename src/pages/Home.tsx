@@ -5,6 +5,8 @@ import Home_4_Stay_Updated from "../components/home/Home_4_Stay_Updated";
 import Home_5_Peace_With_Your_Squad from "../components/home/Home_5_Peace_With_Your_Squad";
 import Home_6_Peace_Of_Mind from "../components/home/Home_6_Peace_Of_Mind";
 import Home_7_Advertising from "../components/home/Home_7_Advertising";
+import GlobalSearch from "../components/search/GlobalSearch";
+import MobSearchPage from "../components/search/mobSearchPage";
 // import SearchCard from "../components/search/SearchCard";
 
 const Home = () => {
@@ -15,6 +17,7 @@ const Home = () => {
         margin: "auto",
       }}
     >
+      <MobSearchPage />
       {/* <SearchCard /> */}
       {/* Home  */}
       <Home_1_TopCards />

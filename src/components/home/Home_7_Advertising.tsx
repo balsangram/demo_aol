@@ -5,6 +5,8 @@ import "react-multi-carousel/lib/styles.css";
 import { Advertisement_Img } from "../../allapi/api";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import CustomLeftArrow from "../Carousel/CustomLeftArrow";
+import CustomRightArrow from "../Carousel/CustomRightArrow";
 
 interface Advertisement {
   link: string;
@@ -75,36 +77,44 @@ const Home_7_Advertising: React.FC = () => {
         </div>
       )}
       {!loading && (
-        <div style={{ margin: "5rem 2rem" }}>
-          <Carousel
-            responsive={responsive}
-            infinite={true}
-            autoPlay={true}
-            autoPlaySpeed={2000}
-            arrows={true}
-            keyBoardControl={true}
-            containerClass="carousel-container"
-            itemClass="px-2"
-            rtl={true}
-          >
-            {ads.map((ad, index) => (
-              <div key={index}>
-                <a href={ad.link} target="_blank" rel="noopener noreferrer">
-                  <img
-                    src={ad.img}
-                    alt={`Advertisement ${index + 1}`}
-                    style={{
-                      height: "40vh",
-                      width: "100%",
-                      objectFit: "cover",
-                      borderRadius: "10px",
-                    }}
-                  />
-                </a>
-              </div>
-            ))}
-          </Carousel>
-        </div>
+        <section className="bg-white py-12 px-4">
+          <div className="max-w-7xl mx-auto">
+            <h1 className="text-3xl font-bold text-center mb-12 font-cinzel">
+              Facilities & Services at Center
+            </h1>
+
+            <div className="relative z-0  ">
+              <Carousel
+                responsive={responsive}
+                infinite={true}
+                autoPlay={true}
+                autoPlaySpeed={2000}
+                keyBoardControl={true}
+                customLeftArrow={<CustomLeftArrow />}
+                customRightArrow={<CustomRightArrow />}
+                containerClass="carousel-container relative"
+                rtl={true}
+              >
+                {ads.map((ad, index) => (
+                  <div key={index}>
+                    <a href={ad.link} target="_blank" rel="noopener noreferrer">
+                      <img
+                        src={ad.img}
+                        alt={`Advertisement ${index + 1}`}
+                        style={{
+                          height: "40vh",
+                          width: "100%",
+                          objectFit: "cover",
+                          borderRadius: "10px",
+                        }}
+                      />
+                    </a>
+                  </div>
+                ))}
+              </Carousel>
+            </div>
+          </div>
+        </section>
       )}
     </div>
   );

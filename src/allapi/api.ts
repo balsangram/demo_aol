@@ -36,3 +36,5 @@ export const global_search = `${API_URL}/aol/card_search`;
 
 // notification 
 export const display_all_notification = `${API_URL}/aol/display_notification`;
+
+export const addToken = `${API_URL}/aol/deviceToken`;
