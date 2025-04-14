@@ -58,11 +58,20 @@ export const requestForToken = async () => {
 
 
 // Listen for foreground messages
+// onMessage(messaging, (payload) => {
+//   console.log("Message received in foreground:", payload);
+//   // You can show a custom notification here if needed
+//   // <ToastContainer />
+//   // alert(payload.notification?.title);
+//   // toast()
+  
+  
+// });   
+
+
 onMessage(messaging, (payload) => {
   console.log("Message received in foreground:", payload);
-  // You can show a custom notification here if needed
-  // <ToastContainer />
-  // alert(payload.notification?.title);
-  // toast()
   
-});   
+  const title = payload?.notification?.title || 'New Notification';
+  notify(title);
+});

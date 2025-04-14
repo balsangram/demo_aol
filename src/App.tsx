@@ -13,6 +13,8 @@ import {
 } from "./store/themeConfigSlice";
 import store from "./store";
 import { requestForToken } from "../firebase-messaging"; // Adjust path
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // import { requestForToken } from "../firebase-messaging"; // adjust the path if needed
 
@@ -61,6 +63,7 @@ function App({ children }: PropsWithChildren) {
 
   return (
     <>
+      <ToastContainer position="top-right" autoClose={3000} />
       <div
         className={`${
           (store.getState().themeConfig.sidebar && "toggle-sidebar") || ""
