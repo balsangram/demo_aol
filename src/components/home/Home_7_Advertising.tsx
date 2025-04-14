@@ -36,7 +36,7 @@ const Home_7_Advertising: React.FC = () => {
       try {
         setLoading(true);
         const { data } = await axios.get(Advertisement_Img);
-        console.log(data.data, "response adv");
+        // console.log(data.data, "response adv");
 
         if (data.data.length > 0) {
           const adData: RawAdvertisement = data.data[0];

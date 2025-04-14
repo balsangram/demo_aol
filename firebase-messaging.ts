@@ -1,21 +1,14 @@
-// firebase-messaging.js
 import axios from "axios";
 import { initializeApp } from "firebase/app";
-import { deleteToken, getMessaging, getToken, onMessage } from "firebase/messaging";
+import { getMessaging, getToken, onMessage } from "firebase/messaging";
 import { addToken } from "./src/allapi/api";
 import { ToastContainer, toast } from 'react-toastify';
+import CustomToast from "./src/components/CustomToast";
 
+// Notify function to show success notification
 const notify = (msg: string) => toast.success(msg);
-// const firebaseConfig = {
-//   apiKey: "AIzaSyAAxzK29bYT1V-DWBU_jCrclegWCbSjqZM",
-//   authDomain: "art-of-living-1b75a.firebaseapp.com",
-//   projectId: "art-of-living-1b75a",
-//   storageBucket: "art-of-living-1b75a.firebasestorage.app",
-//   messagingSenderId: "977417645515",
-//   appId: "1:977417645515:web:a7b36ae35f6cd485841a4e",
-//   measurementId: "G-F7XKVV9G2M",
-// };
 
+// Firebase configuration
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
@@ -26,52 +19,48 @@ const firebaseConfig = {
   measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
-
 const app = initializeApp(firebaseConfig);
 const messaging = getMessaging(app);
 
-// Request Permission and Get Token
-export const requestForToken = async () => {
+// Request permission and get token
+export const requestForToken = async (): Promise<void> => {
   try {
-    // await deleteToken(messaging);
-    const token = await getToken(messaging, {
-      vapidKey: import.meta.env.REACT_APP_FIREBASE_VAPID_KEY, // From Firebase > Cloud Messaging tab
-   
-      // vapidKey: "BNlMjTdPBDohBDzxJ2Vujcxvr7Rf9RN9Q3aWdhO267sx5cd6bbFM-Z6Ihtxv_j7kOuqzEkuJSCuDmPk6EyyaSKc", // From Firebase > Cloud Messaging tab
-      // vapidKey: "YOUR_PUBLIC_VAPID_KEY", // From Firebase > Cloud Messaging tab
-    });
+    // Check for notification permission
+    const permission = await Notification.requestPermission();
 
-    if (token) {
-      console.log("FCM Web Token:", token);
-      // Send this token to your backend just like mobile token
+    if (permission === "granted") {
+      // Get the FCM token
+      const token = await getToken(messaging, {
+        vapidKey: import.meta.env.REACT_APP_FIREBASE_VAPID_KEY, // From Firebase Cloud Messaging
+      });
+
+      if (token) {
+        console.log("FCM Web Token:", token);
+        // Send token to your backend
+        axios.post(addToken, { token })
+          .then((response) => {
+            console.log(response, "response");
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
+    } else {
+      console.log("Notification permission denied.");
     }
-    axios.post(addToken ,{token}).then((response)=>{
-      console.log(response,"response");
-    }).catch((Err)=>{
-      console.log(Err);
-      
-    })
   } catch (error) {
     console.error("Error getting FCM token", error);
   }
 };
 
-
-// Listen for foreground messages
-// onMessage(messaging, (payload) => {
-//   console.log("Message received in foreground:", payload);
-//   // You can show a custom notification here if needed
-//   // <ToastContainer />
-//   // alert(payload.notification?.title);
-//   // toast()
-  
-  
-// });   
-
-
+// Handle foreground push notifications
 onMessage(messaging, (payload) => {
   console.log("Message received in foreground:", payload);
-  
-  const title = payload?.notification?.title || 'New Notification';
-  notify(title);
+const title = payload?.notification?.title;
+const body = payload?.notification?.body;
+
+  // Displaying an alert with the notification title
+  alert(`${title}\n\n${body}`);
+  // <CustomToast title={payload?.notification?.title} body={payload?.notification?.body} />
+
 });
