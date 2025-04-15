@@ -13,8 +13,9 @@ import {
 } from "./store/themeConfigSlice";
 import store from "./store";
 import {
-  registerOnMessageListener,
-  requestForToken,
+  // registerOnMessageListener,
+  // requestForToken,
+  requestPermission,
 } from "../firebase-messaging"; // Adjust path
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -61,8 +62,8 @@ function App({ children }: PropsWithChildren) {
   ]);
   // function App() {
   useEffect(() => {
-    requestForToken(); // Get token on app load
-    registerOnMessageListener();
+    // requestForToken(); // Get token on app load
+    requestPermission();
   }, []);
 
   return (

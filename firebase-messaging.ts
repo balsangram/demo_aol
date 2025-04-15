@@ -1,11 +1,7 @@
-// firebaseConfig.ts or firebaseInit.ts
-
+// src/firebase.js
 import { initializeApp } from "firebase/app";
-import { getMessaging, onMessage, getToken } from "firebase/messaging";
-import axios from "axios";
-import { addToken } from "./src/allapi/api";
+import { getMessaging, getToken, onMessage } from "firebase/messaging";
 
-// Firebase configuration
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
@@ -13,48 +9,39 @@ const firebaseConfig = {
   storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
   appId: import.meta.env.VITE_FIREBASE_APP_ID,
-  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
 const app = initializeApp(firebaseConfig);
 const messaging = getMessaging(app);
 
-// Request FCM token
-export const requestForToken = async () => {
+// ✅ Request permission and get token
+export const requestPermission = async () => {
   try {
     const permission = await Notification.requestPermission();
     if (permission === "granted") {
+      // const token = await getToken(messaging, {
+      //   vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY,
+      // });
       const token = await getToken(messaging, {
-        vapidKey: import.meta.env.REACT_APP_FIREBASE_VAPID_KEY,
+        vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY,  // Check this key
       });
-
-      if (token) {
-        console.log("✅ FCM Token:", token);
-        await axios.post(addToken, { token });
-      }
+      
+      console.log("✅ FCM Token:", token);
+      return token;
     } else {
-      console.log("❌ Notification permission denied.");
+      console.log("❌ Permission not granted.");
     }
-  } catch (err) {
-    console.error("🔥 Error getting token", err);
+  } catch (error) {
+    console.error("Error getting token:", error);
   }
 };
 
-// 👇 Flag to ensure it's only registered once
-let isMessageListenerRegistered = false;
+// ✅ Listen for messages when app is in foreground
+onMessage(messaging, (payload) => {
+  console.log("📩 Foreground message:", payload);
+  // alert(`${payload.notification.title}\n${payload.notification.body}`);
+});
 
-export const registerOnMessageListener = () => {
-  if (isMessageListenerRegistered) return;
-  isMessageListenerRegistered = true;
-
-  onMessage(messaging, (payload) => {
-    const title = payload?.notification?.title;
-    const body = payload?.notification?.body;
-    console.log("📩 Message received in foreground:", payload);
-
-    alert(`${title}\n\n${body}`);
-  });
-};
 
 
 
