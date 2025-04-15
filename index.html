@@ -33,16 +33,15 @@
         <div id="root"></div>
         <script type="module" src="/src/main.tsx"></script>
          <!-- Service Worker Registration -->
-         <script>
-          if ("serviceWorker" in navigator) {
-            navigator.serviceWorker
-              .register("/firebase-messaging-sw.js")
-              .then((registration) => {
-                console.log("✅ Service Worker Registered!", registration);
-              })
-              .catch((err) => console.log("❌ Service Worker Error", err));
-          }
-        </script>
-        
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .register("/firebase-messaging-sw.js")
+        .then((registration) => {
+          console.log("Service Worker Registered!", registration);
+        })
+        .catch((err) => console.log("Service Worker Error", err));
+    }
+  </script>
     </body>
 </html>
