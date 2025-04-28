@@ -75,10 +75,10 @@ const Home_6_Peace_Of_Mind: React.FC = () => {
         </SkeletonTheme>
       )}
       {!loading && (
-        <section className="bg-white py-12 px-4">
+        <section className="  px-4">
           <div className="max-w-7xl mx-auto">
-            <h1 className="text-3xl font-bold text-center mb-12 font-cinzel">
-              Facilities & Services at Center
+            <h1 className="text-3xl font-bold text-center mb-8 sm:mb-8 font-cinzel">
+              PEACE OF MIND
             </h1>
 
             <div className="relative z-0  ">
@@ -99,7 +99,7 @@ const Home_6_Peace_Of_Mind: React.FC = () => {
                       href={video.YouTubeLink}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="block w-full h-[300px] overflow-hidden rounded-xl shadow-md "
+                      className="block w-full h-[200px] sm:h-[250px] overflow-hidden rounded-xl shadow-md "
                     >
                       <video
                         className="w-full h-full object-cover pointer-events-none"

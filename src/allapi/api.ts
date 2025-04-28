@@ -38,3 +38,13 @@ export const global_search = `${API_URL}/aol/card_search`;
 export const display_all_notification = `${API_URL}/aol/display_notification`;
 
 export const addToken = `${API_URL}/aol/deviceToken`;
+
+// footer 
+export const footer_social = `${API_URL}/aol/social_media`;
+export const footer_contactUS = `${API_URL}/aol/contact_with_us`;
+
+// popup
+export const display_popup = `${API_URL}/aol/displayPopUp`;
+
+// sos 
+export const display_sos = `${API_URL}/aol/sos/latest`;

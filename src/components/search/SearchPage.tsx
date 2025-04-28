@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Card from "../cards/Card";
+import MobSearchPage from "./MobSearchPage";
 
 type ResultItem = {
   link: string;
@@ -21,10 +22,13 @@ const SearchPage: React.FC = () => {
   }, [location.state, navigate]);
 
   return (
-    <div className="p-6">
-      <h2 className="text-2xl font-semibold mb-6">Search Results</h2>
+    <div className="sm:p-6 p-2">
+      <MobSearchPage />
+      <h2 className="text-2xl text-center sm:text-left sm:pl-8  font-semibold sm:mb-6 my-3 mt-20 sm:mt-0">
+        Search Results
+      </h2>
       {results.length > 0 ? (
-        <div className="flex justify-center flex-wrap items-center gap-4 py-8">
+        <div className="flex justify-center flex-wrap items-center gap-4">
           {results.map((item, index) => (
             <Card
               key={index}

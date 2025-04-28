@@ -15,7 +15,8 @@ const CarouselCard: React.FC<CardProps> = ({ link = "#", name, img }) => {
         height: "15rem",
         margin: "3rem auto",
         maxWidth: "15rem",
-        boxShadow: "2px 2px 10px 0 rgb(97 75 66 / 70%)",
+        // boxShadow: "2px 2px 10px 0 rgb(97 75 66 / 70%)",
+        boxShadow: "rgba(97, 75, 66, 0.7) 2px 2px 5px 0px",
         backgroundImage: img
           ? `url(${img})`
           : "linear-gradient(45deg, #b3b3b3, #e0e0e0)", // Fallback

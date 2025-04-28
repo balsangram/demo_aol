@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Card from "../cards/Card";
 import { Experience_Center_Digitally } from "../../allapi/api";
 import axios from "axios";
-import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
 interface cards {
@@ -33,65 +33,42 @@ function Home_2_Experience_Center_Digitally() {
 
   return (
     <>
-      {loading && (
-        <SkeletonTheme>
-          {[1].map((_, i) => (
-            <div key={i} className="w-full text-center my-4 ">
-              {/* Headline Skeleton */}
-              <Skeleton
-                height={30}
-                width={200}
-                className="mx-auto mb-4"
-                style={{ borderRadius: "8px" }}
-              />
+      {loading ? (
+        <div className="w-full text-center  sm:my-4 px-4">
+          {/* Header Skeleton */}
+          <Skeleton
+            height={30}
+            width={260}
+            className="mx-auto mb-6"
+            style={{ borderRadius: "8px" }}
+          />
 
-              {/* Card Grid Skeletons */}
-              <div className="flex gap-4 flex-wrap justify-center pb-12">
-                {[1, 2, 3, 4].map((_, j) => (
-                  <Skeleton
-                    key={j}
-                    height={240}
-                    width={240}
-                    className="rounded-xl"
-                    style={{ borderRadius: "1rem" }}
-                  />
-                ))}
+          {/* Responsive Skeleton Cards */}
+          <div className="flex gap-6 flex-wrap justify-center pb-12">
+            {[1, 2, 3, 4].map((_, index) => (
+              <div
+                key={index}
+                className="flex flex-col items-center justify-center p-6 bg-[#ffffff7e] rounded-[16px] w-[150px] h-[150px] sm:w-[15rem] sm:h-[15rem]"
+              >
+                <Skeleton
+                  height="5rem"
+                  width="5rem"
+                  circle
+                  style={{ marginBottom: "1rem" }}
+                />
+                <Skeleton width="70%" height="1.5rem" />
               </div>
-            </div>
-          ))}
-        </SkeletonTheme>
-      )}
-
-      {!loading && (
-        <div
-          style={{
-            textAlign: "center",
-            // marginBottom: "1rem",
-            // backgroundColor: "red",
-            paddingBottom: "3rem",
-          }}
-        >
-          <h2
-            style={{
-              marginTop: "1rem",
-              fontSize: "2rem",
-              fontWeight: "bold",
-              padding: "2rem",
-              lineHeight: "1.6",
-              fontFamily: "Cinzel",
-            }}
-          >
-            Experience Center Digitally
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div className="text-center  py-8 px-4 ">
+          <h2 className=" text-2xl sm:text-3xl font-bold font-[Cinzel] mb-8">
+            {/* Experience Center Digitally */}
+            EXPERIENCE CENTER DIGITALLY
           </h2>
 
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              gap: "1rem",
-              flexWrap: "wrap",
-            }}
-          >
+          <div className="flex flex-wrap justify-center gap-6 ">
             {items.map((item, index) => (
               <Card
                 key={index}

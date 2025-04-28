@@ -13,12 +13,14 @@ import {
 } from "./store/themeConfigSlice";
 import store from "./store";
 import {
+  requestForToken,
   // registerOnMessageListener,
   // requestForToken,
-  requestPermission,
+  // requestPermission,
 } from "../firebase-messaging"; // Adjust path
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Toaster } from "react-hot-toast";
 
 // import { requestForToken } from "../firebase-messaging"; // adjust the path if needed
 
@@ -62,13 +64,23 @@ function App({ children }: PropsWithChildren) {
   ]);
   // function App() {
   useEffect(() => {
-    // requestForToken(); // Get token on app load
-    requestPermission();
+    requestForToken(); // Get token on app load
+    // requestPermission();
   }, []);
 
   return (
     <>
-      <ToastContainer position="top-right" autoClose={3000} />
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 5000,
+          style: {
+            background: "#363636",
+            color: "#fff",
+          },
+        }}
+      />
+      {/* <ToastContainer position="top-right" autoClose={3000} /> */}
       <div
         className={`${
           (store.getState().themeConfig.sidebar && "toggle-sidebar") || ""

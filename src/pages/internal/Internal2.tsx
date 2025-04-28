@@ -38,7 +38,7 @@ function Internal2() {
   }, [userType]);
 
   return (
-    <div className="text-center px-4 mt-12">
+    <div className="text-center px-4 mt-12 min-h-[100vh]">
       <h2 className="text-3xl font-bold font-[Cinzel] mb-8 capitalize">
         {userType}
       </h2>
@@ -46,14 +46,19 @@ function Internal2() {
       <div className="flex gap-12 flex-wrap justify-center">
         {loading ? (
           <div className="flex gap-6 flex-wrap justify-center pb-12">
-            {[1, 2, 3, 4].map((_, j) => (
-              <Skeleton
-                key={j}
-                height={240}
-                width={240}
-                className="rounded-xl"
-                style={{ borderRadius: "1rem" }}
-              />
+            {[1, 2, 3, 4].map((_, index) => (
+              <div
+                key={index}
+                className="flex flex-col items-center justify-center p-6 bg-[#ffffff7e] rounded-[16px] w-[150px] h-[150px] sm:w-[15rem] sm:h-[15rem]"
+              >
+                <Skeleton
+                  height="5rem"
+                  width="5rem"
+                  circle
+                  style={{ marginBottom: "1rem" }}
+                />
+                <Skeleton width="70%" height="1.5rem" />
+              </div>
             ))}
           </div>
         ) : internal.length > 0 ? (

@@ -95,10 +95,11 @@ const Home_3_Facilities_and_Services_at_Center = () => {
         </SkeletonTheme>
       )}
       {!loading && (
-        <section className="bg-white py-12 px-4">
-          <div className="max-w-7xl mx-auto">
-            <h1 className="text-3xl font-bold text-center mb-12 font-cinzel">
-              Facilities & Services at Center
+        <section className="   px-4">
+          <div className="max-w-7xl mx-auto ">
+            <h1 className="text-3xl font-bold text-center  font-cinzel">
+              {/* Facilities & Services at Center */}
+              FACILITIES & SERVICES AT CENTER
             </h1>
 
             <div className="relative z-0  ">

@@ -77,13 +77,14 @@ const Home_7_Advertising: React.FC = () => {
         </div>
       )}
       {!loading && (
-        <section className="bg-white py-12 px-4">
+        <section className="py-8 sm:py-12 px-4">
           <div className="max-w-7xl mx-auto">
-            <h1 className="text-3xl font-bold text-center mb-12 font-cinzel">
-              Facilities & Services at Center
+            <h1 className="text-3xl font-bold text-center mb-8 sm:mb-12 font-cinzel">
+              {/* ADVERTISEMENT BAR */}
+              UPCOMING PROGRAMS/ ACTIVITIES AT THE CENTER
             </h1>
 
-            <div className="relative z-0  ">
+            <div className="relative z-0">
               <Carousel
                 responsive={responsive}
                 infinite={true}
@@ -103,7 +104,7 @@ const Home_7_Advertising: React.FC = () => {
                         alt={`Advertisement ${index + 1}`}
                         style={{
                           height: "40vh",
-                          width: "100%",
+                          width: "96%",
                           objectFit: "cover",
                           borderRadius: "10px",
                         }}

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { user_Type } from "../../allapi/api";
 import InternalLoginSearch from "../../components/search/InternalLoginSearch";
-import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
 interface card {
@@ -39,18 +39,36 @@ function Internal() {
   );
 
   return (
-    <>
+    <div className="h-[80vh]">
       <InternalLoginSearch onSearch={(val) => setSearchTerm(val)} />
       {loading ? (
-        <div className="flex gap-4 flex-wrap justify-center pb-12 mt-10">
-          {[1, 2, 3, 4].map((_, j) => (
-            <Skeleton
-              key={j}
-              height={240}
-              width={240}
-              className="rounded-xl"
-              style={{ borderRadius: "1rem" }}
-            />
+        <div className="flex gap-12 flex-wrap justify-center my-12">
+          {[1, 2, 3, 4].map((_, index) => (
+            <div
+              key={index}
+              className="flex sm:p-10 p-4 
+                bg-[#ffffff7e]
+                text-[#06202B]
+                flex-col 
+                cursor-pointer 
+                min-w-6  
+                h-[150px] 
+                w-[150px] 
+                sm:w-[15rem] 
+                sm:h-[15rem] 
+                md:rounded-[4px] 
+                rounded-[16px]"
+            >
+              <Skeleton
+                height="5rem"
+                width="5rem"
+                circle
+                style={{ margin: "auto" }}
+              />
+              <div className="text-center m-auto text-[14px] sm:text-xl h-20 sm:mt-4 mt-1 flex justify-center items-center font-bold">
+                <Skeleton width="80%" height="1.5rem" />
+              </div>
+            </div>
           ))}
         </div>
       ) : (
@@ -61,15 +79,13 @@ function Internal() {
                 key={index}
                 to="/internal2"
                 state={{ usertype: item.usertype }}
-                className="shadow-2xl flex p-10 transition-all duration-500 ease-in-out w-full flex-col cursor-pointer min-w-6 text-[#5A382D]
-                  hover:text-[#7B480F] hover:font-bold hover:shadow-2xl hover:scale-105 hover:px-7"
-                style={{
-                  backgroundColor: "white",
-                  boxShadow: "10px 10px 20px 0 rgb(97 75 66 / 70%)",
-                  borderRadius: "4px",
-                  maxWidth: "15rem",
-                  maxHeight: "15rem",
-                }}
+                className="flex sm:p-10 p-4 
+                  transition-all duration-500 ease-in-out
+                  bg-[#ffffff7e]
+                  text-[#06202B]
+                  hover:font-bold hover:scale-105 hover:px-7
+                  flex-col cursor-pointer min-w-6 h-[150px] w-[150px] sm:w-[15rem] sm:h-[15rem] md:rounded-[4px] rounded-[16px]"
+                style={{ overflow: "hidden" }}
               >
                 <img
                   src={item.img}
@@ -81,7 +97,7 @@ function Internal() {
                     borderRadius: "5rem",
                   }}
                 />
-                <div className="text-center m-auto text-xl mt-4">
+                <div className="text-center m-auto text-[14px] sm:text-xl h-20 sm:mt-4 mt-1 flex justify-center items-center font-bold">
                   {item.usertype}
                 </div>
               </Link>
@@ -89,7 +105,7 @@ function Internal() {
           </div>
         </>
       )}
-    </>
+    </div>
   );
 }
 

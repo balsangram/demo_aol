@@ -1,7 +1,7 @@
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { toggleSidebar } from "../../store/themeConfigSlice";
 import { IRootState } from "../../store";
 import { useEffect } from "react";
@@ -12,6 +12,7 @@ import LaunchIcon from "@mui/icons-material/Launch";
 import LiveTvIcon from "@mui/icons-material/LiveTv";
 
 const Sidebar = () => {
+  const navigate = useNavigate();
   const themeConfig = useSelector((state: IRootState) => state.themeConfig);
   const semidark = useSelector(
     (state: IRootState) => state.themeConfig.semidark
@@ -47,22 +48,39 @@ const Sidebar = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location]);
 
+  function handleLogout() {
+    localStorage.removeItem("email");
+    localStorage.removeItem("username");
+    localStorage.removeItem("popupShown");
+    localStorage.removeItem("userLoggedIn");
+    console.log("Logged out successfully");
+    navigate("/login");
+    // Optional: Clear the form fields too
+    // setEmail("");
+    // setUsername("");
+  }
+
   return (
-    <div className={semidark ? "dark" : ""}>
+    <div
+      className={semidark ? "dark" : ""}
+      style={{
+        zIndex: "99",
+      }}
+    >
       <nav
         className={`sidebar fixed min-h-screen h-full top-0 bottom-0 w-[260px] shadow-[5px_0_25px_0_rgba(94,92,154,0.1)] z-50 transition-all duration-300 ${
           semidark ? "text-white-dark" : ""
         }`}
       >
         <div
-          className="bg-white dark:bg-black h-full"
+          className=" dark:bg-black h-full"
           style={
             {
               // backgroundImage: "linear-gradient(0deg, #ECA55A , #fff)",
             }
           }
         >
-          <div className="flex justify-between items-center px-4 py-3">
+          <div className="flex justify-between items-center px-4 py-3 bg-[#A7E6F8]">
             <NavLink
               to="/"
               className="main-logo flex items-center shrink-0 justify-center"
@@ -82,21 +100,35 @@ const Sidebar = () => {
               <KeyboardArrowDownIcon className="m-auto rotate-90" />
             </button>
           </div>
-          <PerfectScrollbar className="h-[calc(100vh-80px)] relative">
+          <PerfectScrollbar className="h-[calc(100vh-80px)] relative bg-[#dbf3fa] pt-4">
             <ul className="relative font-semibold space-y-0.5 p-4 py-0">
               <li className="nav-item">
                 <ul>
-                  <li className="nav-item">
-                    <NavLink to="/" className="group">
+                  <li className="nav-item ">
+                    <NavLink
+                      to="/profile"
+                      className="group "
+                      style={{
+                        backgroundColor: "#fff",
+                        borderRadius: "12px",
+                      }}
+                    >
                       <div className="flex items-center gap-2">
                         <HomeIcon />
                         {/* <FiGrid className="group-hover:!text-primary shrink-0" /> */}
-                        <span>{t("Home")}</span>
+                        <span>{t("Profile")}</span>
                       </div>
                     </NavLink>
                   </li>
                   <li className="nav-item">
-                    <NavLink to="/internal" className="group">
+                    <NavLink
+                      to="/internal"
+                      className="group"
+                      style={{
+                        backgroundColor: "#fff",
+                        borderRadius: "12px",
+                      }}
+                    >
                       <div className="flex items-center gap-2">
                         <LaunchIcon />
                         {/* <FiGrid className="group-hover:!text-primary shrink-0" /> */}
@@ -105,7 +137,14 @@ const Sidebar = () => {
                     </NavLink>
                   </li>
                   <li className="nav-item">
-                    <NavLink to="/live_link" className="group">
+                    <NavLink
+                      to="/live_link"
+                      className="group"
+                      style={{
+                        backgroundColor: "#fff",
+                        borderRadius: "12px",
+                      }}
+                    >
                       <div className="flex items-center gap-2">
                         <LiveTvIcon />
                         {/* <FiGrid className="group-hover:!text-primary shrink-0" /> */}
@@ -115,6 +154,14 @@ const Sidebar = () => {
                   </li>
                 </ul>
               </li>
+              <div className="flex justify-center py-2">
+                <button
+                  className=" bg-[#A7E6F8] hover:bg-[#88def5] px-6 rounded-lg py-3 font-bold"
+                  onClick={handleLogout}
+                >
+                  Log Out
+                </button>
+              </div>
             </ul>
           </PerfectScrollbar>
         </div>

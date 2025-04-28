@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Card from "../cards/Card";
 import { Stay_Updated } from "../../allapi/api";
-import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
 interface CardItem {
@@ -33,34 +33,37 @@ const Home_4_Stay_Updated: React.FC = () => {
   return (
     <>
       {loading ? (
-        <SkeletonTheme>
-          <div className="w-full text-center my-4">
-            <Skeleton
-              height={30}
-              width={200}
-              className="mx-auto mb-4"
-              style={{ borderRadius: "8px" }}
-            />
-            <div className="flex gap-4 flex-wrap justify-center pb-12">
-              {[1, 2, 3, 4].map((_, index) => (
+        <div className="w-full text-center sm:my-4 px-4">
+          <Skeleton
+            height={30}
+            width={200}
+            className="mx-auto mb-6"
+            style={{ borderRadius: "8px" }}
+          />
+          <div className="flex gap-6 flex-wrap justify-center pb-12">
+            {[1, 2, 3, 4].map((_, index) => (
+              <div
+                key={index}
+                className="flex flex-col items-center justify-center p-6 bg-[#ffffff7e] rounded-[16px] w-[150px] h-[150px] sm:w-[15rem] sm:h-[15rem]"
+              >
                 <Skeleton
-                  key={index}
-                  height={240}
-                  width={240}
-                  className="rounded-xl"
-                  style={{ borderRadius: "1rem" }}
+                  height="5rem"
+                  width="5rem"
+                  circle
+                  style={{ marginBottom: "1rem" }}
                 />
-              ))}
-            </div>
+                <Skeleton width="70%" height="1.5rem" />
+              </div>
+            ))}
           </div>
-        </SkeletonTheme>
+        </div>
       ) : (
-        <div className="text-center">
-          <h2 className="mt-12 text-3xl font-bold py-8 leading-relaxed font-cinzel">
-            Stay Updated
+        <div className="text-center px-4 ">
+          <h2 className="sm:mt-2 text-2xl sm:text-3xl py-8 font-bold sm:py-8 leading-relaxed font-cinzel">
+            {/* Stay Updated */}
+            STAY UPDATE
           </h2>
-          <div className="flex items-center justify-center gap-8 ">
-            {/* <div className="flex justify-center flex-wrap gap-4"> */}
+          <div className="flex flex-wrap justify-center gap-6 ">
             {items.map((item, index) => (
               <Card
                 key={index}
@@ -69,7 +72,6 @@ const Home_4_Stay_Updated: React.FC = () => {
                 img={item.img}
               />
             ))}
-            {/* </div> */}
           </div>
         </div>
       )}

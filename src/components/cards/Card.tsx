@@ -41,26 +41,31 @@ const Card: React.FC<CardProps> = ({ link, name, onEdit, img }) => {
         color: "white",
         fontWeight: "bold",
         borderRadius: "8px",
-        boxShadow: "0px 4px 10px rgba(0, 255, 0, 0.5)",
+        // boxShadow: "0px 4px 10px rgba(0, 255, 0, 0.5)",
+        boxShadow: "rgba(97, 75, 66, 0.7) 2px 2px 5px 0px",
       },
     });
   };
 
   return (
     <div
-      className="  shadow-2xl flex  p-10 
+      className="   flex  sm:p-10 p-4 
                  transition-all duration-500 ease-in-out
-                  text-[#5A382D]
-                 hover:text-[#7B480F] hover:font-bold hover:shadow-2xl hover:scale-105 hover:px-7
-                 w-full flex-col  cursor-pointer min-w-6 "
-      style={{
-        backgroundColor: "white",
-        boxShadow: "10px 10px 20px 0 rgb(97 75 66 / 70%)",
-        borderRadius: "4px",
-        maxWidth: "15rem",
-        maxHeight: "15rem",
-        // minWidth:"15rem"
-      }}
+                 bg-[#ffffffa3]
+                  text-[#06202B]
+                  hover:font-bold  hover:scale-105 hover:px-7
+                  flex-col  cursor-pointer min-w-6  h-[150px] w-[150px] sm:w-[15rem] sm:h-[15rem] md:rounded-[4px] rounded-[16px]"
+      style={
+        {
+          // backgroundColor: "#fff",
+          // boxShadow: "10px 10px 20px 0 rgb(97 75 66 / 70%)",
+          // boxShadow: "rgba(97, 75, 66, 0.7) 2px 2px 5px 0px",
+          // borderRadius: "4px",
+          // maxWidth: "15rem",
+          // maxHeight: "15rem",
+          // minWidth:"15rem"
+        }
+      }
     >
       <img
         src={img}
@@ -78,9 +83,9 @@ const Card: React.FC<CardProps> = ({ link, name, onEdit, img }) => {
         href={link}
         target="_blank"
         rel="noopener noreferrer"
-        className="text-center m-auto text-xl h-20 mt-4 flex justify-center items-center"
+        className="text-center m-auto text-[14px] sm:text-xl sm:mt-4 mt-1 flex justify-center items-center w-full bold font-bold"
       >
-        {name}
+        {name.length > 13 ? name.slice(0, 13) + "..." : name}
       </a>
     </div>
   );

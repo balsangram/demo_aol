@@ -41,7 +41,7 @@ const GlobalSearch: React.FC = () => {
         />
         <button
           onClick={fetchData}
-          className="bg-[#F4A460] text-white p-2 rounded-full hover:bg-[#E97451]"
+          className="bg-[#82c9dd] text-white p-2 rounded-full hover:bg-[#67a6b8]"
         >
           <SearchIcon />
         </button>

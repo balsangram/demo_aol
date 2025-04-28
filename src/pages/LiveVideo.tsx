@@ -8,53 +8,54 @@ interface LiveData {
   link: string;
 }
 
+interface UpdateData {
+  content: string;
+}
+
 const LiveVideo: React.FC = () => {
-  const [item, setItem] = useState<LiveData | null>(null);
+  const [videoLink, setVideoLink] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const [date, setDate] = useState();
-  const [time, setTime] = useState();
+  const [updateMessage, setUpdateMessage] = useState<string>("");
 
   useEffect(() => {
-    const functionData = async () => {
+    const fetchVideo = async () => {
       setLoading(true);
       try {
         const response = await axios.get<{ data: LiveData[] }>(Live_Link);
         const rawLink = response.data.data[0]?.link;
 
-        // Extract video ID from the YouTube link (supporting m.youtube.com or www.youtube.com)
         const videoIdMatch = rawLink?.match(/(?:v=|\/)([0-9A-Za-z_-]{11})/);
         const embedLink = videoIdMatch
           ? `https://www.youtube.com/embed/${videoIdMatch[1]}`
           : null;
 
-        setItem({ link: embedLink || "" });
+        setVideoLink(embedLink);
       } catch (error) {
-        console.error("Error fetching live video:", error);
+        console.error("Error fetching video link:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    functionData();
+    fetchVideo();
   }, []);
 
   useEffect(() => {
     axios
-      .get(Live_Date_Time)
+      .get<{ data: UpdateData[] }>(Live_Date_Time)
       .then((response) => {
-        console.log(response.data.data[0], "response date time");
-        setDate(response.data.data[0]?.date);
-        setTime(response.data.data[0]?.time);
+        const message = response.data.data[0]?.content;
+        setUpdateMessage(message || "");
       })
       .catch((error) => {
-        console.log(error);
+        console.error("Error fetching update message:", error);
       });
   }, []);
 
   return (
-    <div className="w-[60vw] h-[80vh] m-auto ">
+    <div className="w-[60vw] h-[80vh] m-auto">
       {loading ? (
-        <div className="flex justify-center items-center pb-12 w-full h-full  m-auto mt-8">
+        <div className="flex justify-center items-center pb-12 w-full h-full mt-8">
           <Skeleton
             height="450px"
             width="800px"
@@ -63,10 +64,10 @@ const LiveVideo: React.FC = () => {
           />
         </div>
       ) : (
-        <div className="flex justify-center items-center pb-12 w-full h-full m-auto mt-8 ">
-          {item?.link ? (
+        <div className="flex justify-center items-center pb-12 w-full h-full mt-8">
+          {videoLink ? (
             <iframe
-              src={item.link}
+              src={videoLink}
               width="800"
               height="450"
               title="Live Video"
@@ -74,13 +75,9 @@ const LiveVideo: React.FC = () => {
               className="rounded-xl shadow-lg"
             />
           ) : (
-            <div className="flex flex-col justify-center items-center sm:bg-gray-100 sm:p-24 rounded-xl">
-              <p className=" text-center mb-6 sm:text-3xl text-lg">
-                Scheduled Live Video on
-              </p>
-
-              <p className=" text-center sm:text-3xl text-lg">
-                <strong>{date}</strong> at <strong>{time}</strong>
+            <div className="flex flex-col justify-center items-center bg-gray-100 p-10 rounded-xl">
+              <p className="text-center text-xl sm:text-3xl">
+                {updateMessage || "Coming Soon"}
               </p>
             </div>
           )}

@@ -72,7 +72,7 @@ function Home_5_Peace_With_Your_Squad() {
               <Skeleton
                 height={30}
                 width={200}
-                className="mx-auto mb-4"
+                className="mx-auto sb:mb-4"
                 style={{ borderRadius: "8px" }}
               />
 
@@ -94,10 +94,10 @@ function Home_5_Peace_With_Your_Squad() {
       )}
 
       {!loading && (
-        <section className="bg-white py-12 px-4">
+        <section className=" sm:py-2 pt-4 px-4">
           <div className="max-w-7xl mx-auto">
-            <h1 className="text-3xl font-bold text-center mb-12 font-cinzel">
-              Facilities & Services at Center
+            <h1 className="text-3xl font-bold text-center font-cinzel">
+              WHATS'S NEW
             </h1>
 
             <div className="relative z-0  ">

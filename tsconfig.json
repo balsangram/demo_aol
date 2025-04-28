@@ -16,6 +16,6 @@
         "noEmit": true,
         "jsx": "react-jsx"
     },
-    "include": ["src", "ex/Login.tsx", "ex/Slide/AdvertisementBar.tsx", "firebase-messaging.ts"],
+    "include": ["src", "ex/Login.tsx", "ex/Slide/AdvertisementBar.tsx", "firebase-messaging.tsx"],
     "references": [{ "path": "./tsconfig.node.json" }]
 }

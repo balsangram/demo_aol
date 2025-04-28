@@ -29,7 +29,7 @@ const MobSearchPage: React.FC = () => {
   };
 
   return (
-    <div className="absolute top-[7rem] px-[1rem] w-full max-w-xl block sm:hidden">
+    <div className="absolute top-[7rem] px-[1rem] w-full max-w-xl block sm:hidden mt-3">
       <div className="flex items-center space-x-2">
         <input
           type="text"
@@ -41,7 +41,7 @@ const MobSearchPage: React.FC = () => {
         />
         <button
           onClick={fetchData}
-          className="bg-[#F4A460] text-white p-2 rounded-full hover:bg-[#E97451]"
+          className="bg-[#A7E6F8] text-white p-2 rounded-full hover:bg-[#67a6b8]"
         >
           <SearchIcon />
         </button>
