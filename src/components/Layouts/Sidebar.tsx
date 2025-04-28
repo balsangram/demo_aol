@@ -51,7 +51,7 @@ const Sidebar = () => {
   function handleLogout() {
     localStorage.removeItem("email");
     localStorage.removeItem("username");
-    localStorage.removeItem("popupShown");
+    // localStorage.removeItem("popupShown");
     localStorage.removeItem("userLoggedIn");
     console.log("Logged out successfully");
     navigate("/login");

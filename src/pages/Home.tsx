@@ -16,6 +16,7 @@ const Home = () => {
       style={{
         padding: "4rem 0 2rem",
         margin: "auto",
+        minHeight: "60vh",
       }}
     >
       <Popups />

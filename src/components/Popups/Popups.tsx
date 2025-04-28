@@ -9,11 +9,11 @@ function Popups() {
 
   function clearPage() {
     setShow(false);
-    localStorage.setItem("popupShown", "true"); // Save flag to localStorage
+    sessionStorage.setItem("popupShown", "true"); // ✅ sessionStorage here
   }
 
   useEffect(() => {
-    const alreadyShown = localStorage.getItem("popupShown");
+    const alreadyShown = sessionStorage.getItem("popupShown"); // ✅ sessionStorage here
 
     if (!alreadyShown) {
       setShow(true);
@@ -28,23 +28,17 @@ function Popups() {
         });
     }
 
-    // Set a timer to reset the popupShown after 15 minutes (900,000 ms)
-    const timer = setTimeout(() => {
-      // localStorage.setItem("popupShown", "false");
-      localStorage.removeItem("popupShown");
-    }, 900000); // 15 minutes
-
-    // Cleanup function to clear the timer if the component is unmounted
-    return () => clearTimeout(timer);
+    // No need for the 15-minute reset timer anymore if using sessionStorage
+    // sessionStorage auto-clears on tab close!
   }, []);
 
   useEffect(() => {
     if (show) {
       const timer = setTimeout(() => {
         clearPage();
-      }, 500000); // Auto close after 5 seconds
+      }, 5000); // Auto close after 5 seconds (note: 5000ms not 500000ms!)
 
-      return () => clearTimeout(timer); // Cleanup timer when popup closes manually
+      return () => clearTimeout(timer);
     }
   }, [show]);
 
@@ -86,7 +80,6 @@ function Popups() {
               position: "relative",
               display: "inline-block",
               width: "100%",
-              // maxHeight: "400px",
               borderRadius: "12px",
               objectFit: "contain",
             }}
