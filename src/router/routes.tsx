@@ -1,14 +1,14 @@
 import { lazy, Suspense } from "react";
 import { Navigate } from "react-router-dom";
-import Internal from "../pages/internal/Internal";
-import Internal2 from "../pages/internal/Internal2";
-import LiveVideo from "../pages/LiveVideo";
-import SearchPage from "../components/search/SearchPage";
+import PrivateRoute from "./PrivateRoute"; // Import the PrivateRoute
 import Login from "../pages/auth/Login";
-// import PrivateRoute from "./PrivateRoute"; // Import the PrivateRoute component
 import Profile from "../pages/profile/Profile";
 
 const Home = lazy(() => import("../pages/Home"));
+const Internal = lazy(() => import("../pages/internal/Internal"));
+const Internal2 = lazy(() => import("../pages/internal/Internal2"));
+const LiveVideo = lazy(() => import("../pages/LiveVideo"));
+const SearchPage = lazy(() => import("../components/search/SearchPage"));
 
 const routes = [
   {
@@ -18,59 +18,67 @@ const routes = [
   {
     path: "/",
     element: (
-      <Suspense fallback={<div>Loading...</div>}>
-        <Home />
-      </Suspense>
+      <PrivateRoute>
+        <Suspense fallback={<div>Loading...</div>}>
+          <Home />
+        </Suspense>
+      </PrivateRoute>
     ),
     layout: "default",
   },
   {
     path: "/internal",
     element: (
-      // <PrivateRoute
-      //   element={
-      <Suspense fallback={<div>Loading...</div>}>
-        <Internal />
-      </Suspense>
-      //   }
-      // />
+      <PrivateRoute>
+        <Suspense fallback={<div>Loading...</div>}>
+          <Internal />
+        </Suspense>
+      </PrivateRoute>
     ),
   },
   {
     path: "/internal2",
     element: (
-      <Suspense fallback={<div>Loading...</div>}>
-        <Internal2 />
-      </Suspense>
+      <PrivateRoute>
+        <Suspense fallback={<div>Loading...</div>}>
+          <Internal2 />
+        </Suspense>
+      </PrivateRoute>
     ),
   },
   {
     path: "/live_link",
     element: (
-      <Suspense fallback={<div>Loading...</div>}>
-        <LiveVideo />
-      </Suspense>
+      <PrivateRoute>
+        <Suspense fallback={<div>Loading...</div>}>
+          <LiveVideo />
+        </Suspense>
+      </PrivateRoute>
     ),
   },
   {
     path: "/searchPage",
     element: (
-      <Suspense fallback={<div>Loading...</div>}>
-        <SearchPage />
-      </Suspense>
+      <PrivateRoute>
+        <Suspense fallback={<div>Loading...</div>}>
+          <SearchPage />
+        </Suspense>
+      </PrivateRoute>
     ),
   },
   {
     path: "/profile",
     element: (
-      <Suspense fallback={<div>Loading...</div>}>
-        <Profile />
-      </Suspense>
+      <PrivateRoute>
+        <Suspense fallback={<div>Loading...</div>}>
+          <Profile />
+        </Suspense>
+      </PrivateRoute>
     ),
   },
   {
     path: "*",
-    element: <Navigate to="/" />, // Redirect unknown routes to Home
+    element: <Navigate to="/" />,
   },
 ];
 

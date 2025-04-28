@@ -7,6 +7,10 @@ import CardMembershipIcon from "@mui/icons-material/CardMembership";
 import GTranslateIcon from "@mui/icons-material/GTranslate";
 import EditIcon from "@mui/icons-material/Edit";
 
+interface Language {
+  code: string;
+  label: string;
+}
 function Profile() {
   const [editCard, setEditCard] = useState(false);
 
@@ -30,6 +34,26 @@ function Profile() {
     localStorage.setItem("phone", phone);
     localStorage.setItem("aadhar", aadhar);
     setEditCard(false);
+  };
+
+  const [showDropdown, setShowDropdown] = useState<boolean>(false);
+  const [selectedLang, setSelectedLang] = useState<string>("");
+
+  const languages: Language[] = [
+    { code: "en", label: "English" },
+    { code: "fr", label: "French" },
+    { code: "hi", label: "Hindi" },
+    { code: "es", label: "Spanish" },
+  ];
+
+  const handleConfirm = () => {
+    if (selectedLang) {
+      console.log(`Language changed to: ${selectedLang}`);
+      // Implement real logic like i18n.changeLanguage(selectedLang)
+      setShowDropdown(false); // close the modal after confirming
+    } else {
+      alert("Please select a language!");
+    }
   };
 
   return (
@@ -138,10 +162,56 @@ function Profile() {
               <EditIcon className="mr-2" /> Edit Profile
             </button>
           </li>
-          <li>
-            <button className="flex items-center">
+          <li className="relative list-none">
+            <button
+              onClick={() => setShowDropdown(true)}
+              className="flex items-center"
+            >
               <GTranslateIcon className="mr-2" /> Languages
             </button>
+
+            {showDropdown && (
+              <div
+                className="fixed top-0 left-0 h-screen w-screen bg-black/50 flex items-center justify-center z-50"
+                onClick={() => setShowDropdown(false)} // close when clicking outside
+              >
+                <div
+                  onClick={(e) => e.stopPropagation()} // prevent closing when clicking inside
+                  className="bg-white p-8 rounded-lg shadow-lg w-80 text-center"
+                >
+                  <h2 className="text-2xl font-semibold mb-6">
+                    Select Language
+                  </h2>
+                  <ul className="space-y-4 text-left">
+                    {languages.map((lang) => (
+                      <li
+                        key={lang.code}
+                        className="flex items-center space-x-2"
+                      >
+                        <input
+                          type="radio"
+                          id={lang.code}
+                          name="language"
+                          value={lang.code}
+                          checked={selectedLang === lang.code}
+                          onChange={(e) => setSelectedLang(e.target.value)}
+                          className="cursor-pointer"
+                        />
+                        <label htmlFor={lang.code} className="cursor-pointer">
+                          {lang.label}
+                        </label>
+                      </li>
+                    ))}
+                  </ul>
+                  <button
+                    onClick={handleConfirm}
+                    className="mt-6 w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded"
+                  >
+                    Confirm
+                  </button>
+                </div>
+              </div>
+            )}
           </li>
         </ul>
       </div>
