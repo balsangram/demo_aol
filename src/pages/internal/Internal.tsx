@@ -1,28 +1,34 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { user_Type } from "../../allapi/api";
+import { all_user_Type, user_Type } from "../../allapi/api";
 import InternalLoginSearch from "../../components/search/InternalLoginSearch";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { useLanguage } from "../../context/LanguageContext";
 
 interface card {
   link: string;
   usertype: string;
   img: string;
   state: string;
+  name: string;
 }
 
 function Internal() {
   const [internal, setInternal] = useState<card[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
+  const { language } = useLanguage();
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(user_Type);
+        const response = await axios.get(`${all_user_Type}/${language}`);
+        // const response = await axios.get(user_Type);
+        console.log(response, "response");
+
         setInternal(response.data);
       } catch (error) {
         console.error("Error fetching user types:", error);
@@ -98,7 +104,7 @@ function Internal() {
                   }}
                 />
                 <div className="text-center m-auto text-[14px] sm:text-xl h-20 sm:mt-4 mt-1 flex justify-center items-center font-bold">
-                  {item.usertype}
+                  {item.name}
                 </div>
               </Link>
             ))}

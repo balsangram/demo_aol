@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Card from "../cards/Card";
-import { Experience_Center_Digitally } from "../../allapi/api";
+import { all_Card, Experience_Center_Digitally } from "../../allapi/api";
 import axios from "axios";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
@@ -48,7 +48,10 @@ function Home_2_Experience_Center_Digitally() {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(Experience_Center_Digitally);
+        const response = await axios.get(
+          `${all_Card}/Experience Center Digitally/${selectedLanguage}`
+        );
+        // const response = await axios.get(Experience_Center_Digitally);
         setItems(response.data);
       } catch (error) {
         console.error("Error fetching experience center data:", error);

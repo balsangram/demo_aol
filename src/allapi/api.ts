@@ -53,3 +53,9 @@ export const display_popup = `${API_URL}/aol/displayPopUp`;
 
 // sos 
 export const display_sos = `${API_URL}/aol/sos/latest`;
+
+// language 
+export const all_Card = `${API_URL}/aol/Card_language`;
+export const all_action = `${API_URL}/aol/action_language`;
+export const all_user_Type = `${API_URL}/aol/userType_language`;
+export const all_search = `${API_URL}/aol/searchCard_language`;

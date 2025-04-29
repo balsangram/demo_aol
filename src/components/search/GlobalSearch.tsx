@@ -1,23 +1,27 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { global_search } from "../../allapi/api";
+import { all_search, global_search } from "../../allapi/api";
 import SearchIcon from "@mui/icons-material/Search";
 import { useNavigate } from "react-router-dom";
+import { useLanguage } from "../../context/LanguageContext";
 
 const GlobalSearch: React.FC = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(false);
+  const { language } = useLanguage();
 
   const fetchData = async () => {
     if (!searchTerm.trim()) return;
     setLoading(true);
     try {
       const response = await axios.get(
-        `${global_search}?query=${encodeURIComponent(searchTerm)}`
+        `${all_search}/${language}?query=${encodeURIComponent(searchTerm)}`
+        // `${global_search}?query=${encodeURIComponent(searchTerm)}`
+        // `${global_search}?query=${encodeURIComponent(searchTerm)}`
       );
-      console.log("Search response:", response.data.data);
-      const searchResults = response.data.data || [];
+      console.log("Search response:", response.data);
+      const searchResults = response.data || [];
 
       // Pass results to the next page via state
       navigate("/searchPage", { state: { searchResults } });

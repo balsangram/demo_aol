@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Facilities_Services_at_Center } from "../../allapi/api";
+import { all_Card, Facilities_Services_at_Center } from "../../allapi/api";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import CarouselCard from "../cards/CarouselCard";
@@ -74,7 +74,9 @@ const Home_3_Facilities_and_Services_at_Center = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(Facilities_Services_at_Center);
+        const response = await axios.get(
+          `${all_Card}/Facilities & Services at Center/${language}`
+        );
         setSlides(response.data);
       } catch (error) {
         console.log(error);

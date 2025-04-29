@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Experience_Peace_With_Your_Squad } from "../../allapi/api";
+import { all_Card, Experience_Peace_With_Your_Squad } from "../../allapi/api";
 
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
@@ -10,7 +10,6 @@ import CustomRightArrow from "../Carousel/CustomRightArrow";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { useLanguage } from "../../context/LanguageContext";
-
 
 interface Card {
   link: string;
@@ -71,7 +70,9 @@ function Home_5_Peace_With_Your_Squad() {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(Experience_Peace_With_Your_Squad);
+        const response = await axios.get(
+          `${all_Card}/Experience Peace With Your Squad/${language}`
+        );
         setSlides(response.data);
       } catch (error) {
         console.log(error);
@@ -80,9 +81,7 @@ function Home_5_Peace_With_Your_Squad() {
       }
     };
     fetchData();
-  },[])
-  
-    
+  }, []);
 
   return (
     <>
@@ -120,7 +119,7 @@ function Home_5_Peace_With_Your_Squad() {
           <div className="max-w-7xl mx-auto">
             <h1 className="text-3xl font-bold text-center font-cinzel">
               {/* WHATS'S NEW */}
-              
+
               {whatsNewTranslations[language] || whatsNewTranslations["en"]}
             </h1>
 
