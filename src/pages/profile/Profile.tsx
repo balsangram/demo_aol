@@ -393,6 +393,8 @@ function Profile() {
 
   const handleConfirm = () => {
     if (language) {
+      console.log(language, "language");
+
       localStorage.setItem("language", language);
       setLanguage(language);
       setShowDropdown(false);
@@ -549,7 +551,7 @@ function Profile() {
               >
                 <div
                   onClick={(e) => e.stopPropagation()}
-                  className="bg-white p-8 rounded-lg shadow-lg w-80 text-center h-[60vh] overflow-scroll"
+                  className="bg-white p-8 rounded-lg shadow-lg w-80 text-center h-[60vh] overflow-y-scroll"
                 >
                   <h2 className="text-2xl font-semibold mb-6">
                     {getTranslation("selectLanguage")}

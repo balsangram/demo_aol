@@ -4,7 +4,35 @@ import Card from "../cards/Card";
 import { Stay_Updated } from "../../allapi/api";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import { useLanguage } from "../../context/LanguageContext"; // adjust path if needed
+import { useLanguage } from "../../context/LanguageContext";
+import { translateText } from "../../context/translateText";
+
+// Translation for static texts like "Stay Updated"
+const stayUpdatedTranslations: { [key: string]: string } = {
+  en: "STAY UPDATED",
+  hi: "अपडेट रहें",
+  kn: "ನವೀಕೃತವಾಗಿರಿ",
+  ta: "புதுப்பிப்புகளைப் பெறுங்கள்",
+  te: "నవీకరించబడినట్లుగా ఉండండి",
+  gu: "અપડેટ રહો",
+  mr: "अपडेट राहा",
+  ml: "അപ്‌ഡേറ്റ് ആയിരിക്കുക",
+  pa: "ਅੱਪਡੇਟ ਰਹੋ",
+  bn: "আপডেট থাকুন",
+  ru: "Оставайтесь в курсе",
+  es: "MANTÉNGASE ACTUALIZADO",
+  zh: "保持更新",
+  mn: "Шинэчлэгдэж байгаарай",
+  pl: "BĄDŹ NA BIEŻĄCO",
+  bg: "Бъдете в течение",
+  fr: "RESTEZ INFORMÉ",
+  de: "BLEIBEN SIE AUF DEM LAUFENDEN",
+  nl: "BLIJF OP DE HOOGTE",
+  it: "RIMANI AGGIORNATO",
+  pt: "FIQUE ATUALIZADO",
+  ja: "最新情報を入手",
+  vi: "LUÔN CẬP NHẬT",
+};
 
 interface CardItem {
   name: string;
@@ -17,46 +45,28 @@ const Home_4_Stay_Updated: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const { language } = useLanguage();
 
-  const stayUpdatedTranslations: { [key: string]: string } = {
-    en: "STAY UPDATED",
-    hi: "अपडेट रहें",
-    kn: "ನವೀಕೃತವಾಗಿರಿ",
-    ta: "புதுப்பிப்புகளைப் பெறுங்கள்",
-    te: "నవీకరించబడినట్లుగా ఉండండి",
-    gu: "અપડેટ રહો",
-    mr: "अपडेट राहा",
-    ml: "അപ്‌ഡേറ്റ് ആയിരിക്കുക",
-    pa: "ਅੱਪਡੇਟ ਰਹੋ",
-    bn: "আপডেট থাকুন",
-    ru: "Оставайтесь в курсе",
-    es: "MANTÉNGASE ACTUALIZADO",
-    zh: "保持更新",
-    mn: "Шинэчлэгдэж байгаарай",
-    pl: "BĄDŹ NA BIEŻĄCO",
-    bg: "Бъдете в течение",
-    fr: "RESTEZ INFORMÉ",
-    de: "BLEIBEN SIE AUF DEM LAUFENDEN",
-    nl: "BLIJF OP DE HOOGTE",
-    it: "RIMANI AGGIORNATO",
-    pt: "FIQUE ATUALIZADO",
-    ja: "最新情報を入手",
-    vi: "LUÔN CẬP NHẬT",
-  };
-
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       try {
         const response = await axios.get(Stay_Updated);
-        setItems(response.data);
+        const translatedItems = await Promise.all(
+          response.data.map(async (item: CardItem) => {
+            if (language === "en") return item; // Skip translation if language is English
+            const translatedName = await translateText(item.name, language);
+            return { ...item, name: translatedName }; // Translate name if not English
+          })
+        );
+        setItems(translatedItems); // Set translated items
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching or translating data:", error);
       } finally {
         setLoading(false);
       }
     };
 
     fetchData();
-  }, []);
+  }, [language]); // Re-fetch and re-translate when language changes
 
   return (
     <>
@@ -86,13 +96,12 @@ const Home_4_Stay_Updated: React.FC = () => {
           </div>
         </div>
       ) : (
-        <div className="text-center px-4 ">
+        <div className="text-center px-4">
           <h2 className="sm:mt-2 text-2xl sm:text-3xl py-8 font-bold sm:py-8 leading-relaxed font-cinzel">
-            {/* Stay Updated */}
-            {/* STAY UPDATE */}
-            {stayUpdatedTranslations[language] || stayUpdatedTranslations["en"]}
+            {stayUpdatedTranslations[language] || stayUpdatedTranslations["en"]}{" "}
+            {/* Static translation */}
           </h2>
-          <div className="flex flex-wrap justify-center gap-6 ">
+          <div className="flex flex-wrap justify-center gap-6">
             {items.map((item, index) => (
               <Card
                 key={index}
