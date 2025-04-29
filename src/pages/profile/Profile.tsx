@@ -551,12 +551,12 @@ function Profile() {
               >
                 <div
                   onClick={(e) => e.stopPropagation()}
-                  className="bg-white p-8 rounded-lg shadow-lg w-80 text-center h-[60vh] overflow-y-scroll"
+                  className="bg-white p-8 rounded-lg shadow-lg w-80 text-center"
                 >
                   <h2 className="text-2xl font-semibold mb-6">
                     {getTranslation("selectLanguage")}
                   </h2>
-                  <ul className="space-y-4 text-left">
+                  <ul className="space-y-4 text-left h-[15rem] overflow-y-scroll">
                     {languages.map((lang) => (
                       <li
                         key={lang.code}

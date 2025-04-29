@@ -83,9 +83,9 @@ const Card: React.FC<CardProps> = ({ link, name, onEdit, img }) => {
         href={link}
         target="_blank"
         rel="noopener noreferrer"
-        className="text-center m-auto text-[14px] sm:text-xl sm:mt-4 mt-1 flex justify-center items-center w-full bold font-bold"
+        className="text-center m-auto text-[14px] sm:text-lg sm:mt-4 mt-1 flex justify-center items-center w-full bold font-bold"
       >
-        {name && name.length > 10 ? name.slice(0, 10) + "..." : name}
+        {name && name.length > 13 ? name.slice(0, 13) + "..." : name}
       </a>
 
       {/* <a
