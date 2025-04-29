@@ -55,6 +55,7 @@ const Card: React.FC<CardProps> = ({ link, name, onEdit, img }) => {
                   text-[#06202B]
                   hover:font-bold  hover:scale-105 hover:px-7
                   flex-col  cursor-pointer min-w-6  h-[150px] w-[150px] sm:w-[15rem] sm:h-[15rem] md:rounded-[4px] rounded-[16px]"
+      onClick={() => window.open(link, "_blank")}
       style={
         {
           // backgroundColor: "#fff",

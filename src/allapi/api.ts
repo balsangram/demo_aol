@@ -43,6 +43,11 @@ export const addToken = `${API_URL}/aol/deviceToken`;
 export const footer_social = `${API_URL}/aol/social_media`;
 export const footer_contactUS = `${API_URL}/aol/contact_with_us`;
 
+export const footer_email = `${API_URL}/aol/footer_email`;
+export const footer_call = `${API_URL}/aol/footer_Call`;
+export const footer_message = `${API_URL}/aol/footer_Message`;
+export const footer_drop = `${API_URL}/aol/footer_Drop`;
+
 // popup
 export const display_popup = `${API_URL}/aol/displayPopUp`;
 

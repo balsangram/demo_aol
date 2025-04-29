@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import MobileFriendlyIcon from "@mui/icons-material/MobileFriendly";
@@ -66,8 +66,7 @@ function Profile() {
     { code: "vi", label: "Vietnamese" },
   ];
 
- 
-  const translations :Translations = {
+  const translations: Translations = {
     en: {
       profile: "PROFILE",
       personalDetails: "PERSONAL DETAILS",
@@ -391,10 +390,10 @@ function Profile() {
       confirm: "Xác nhận",
     },
   };
-  
 
   const handleConfirm = () => {
     if (language) {
+      localStorage.setItem("language", language);
       setLanguage(language);
       setShowDropdown(false);
     } else {
@@ -413,12 +412,17 @@ function Profile() {
   };
 
   // Type guard to ensure the language key exists in translations
-  const getTranslation = (key: keyof Translations['en']) => {
+  const getTranslation = (key: keyof Translations["en"]) => {
     if (language in translations) {
       return translations[language][key];
     }
-    return translations['en'][key]; // fallback to English
+    return translations["en"][key]; // fallback to English
   };
+
+  // useEffect(() => {
+  //   const savedLang = localStorage.getItem("language");
+  //   if (savedLang) setLanguage(savedLang);
+  // }, []);
 
   return (
     <div className="h-auto md:min-h-[70vh] px-4 py-8">
@@ -430,35 +434,35 @@ function Profile() {
               className="pl-2 text-lg font-semibold"
               style={{ borderLeft: "5px solid black" }}
             >
-              {getTranslation('personalDetails')}
+              {getTranslation("personalDetails")}
             </h3>
 
             {/* Input Fields */}
             <input
               className="py-2 px-4 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
               type="text"
-              placeholder={getTranslation('name')}
+              placeholder={getTranslation("name")}
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
             <input
               className="py-2 px-4 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
               type="text"
-              placeholder={getTranslation('email')}
+              placeholder={getTranslation("email")}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
             <input
               className="py-2 px-4 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
               type="text"
-              placeholder={getTranslation('phone')}
+              placeholder={getTranslation("phone")}
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
             />
             <input
               className="py-2 px-4 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
               type="text"
-              placeholder={getTranslation('aadhar')}
+              placeholder={getTranslation("aadhar")}
               value={aadhar}
               onChange={(e) => setAadhar(e.target.value)}
             />
@@ -469,13 +473,13 @@ function Profile() {
                 className="bg-red-500 hover:bg-red-600 px-6 py-2 rounded-full text-white transition"
                 onClick={closeEditModal}
               >
-                {getTranslation('cancel')}
+                {getTranslation("cancel")}
               </button>
               <button
                 className="bg-blue-500 hover:bg-blue-600 px-6 py-2 rounded-full text-white transition"
                 onClick={saveEditedDetails}
               >
-                {getTranslation('save')}
+                {getTranslation("save")}
               </button>
             </div>
           </div>
@@ -484,7 +488,7 @@ function Profile() {
 
       {/* Profile Section */}
       <h2 className="block sm:hidden pb-4 px-1 text-lg font-semibold">
-        {getTranslation('profile')}
+        {getTranslation("profile")}
       </h2>
 
       <div className="bg-white rounded-lg p-4 max-w-3xl mx-auto mb-4">
@@ -492,21 +496,25 @@ function Profile() {
           className="pl-2 text-lg font-semibold"
           style={{ borderLeft: "5px solid black" }}
         >
-          {getTranslation('personalDetails')}
+          {getTranslation("personalDetails")}
         </h3>
 
         <ul className="mt-4 space-y-4">
           <li className="flex items-center py-2 border-b border-gray-300">
-            <PersonOutlineIcon className="mr-2" /> {getTranslation('name')}: {name}
+            <PersonOutlineIcon className="mr-2" /> {getTranslation("name")}:{" "}
+            {name}
           </li>
           <li className="flex items-center py-2 border-b border-gray-300">
-            <MailOutlineIcon className="mr-2" /> {getTranslation('email')}: {email}
+            <MailOutlineIcon className="mr-2" /> {getTranslation("email")}:{" "}
+            {email}
           </li>
           <li className="flex items-center py-2 border-b border-gray-300">
-            <MobileFriendlyIcon className="mr-2" /> {getTranslation('phone')}: {phone}
+            <MobileFriendlyIcon className="mr-2" /> {getTranslation("phone")}:{" "}
+            {phone}
           </li>
           <li className="flex items-center py-2">
-            <CardMembershipIcon className="mr-2" /> {getTranslation('aadhar')}: {aadhar}
+            <CardMembershipIcon className="mr-2" /> {getTranslation("aadhar")}:{" "}
+            {aadhar}
           </li>
         </ul>
       </div>
@@ -517,13 +525,13 @@ function Profile() {
           className="pl-2 text-lg font-semibold"
           style={{ borderLeft: "5px solid black" }}
         >
-          {getTranslation('general')}
+          {getTranslation("general")}
         </h3>
 
         <ul className="mt-4 space-y-4">
           <li className="flex items-center py-2 border-b border-gray-300">
             <button onClick={openEditModal} className="flex items-center">
-              <EditIcon className="mr-2" /> {getTranslation('editProfile')}
+              <EditIcon className="mr-2" /> {getTranslation("editProfile")}
             </button>
           </li>
           <li className="relative list-none">
@@ -531,7 +539,7 @@ function Profile() {
               onClick={() => setShowDropdown(true)}
               className="flex items-center"
             >
-              <GTranslateIcon className="mr-2" /> {getTranslation('languages')}
+              <GTranslateIcon className="mr-2" /> {getTranslation("languages")}
             </button>
 
             {showDropdown && (
@@ -544,7 +552,7 @@ function Profile() {
                   className="bg-white p-8 rounded-lg shadow-lg w-80 text-center h-[60vh] overflow-scroll"
                 >
                   <h2 className="text-2xl font-semibold mb-6">
-                    {getTranslation('selectLanguage')}
+                    {getTranslation("selectLanguage")}
                   </h2>
                   <ul className="space-y-4 text-left">
                     {languages.map((lang) => (
@@ -571,7 +579,7 @@ function Profile() {
                     onClick={handleConfirm}
                     className="mt-6 w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded"
                   >
-                    {getTranslation('confirm')}
+                    {getTranslation("confirm")}
                   </button>
                 </div>
               </div>

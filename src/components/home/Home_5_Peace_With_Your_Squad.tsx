@@ -9,12 +9,40 @@ import CustomLeftArrow from "../Carousel/CustomLeftArrow";
 import CustomRightArrow from "../Carousel/CustomRightArrow";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { useLanguage } from "../../context/LanguageContext";
+
 
 interface Card {
   link: string;
   img: string;
   name: string;
 }
+
+const whatsNewTranslations: { [key: string]: string } = {
+  en: "WHAT'S NEW",
+  hi: "क्या नया है",
+  kn: "ಏನು ಹೊಸದು",
+  ta: "புதியவை என்ன",
+  te: "ఏమి కొత్తది",
+  gu: "શું નવું છે",
+  mr: "नवीन काय आहे",
+  ml: "പുതിയത് എന്താണ്",
+  pa: "ਨਵਾਂ ਕੀ ਹੈ",
+  bn: "নতুন কী",
+  ru: "Что нового",
+  es: "Qué hay de nuevo",
+  zh: "最新动态",
+  mn: "Шинэ юу байна",
+  pl: "Co nowego",
+  bg: "Какво ново",
+  fr: "Quoi de neuf",
+  de: "Was gibt's Neues",
+  nl: "Wat is nieuw",
+  it: "Cosa c'è di nuovo",
+  pt: "O que há de novo",
+  ja: "新着情報",
+  vi: "Có gì mới",
+};
 
 const responsive = {
   superLargeDesktop: {
@@ -35,6 +63,7 @@ const responsive = {
   },
 };
 function Home_5_Peace_With_Your_Squad() {
+  const { language } = useLanguage();
   const [slides, setSlides] = useState<Card[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -51,16 +80,9 @@ function Home_5_Peace_With_Your_Squad() {
       }
     };
     fetchData();
-    // axios
-    //   .get(Experience_Peace_With_Your_Squad)
-    //   .then((response) => {
-    //     console.log(response.data);
-    //     setSlides(response.data);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
-  }, []);
+  },[])
+  
+    
 
   return (
     <>
@@ -97,7 +119,9 @@ function Home_5_Peace_With_Your_Squad() {
         <section className=" sm:py-2 pt-4 px-4">
           <div className="max-w-7xl mx-auto">
             <h1 className="text-3xl font-bold text-center font-cinzel">
-              WHATS'S NEW
+              {/* WHATS'S NEW */}
+              
+              {whatsNewTranslations[language] || whatsNewTranslations["en"]}
             </h1>
 
             <div className="relative z-0  ">

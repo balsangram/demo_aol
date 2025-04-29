@@ -4,6 +4,7 @@ import { Experience_Center_Digitally } from "../../allapi/api";
 import axios from "axios";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { useLanguage } from "../../context/LanguageContext"; // Import useLanguage
 
 interface cards {
   link: string;
@@ -14,6 +15,34 @@ interface cards {
 function Home_2_Experience_Center_Digitally() {
   const [items, setItems] = useState<cards[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const { language: selectedLanguage, setLanguage } = useLanguage(); // Use context here
+
+  const translations: { [key: string]: string } = {
+    en: "Experience Center Digitally",
+    hi: "डिजिटल रूप में अनुभव केंद्र",
+    kn: "ಡಿಜಿಟಲ್ ಅನುಭವ ಕೇಂದ್ರ",
+    ta: "டிஜிட்டல் அனுபவ மையம்",
+    te: "డిజిటల్ అనుభవ కేంద్రం",
+    gu: "ડિજિટલ અનુભવ કેન્દ્ર",
+    mr: "डिजिटल अनुभव केंद्र",
+    ml: "ഡിജിറ്റൽ അനുഭവ കേന്ദ്രം",
+    pa: "ਡਿਜੀਟਲ ਅਨੁਭਵ ਕੇਂਦਰ",
+    bn: "ডিজিটাল অভিজ্ঞতা কেন্দ্র",
+    ru: "Центр цифрового опыта",
+    es: "Centro de experiencia digital",
+    zh: "数字体验中心",
+    mn: "Дижитал туршлагын төв",
+    pl: "Centrum Doświadczeń Cyfrowych",
+    bg: "Център за дигитално изживяване",
+    fr: "Centre d'expérience numérique",
+    de: "Digitales Erlebniszentrum",
+    nl: "Digitaal Ervaringscentrum",
+    it: "Centro di Esperienza Digitale",
+    pt: "Centro de Experiência Digital",
+    ja: "デジタル体験センター",
+    vi: "Trung tâm trải nghiệm kỹ thuật số",
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,10 +60,16 @@ function Home_2_Experience_Center_Digitally() {
     fetchData();
   }, []);
 
+  const handleLanguageChange = (lang: string) => {
+    setLanguage(lang);
+    localStorage.setItem("language", lang); // Store the selected language
+    window.dispatchEvent(new Event("languageChange")); // Dispatch event for re-render
+  };
+
   return (
     <>
       {loading ? (
-        <div className="w-full text-center  sm:my-4 px-4">
+        <div className="w-full text-center sm:my-4 px-4">
           {/* Header Skeleton */}
           <Skeleton
             height={30}
@@ -62,10 +97,9 @@ function Home_2_Experience_Center_Digitally() {
           </div>
         </div>
       ) : (
-        <div className="text-center  py-8 px-4 ">
+        <div className="text-center py-8 px-4 ">
           <h2 className=" text-2xl sm:text-3xl font-bold font-[Cinzel] mb-8">
-            {/* Experience Center Digitally */}
-            EXPERIENCE CENTER DIGITALLY
+            {translations[selectedLanguage] || translations["en"]}
           </h2>
 
           <div className="flex flex-wrap justify-center gap-6 ">
