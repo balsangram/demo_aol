@@ -29,7 +29,7 @@ const MobSearchPage: React.FC = () => {
   };
 
   return (
-    <div className="absolute top-[7rem] px-[1rem] w-full max-w-xl block sm:hidden mt-3">
+    <div className="absolute top-[7rem] px-[1rem] w-full max-w-md block  lg:hidden mt-3 right-0">
       <div className="flex items-center space-x-2">
         <input
           type="text"

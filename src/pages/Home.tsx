@@ -1,3 +1,4 @@
+import { ToastContainer } from "react-toastify";
 import Home_1_TopCards from "../components/home/Home_1_TopCards";
 import Home_2_Experience_Center_Digitally from "../components/home/Home_2_Experience_Center_Digitally";
 import Home_3_Facilities_and_Services_at_Center from "../components/home/Home_3_Facilities_and_Services_at_Center";
@@ -14,42 +15,36 @@ const Home = () => {
   return (
     <div
       style={{
-        padding: "4rem 0 2rem",
+        padding: "4rem 0 0",
         margin: "auto",
         minHeight: "60vh",
       }}
     >
+      {/* <ToastContainer /> */}
       <Popups />
       <MobSearchPage />
       {/* <SearchCard /> */}
       {/* Home  */}
-      
-        <Home_1_TopCards />
-      
-   
-        {/* Stay_Updated  */}
-        <Home_4_Stay_Updated />
-      
-      
-        {/* Experience_Center_Digitally */}
-        <Home_2_Experience_Center_Digitally />
-      
-   
-        {/* Facilities_and_Services_at_Center */}
-        <Home_3_Facilities_and_Services_at_Center />
-      
-      
-        {/* Peace Of Mind */}
-        <Home_6_Peace_Of_Mind />
-      
-   
-        {/* Advertising */}
-        <Home_7_Advertising />
-      
-      
-        {/* Peace_With_Your_Squad */}
-        <Home_5_Peace_With_Your_Squad />
-      
+
+      <Home_1_TopCards />
+
+      {/* Stay_Updated  */}
+      <Home_4_Stay_Updated />
+
+      {/* Experience_Center_Digitally */}
+      <Home_2_Experience_Center_Digitally />
+
+      {/* Facilities_and_Services_at_Center */}
+      <Home_3_Facilities_and_Services_at_Center />
+
+      {/* Peace Of Mind */}
+      <Home_6_Peace_Of_Mind />
+
+      {/* Advertising */}
+      <Home_7_Advertising />
+
+      {/* Peace_With_Your_Squad */}
+      <Home_5_Peace_With_Your_Squad />
     </div>
   );
 };

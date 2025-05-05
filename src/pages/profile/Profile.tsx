@@ -406,10 +406,9 @@ function Profile() {
   const openEditModal = () => setEditCard(true);
   const closeEditModal = () => setEditCard(false);
   const saveEditedDetails = () => {
-    localStorage.setItem("username", name);
-    localStorage.setItem("email", email);
-    localStorage.setItem("phone", phone);
-    localStorage.setItem("aadhar", aadhar);
+    localStorage.setItem("username", name.trim());
+    localStorage.setItem("phone", phone.trim());
+    localStorage.setItem("aadhar", aadhar.trim());
     setEditCard(false);
   };
 
@@ -447,16 +446,16 @@ function Profile() {
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
-            <input
+            {/* <input
               className="py-2 px-4 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
               type="text"
               placeholder={getTranslation("email")}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-            />
+            /> */}
             <input
               className="py-2 px-4 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
-              type="text"
+              type="number"
               placeholder={getTranslation("phone")}
               value={phone}
               onChange={(e) => setPhone(e.target.value)}

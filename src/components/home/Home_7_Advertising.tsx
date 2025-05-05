@@ -104,10 +104,10 @@ const Home_7_Advertising: React.FC = () => {
         </div>
       )}
       {!loading && (
-        <section className="pb-8 sm:pb-12 px-4">
+        <section className=" sm:pb-0 px-4">
           <div className="max-w-7xl mx-auto">
             <h1
-              className="text-[24px] font-bold text-center mb-8 sm:mb-12 mt-0 font-cinzel"
+              className="text-[24px] font-bold text-center sm:my-0 mt-0 font-cinzel "
               style={{
                 lineHeight: "2rem",
               }}
@@ -116,7 +116,7 @@ const Home_7_Advertising: React.FC = () => {
                 upcomingProgramsTranslations["en"]}
             </h1>
 
-            <div className="relative z-0">
+            <div className="relative z-0 py-12 ">
               <Carousel
                 responsive={responsive}
                 infinite={true}

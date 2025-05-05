@@ -86,9 +86,10 @@ const Header = () => {
             : ""
         }`}
       >
-        <div className="shadow-sm bg-[#A7E6F8] z-[4]">
+        <div className="shadow-sm z-[4] bg-[#A7E6F8]">
+          {/* <div className="shadow-sm bg-[#A7E6F8] z-[4]"> */}
           <div
-            className="relative flex lg:justify-between w-full items-center sm:px-5 py-2.5 dark:bg-black 
+            className="relative flex lg:justify-between w-full items-center sm:px-5 py-2.5 
        
            "
           >
@@ -105,7 +106,7 @@ const Header = () => {
 
             {/* Logo */}
             <div
-              className="ml-4 lg:w-[33%] w-[60%] m-auto horizontal-logo flex lg:hidden lg:justify-center items-center ltr:mr-2 rtl:ml-2 
+              className="ml-4 lg:w-[33%] w-[80%] m-auto horizontal-logo flex lg:hidden lg:justify-center items-center ltr:mr-2 rtl:ml-2 
         
              "
             >
@@ -114,7 +115,7 @@ const Header = () => {
                 className="main-logo flex items-center shrink-0 m-auto pl-3"
               >
                 <img
-                  className="w-32 ml-[1.8rem] md:ml-[15rem] lg:ml-[-1rem] sm:ml-0 rtl:-mr-1 inline "
+                  className="w-32 ml-[1.8rem] md:ml-[1.5rem] lg:ml-[-1rem] sm:ml-0 rtl:-mr-1 inline "
                   src={logo}
                   alt="logo"
                 />

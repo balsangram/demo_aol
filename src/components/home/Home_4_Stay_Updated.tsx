@@ -5,6 +5,7 @@ import { all_Card, Stay_Updated } from "../../allapi/api";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { useLanguage } from "../../context/LanguageContext"; // adjust path if needed
+import { ToastContainer } from "react-toastify";
 
 interface CardItem {
   name: string;
@@ -64,6 +65,8 @@ const Home_4_Stay_Updated: React.FC = () => {
     <>
       {loading ? (
         <div className="w-full text-center sm:my-4 px-4 mt-4">
+          {/* <ToastContainer /> */}
+
           {/* Header Skeleton */}
           <Skeleton
             height={30}
@@ -95,15 +98,16 @@ const Home_4_Stay_Updated: React.FC = () => {
         </div>
       ) : (
         <div className="text-center px-4 ">
+          {/* <ToastContainer /> */}
           <h2
-            className=" text-[24px] sm:text-3xl font-bold leading-relaxed font-cinzel"
+            className=" text-[24px] sm:text-3xl font-bold leading-relaxed font-cinzel "
             style={{
               lineHeight: "2rem",
             }}
           >
             {stayUpdatedTranslations[language] || stayUpdatedTranslations["en"]}
           </h2>
-          <div className="flex flex-wrap justify-center gap-6 py-12">
+          <div className="flex flex-wrap justify-center gap-6 py-12 ">
             {items.map((item, index) => (
               <Card
                 key={index}

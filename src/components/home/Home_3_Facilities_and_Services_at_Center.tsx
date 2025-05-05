@@ -141,7 +141,7 @@ const Home_3_Facilities_and_Services_at_Center = () => {
       <div className="block sm:hidden">
         {/* <h1 className="text-3xl font-bold text-center font-cinzel mb-6"> */}
         <h1
-          className="text-[24px] font-bold text-center font-cinzel mb-6"
+          className="text-[24px] font-bold text-center font-cinzel "
           style={{
             lineHeight: "2rem",
           }}
@@ -166,7 +166,7 @@ const Home_3_Facilities_and_Services_at_Center = () => {
             : slides.map((slide, index) => (
                 <div
                   key={index}
-                  className="min-w-[200px] flex-shrink-0"
+                  className="min-w-[200px] flex-shrink-0 "
                   onClick={() => {
                     const link = slide?.link || "#";
                     if (link !== "#") window.open(link, "_blank");

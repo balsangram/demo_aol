@@ -1,34 +1,35 @@
-import { Style } from "@mui/icons-material";
-import { Button } from "@mui/material";
-import { green } from "@mui/material/colors";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
-import comingSoon from "../../assets/comingSoon/comingSoon.png";
 
 interface CardProps {
   link?: string;
   name: string;
   onEdit?: () => void;
-  // id: string;
   img: string;
 }
 
 const Card: React.FC<CardProps> = ({ link, name, onEdit, img }) => {
-  const navigate = useNavigate();
+  const [maxChar, setMaxChar] = useState(15); // default desktop
 
-  const handleEditClick = (event: React.MouseEvent) => {
-    // event.preventDefault();
-    // if (onEdit) {
-    //   onEdit();
-    // } else {
-    //   navigate(`/update/${id}`);
-    // }
-  };
+  // Detect screen size and update character limit
+  useEffect(() => {
+    const updateCharLimit = () => {
+      setMaxChar(window.innerWidth < 640 ? 11 : 15); // 640px is Tailwind's 'sm' breakpoint
+    };
+
+    updateCharLimit(); // run on mount
+    window.addEventListener("resize", updateCharLimit); // run on resize
+
+    return () => window.removeEventListener("resize", updateCharLimit); // cleanup
+  }, []);
+  // const navigate = useNavigate();
+  const [soon, setSoon] = useState(false);
 
   const notify = () => {
-    console.log("Coming Soon triggered!"); // Debugging log
-    toast.info(" Coming Soon!", {
+    console.log("coming soon");
+
+    toast.info("Coming Soon!", {
       position: "top-right",
       autoClose: 3000,
       hideProgressBar: false,
@@ -37,66 +38,60 @@ const Card: React.FC<CardProps> = ({ link, name, onEdit, img }) => {
       draggable: true,
       theme: "light",
       style: {
-        backgroundColor: "green",
-        color: "white",
-        fontWeight: "bold",
-        borderRadius: "8px",
-        // boxShadow: "0px 4px 10px rgba(0, 255, 0, 0.5)",
-        boxShadow: "rgba(97, 75, 66, 0.7) 2px 2px 5px 0px",
+        backgroundColor: "#E0F7FA", // light cyan
+        color: "#004D40", // dark teal
+        fontWeight: "600",
+        fontSize: "14px",
+        padding: "12px 16px",
+        borderRadius: "10px",
+        boxShadow: "0 4px 8px rgba(0, 77, 64, 0.2)",
+        maxWidth: "90vw", // responsive width
+        wordWrap: "break-word", // prevent overflow
       },
     });
   };
 
+  const handleClick = () => {
+    if (link && link !== "#") {
+      window.open(link, "_blank");
+    } else {
+      if (!soon) {
+        setSoon(true);
+        notify();
+        setTimeout(() => {
+          setSoon(false);
+        }, 4000);
+      }
+    }
+  };
+
   return (
-    <div
-      className="   flex  sm:p-10 p-4 
+    <>
+      <div
+        className=" flex  sm:py-10 py-4 
                  transition-all duration-500 ease-in-out
                  bg-[#ffffffa3]
                   text-[#06202B]
-                  hover:font-bold  hover:scale-105 hover:px-7
-                  flex-col  cursor-pointer min-w-6  h-[150px] w-[150px] sm:w-[15rem] sm:h-[15rem] md:rounded-[4px] rounded-[16px]"
-      onClick={() => window.open(link, "_blank")}
-      style={
-        {
-          // backgroundColor: "#fff",
-          // boxShadow: "10px 10px 20px 0 rgb(97 75 66 / 70%)",
-          // boxShadow: "rgba(97, 75, 66, 0.7) 2px 2px 5px 0px",
-          // borderRadius: "4px",
-          // maxWidth: "15rem",
-          // maxHeight: "15rem",
-          // minWidth:"15rem"
-        }
-      }
-    >
-      <img
-        src={img}
-        alt=""
-        style={{
-          height: "5rem",
-          width: "5rem",
-          margin: "auto",
-          borderRadius: "5rem",
-        }}
-      />
-      {/* <ToastContainer /> */}
-      <a
-        href={link ? link : "#"}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-[#06202B] text-center m-auto text-[12px] sm:text-base sm:mt-4 mt-1 flex justify-center items-center w-full bold font-bold"
+                  hover:font-bold  hover:scale-105 
+                  flex-col  cursor-pointer min-w-6  h-[130px] w-[130px] sm:w-[15rem] sm:h-[15rem] md:rounded-[4px] rounded-[16px]"
+        onClick={handleClick}
       >
-        {name && name.length > 10 ? name.slice(0, 10) + "..." : name}
-      </a>
-
-      {/* <a
-        href={link}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-center m-auto text-[14px] sm:text-xl sm:mt-4 mt-1 flex justify-center items-center w-full bold font-bold"
-      >
-        {name.length > 13 ? name.slice(0, 13) + "..." : name}
-      </a> */}
-    </div>
+        <img
+          src={img}
+          alt=""
+          style={{
+            height: "5rem",
+            width: "5rem",
+            margin: "auto",
+            borderRadius: "5rem",
+          }}
+        />
+        <p className=" text-[#06202B] text-center m-auto text-[12px] sm:text-base flex justify-center items-center w-full font-bold">
+          {name.length > maxChar ? name.slice(0, maxChar) + "..." : name}
+        </p>
+      </div>
+      <ToastContainer />
+    </>
   );
 };
 

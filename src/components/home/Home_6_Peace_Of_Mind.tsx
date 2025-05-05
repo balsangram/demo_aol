@@ -109,7 +109,7 @@ const Home_6_Peace_Of_Mind: React.FC = () => {
     <section className="px-4">
       <div className="max-w-7xl mx-auto">
         <h1
-          className="text-[24px] font-bold text-center font-cinzel pb-8"
+          className="text-[24px] font-bold text-center font-cinzel"
           style={{
             lineHeight: "2rem",
           }}
@@ -180,7 +180,7 @@ const Home_6_Peace_Of_Mind: React.FC = () => {
             : sriVideos.map((slide, index) => (
                 <div
                   key={index}
-                  className="min-w-[200px] flex-shrink-0 cursor-pointer"
+                  className="min-w-[200px] flex-shrink-0 cursor-pointer py-12 "
                   onClick={() => {
                     const link = slide?.YouTubeLink || "#";
                     if (link !== "#") window.open(link, "_blank");

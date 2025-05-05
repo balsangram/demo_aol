@@ -12,32 +12,45 @@ function Login() {
   const [usernameError, setUsernameError] = useState("");
 
   // Regex patterns
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const emailRegex = /^[^@]+@[^@]+$/;
   const usernameRegex = /^[A-Za-z]+(?: [A-Za-z]+)*$/;
 
   // Handle validation
   const validateEmail = (email: string): boolean => {
+    console.log(email, "email");
+
     const trimmed = email.trim();
+    console.log(trimmed, "trimmed");
+
     if (!trimmed) {
       setEmailError("Email cannot be empty.");
       return false;
     }
+
     if (email !== trimmed) {
-      setEmailError(
-        "Spaces allowed only between characters; not at the start or end."
-      );
+      setEmailError("Email cannot have leading or trailing spaces.");
       return false;
     }
-    if (!emailRegex.test(trimmed)) {
+
+    if (email.includes(" ")) {
+      setEmailError("Email cannot contain spaces.");
+      return false;
+    }
+
+    if (!emailRegex.test(email)) {
       setEmailError("Please enter a valid email address.");
       return false;
     }
+
     setEmailError("");
     return true;
   };
 
   const validateUsername = (username: string): boolean => {
     const trimmed = username.trim();
+    console.log(trimmed, "t");
+    console.log(username, "u");
+
     if (!trimmed) {
       setUsernameError("Username cannot be empty.");
       return false;
@@ -93,7 +106,7 @@ function Login() {
           >
             <EmailIcon className="text-[#5F99AE] mr-2" />
             <input
-              type="email"
+              type="text"
               placeholder="Email ID"
               value={email}
               onChange={(e) => setEmail(e.target.value)}

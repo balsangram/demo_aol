@@ -33,7 +33,7 @@ const GlobalSearch: React.FC = () => {
   };
 
   return (
-    <div className="relative w-full max-w-xl hidden sm:block">
+    <div className="relative w-full max-w-xl hidden lg:block">
       <div className="flex items-center space-x-2">
         <input
           type="text"

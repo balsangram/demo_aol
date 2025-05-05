@@ -86,7 +86,7 @@ function Home_5_Peace_With_Your_Squad() {
   return (
     <>
       {/* Desktop View */}
-      <div className="w-full text-center sm:my-4 px-4 mt-4 sm:block hidden">
+      <div className="w-full text-center sm:my-0 px-4 mt-4 sm:mt-0 sm:block hidden">
         <h1 className="text-3xl font-bold text-center font-cinzel ">
           {whatsNewTranslations[language] || whatsNewTranslations["en"]}
         </h1>
@@ -137,7 +137,7 @@ function Home_5_Peace_With_Your_Squad() {
       {/* Mobile View */}
       <div className="block sm:hidden">
         <h1
-          className="text-[24px] font-bold text-center font-cinzel mb-6"
+          className="text-[24px] font-bold text-center font-cinzel"
           style={{
             lineHeight: "2rem",
           }}
@@ -162,7 +162,7 @@ function Home_5_Peace_With_Your_Squad() {
             : slides.map((slide, index) => (
                 <div
                   key={index}
-                  className="min-w-[200px] flex-shrink-0"
+                  className="min-w-[200px] flex-shrink-0  "
                   onClick={() => {
                     const link = slide?.link || "#";
                     if (link !== "#") window.open(link, "_blank");

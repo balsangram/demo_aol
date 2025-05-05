@@ -284,9 +284,9 @@ const Sidebar = () => {
                   </li>
                 </ul>
               </li>
-              <div className="flex justify-center py-2">
+              <div className="flex justify-center py-2 h-[50vh]">
                 <button
-                  className="bg-[#A7E6F8] hover:bg-[#88def5] px-6 rounded-lg py-3 font-bold font-poppins"
+                  className="bg-[#A7E6F8] hover:bg-[#88def5] px-6 rounded-lg py-3 font-bold font-poppins absolute bottom-0"
                   onClick={handleLogout}
                 >
                   {t("Log Out")}

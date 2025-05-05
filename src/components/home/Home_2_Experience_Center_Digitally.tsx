@@ -105,7 +105,7 @@ function Home_2_Experience_Center_Digitally() {
       ) : (
         <div className="text-center px-4 ">
           <h2
-            className=" text-[24px] sm:text-3xl   font-bold font-[Cinzel] "
+            className=" text-[24px] sm:text-3xl   font-bold font-[Cinzel]"
             style={{
               lineHeight: "2rem",
             }}
@@ -113,7 +113,7 @@ function Home_2_Experience_Center_Digitally() {
             {translations[selectedLanguage] || translations["en"]}
           </h2>
 
-          <div className="flex flex-wrap justify-center gap-6 py-12">
+          <div className="flex flex-wrap justify-center gap-6 py-12 ">
             {items.map((item, index) => (
               <Card
                 key={index}
