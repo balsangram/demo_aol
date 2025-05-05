@@ -67,6 +67,7 @@ function App({ children }: PropsWithChildren) {
     requestForToken(); // Get token on app load
     // requestPermission();
   }, []);
+  console.log("updated 2-5-2025");
 
   return (
     <>

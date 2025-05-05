@@ -1,75 +1,60 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { all_Card, Facilities_Services_at_Center } from "../../allapi/api";
+import { all_Card } from "../../allapi/api";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import CarouselCard from "../cards/CarouselCard";
 import CustomLeftArrow from "../Carousel/CustomLeftArrow";
 import CustomRightArrow from "../Carousel/CustomRightArrow";
-import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import { useLanguage } from "../../context/LanguageContext"; // Import the hook
+import { useLanguage } from "../../context/LanguageContext";
+import CarouselCard2 from "../cards/CarouselCard2";
 
-// Define the structure of each card
 interface Card {
   link: string;
   img: string;
   name: string;
 }
 
-// Responsive breakpoints for carousel
 const responsive = {
-  superLargeDesktop: {
-    breakpoint: { max: 4000, min: 3000 },
-    items: 5,
-  },
-  desktop: {
-    breakpoint: { max: 3000, min: 1024 },
-    items: 3,
-  },
-  tablet: {
-    breakpoint: { max: 1024, min: 768 },
-    items: 2,
-  },
-  mobile: {
-    breakpoint: { max: 768, min: 0 },
-    items: 1,
-  },
+  superLargeDesktop: { breakpoint: { max: 4000, min: 3000 }, items: 5 },
+  desktop: { breakpoint: { max: 3000, min: 1024 }, items: 3 },
+  tablet: { breakpoint: { max: 1024, min: 768 }, items: 2 },
+  mobile: { breakpoint: { max: 768, min: 0 }, items: 1 },
 };
 
-// Multilingual translations for the section title
 const facilitiesAndServices: { [key: string]: string } = {
-  en: "FACILITIES & SERVICES AT CENTER",
-  hi: "केंद्र में सुविधाएँ और सेवाएँ",
-  kn: "ಕೇಂದ್ರದಲ್ಲಿ ಸೌಲಭ್ಯಗಳು ಮತ್ತು ಸೇವೆಗಳು",
-  ta: "மையத்தில் வசதிகள் மற்றும் சேவைகள்",
-  te: "కేంద్రంలో సౌకర్యాలు మరియు సేవలు",
-  gu: "કेंद्रમાં સુવિધાઓ અને સેવાઓ",
-  mr: "केंद्रात सुविधा आणि सेवा",
-  ml: "കേന്ദ്രത്തിലെ സൗകര്യങ്ങളും സേവനങ്ങളും",
-  pa: "ਕੇਂਦਰ ਵਿੱਚ ਸੁਵਿਧਾਵਾਂ ਅਤੇ ਸੇਵਾਵਾਂ",
-  bn: "কেন্দ্রে সুবিধা এবং সেবা",
-  ru: "Услуги и удобства в центре",
-  es: "Instalaciones y servicios en el centro",
-  zh: "中心的设施与服务",
-  mn: "Төвийн үйлчилгээ болон үйлчилгээ",
-  pl: "Usługi i udogodnienia w centrum",
-  bg: "Услуги и удобства в центъра",
-  fr: "Installations et services au centre",
-  de: "Einrichtungen und Dienstleistungen im Zentrum",
-  nl: "Faciliteiten en diensten in het centrum",
-  it: "Strutture e servizi al centro",
-  pt: "Instalações e serviços no centro",
-  ja: "センターの施設とサービス",
-  vi: "Cơ sở vật chất và dịch vụ tại trung tâm",
+  en: "FACILITIES & SERVICES",
+  hi: "सुविधाएँ और सेवाएँ",
+  kn: "ಸೌಲಭ್ಯಗಳು ಮತ್ತು ಸೇವೆಗಳು",
+  ta: "வசதிகள் மற்றும் சேவைகள்",
+  te: "సౌకర్యాలు మరియు సేవలు",
+  gu: "સુવિધાઓ અને સેવાઓ",
+  mr: "सुविधा आणि सेवा",
+  ml: "സൗകര്യങ്ങളും സേവനങ്ങളും",
+  pa: "ਸੁਵਿਧਾਵਾਂ ਅਤੇ ਸੇਵਾਵਾਂ",
+  bn: "সুবিধা এবং সেবা",
+  ru: "Услуги и удобства",
+  es: "Instalaciones y servicios",
+  zh: "设施与服务",
+  mn: "Байгууламж, үйлчилгээ",
+  pl: "Udogodnienia i usługi",
+  bg: "Удобства и услуги",
+  fr: "Installations et services",
+  de: "Einrichtungen und Dienstleistungen",
+  nl: "Faciliteiten en diensten",
+  it: "Strutture e servizi",
+  pt: "Instalações e serviços",
+  ja: "施設とサービス",
+  vi: "Cơ sở vật chất và dịch vụ",
 };
 
 const Home_3_Facilities_and_Services_at_Center = () => {
-  const { language } = useLanguage(); // Use language from context
+  const { language } = useLanguage();
   const [loading, setLoading] = useState(true);
   const [slides, setSlides] = useState<Card[]>([]);
 
-  // Fetch the data from API
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -79,80 +64,123 @@ const Home_3_Facilities_and_Services_at_Center = () => {
         );
         setSlides(response.data);
       } catch (error) {
-        console.log(error);
+        console.error("API Error:", error);
       } finally {
         setLoading(false);
       }
     };
 
     fetchData();
-  }, []);
+  }, [language]);
+
+  const translatedTitle =
+    facilitiesAndServices[language] || facilitiesAndServices["en"];
 
   return (
     <>
-      {loading && (
-        <SkeletonTheme>
-          {[1].map((_, i) => (
-            <div key={i} className="w-full text-center my-4">
-              {/* Headline Skeleton */}
-              <Skeleton
-                height={30}
-                width={200}
-                className="mx-auto mb-4"
-                style={{ borderRadius: "8px" }}
-              />
+      {/* Desktop View */}
+      <div className="w-full text-center sm:my-4 px-4 mt-4 sm:block hidden">
+        <h1
+          className="text-[24px] font-bold text-center font-cinzel "
+          style={{
+            lineHeight: "2rem",
+          }}
+        >
+          {translatedTitle}
+        </h1>
 
-              {/* Card Grid Skeletons */}
-              <div className="flex gap-4 flex-wrap justify-center pb-12">
-                {[1, 2, 3, 4].map((_, j) => (
-                  <Skeleton
-                    key={j}
-                    height={240}
-                    width={240}
-                    className="rounded-xl"
-                    style={{ borderRadius: "1rem" }}
-                  />
-                ))}
-              </div>
-            </div>
-          ))}
-        </SkeletonTheme>
-      )}
-
-      {!loading && (
-        <section className="px-4">
-          <div className="max-w-7xl mx-auto">
-            <h1 className="text-3xl font-bold text-center font-cinzel">
-              {/* Displaying the translated text */}
-              {facilitiesAndServices[language] || facilitiesAndServices["en"]}
-            </h1>
-
-            <div className="relative z-0">
-              <Carousel
-                responsive={responsive}
-                infinite={true}
-                autoPlay={true}
-                autoPlaySpeed={2000}
-                keyBoardControl={true}
-                customLeftArrow={<CustomLeftArrow />}
-                customRightArrow={<CustomRightArrow />}
-                containerClass="carousel-container relative"
-                rtl={true}
+        {loading ? (
+          <div className="flex gap-6 flex-wrap justify-center sm:pb-12">
+            {[1, 2, 3, 4].map((_, index) => (
+              <div
+                key={index}
+                className="my-12 flex flex-col items-center justify-center p-4  rounded-2xl w-[140px] h-[140px] sm:w-[200px] sm:h-[200px] md:w-[240px] md:h-[240px]"
               >
-                {slides.map((slide, index) => (
-                  <div key={index} className="">
-                    <CarouselCard
-                      img={slide.img}
-                      link={slide.link}
-                      name={slide.name}
-                    />
-                  </div>
-                ))}
-              </Carousel>
-            </div>
+                <Skeleton height="15rem" width="15rem" />
+              </div>
+            ))}
           </div>
-        </section>
-      )}
+        ) : (
+          <Carousel
+            responsive={responsive}
+            infinite
+            autoPlay
+            autoPlaySpeed={2000}
+            keyBoardControl
+            // customLeftArrow={<CustomRightArrow />}
+            // customRightArrow={<CustomLeftArrow />}
+            customLeftArrow={<CustomLeftArrow />}
+            customRightArrow={<CustomRightArrow />}
+            containerClass="carousel-container relative"
+            rtl
+          >
+            {slides.map((slide, index) => (
+              <div
+                key={index}
+                onClick={() => {
+                  const link = slide?.link || "#";
+                  if (link !== "#") window.open(link, "_blank");
+                }}
+                className="cursor-pointer"
+              >
+                <div key={index}>
+                  <CarouselCard2
+                    img={slide.img}
+                    // link={slide.link}
+                    // link={slide?.link ? slide.link : "#"}
+                    name={slide.name}
+                  />
+                </div>
+              </div>
+            ))}
+          </Carousel>
+        )}
+      </div>
+
+      {/* Mobile View */}
+      <div className="block sm:hidden">
+        {/* <h1 className="text-3xl font-bold text-center font-cinzel mb-6"> */}
+        <h1
+          className="text-[24px] font-bold text-center font-cinzel mb-6"
+          style={{
+            lineHeight: "2rem",
+          }}
+        >
+          {translatedTitle}
+        </h1>
+
+        <div className="flex overflow-x-auto gap-4 pb-2 px-1">
+          {loading
+            ? [...Array(2)].map((_, index) => (
+                <div
+                  key={index}
+                  className=" flex-shrink-0  rounded-2xl my-[3rem] h-[15rem] w-[10rem] gap-8"
+                >
+                  <Skeleton
+                    height="15rem"
+                    width="10rem"
+                    className=" mb-4 rounded-2xl mx-4"
+                  />
+                </div>
+              ))
+            : slides.map((slide, index) => (
+                <div
+                  key={index}
+                  className="min-w-[200px] flex-shrink-0"
+                  onClick={() => {
+                    const link = slide?.link || "#";
+                    if (link !== "#") window.open(link, "_blank");
+                  }}
+                >
+                  <CarouselCard
+                    img={slide.img}
+                    link={slide.link}
+                    name={slide.name}
+                  />
+                </div>
+              ))}
+        </div>
+      </div>
     </>
   );
 };

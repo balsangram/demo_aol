@@ -235,7 +235,7 @@ const Sidebar = () => {
 
           <PerfectScrollbar className="h-[calc(100vh-80px)] relative bg-[#dbf3fa] pt-4">
             <ul className="relative font-semibold space-y-0.5 p-4 py-0">
-              <li className="nav-item">
+              <li className="nav-item font-poppins">
                 <ul>
                   <li className="nav-item">
                     <NavLink
@@ -286,7 +286,7 @@ const Sidebar = () => {
               </li>
               <div className="flex justify-center py-2">
                 <button
-                  className="bg-[#A7E6F8] hover:bg-[#88def5] px-6 rounded-lg py-3 font-bold"
+                  className="bg-[#A7E6F8] hover:bg-[#88def5] px-6 rounded-lg py-3 font-bold font-poppins"
                   onClick={handleLogout}
                 >
                   {t("Log Out")}

@@ -431,9 +431,9 @@ function Profile() {
       {/* Edit Modal */}
       {editCard && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="flex flex-col gap-4 bg-white p-6 rounded-lg shadow-lg w-[90%] max-w-2xl relative">
+          <div className="flex flex-col gap-4 bg-white p-6 rounded-lg shadow-lg w-[90%] max-w-2xl relative font-poppins">
             <h3
-              className="pl-2 text-lg font-semibold"
+              className="pl-2 text-lg font-semibold font-poppins "
               style={{ borderLeft: "5px solid black" }}
             >
               {getTranslation("personalDetails")}
@@ -441,7 +441,7 @@ function Profile() {
 
             {/* Input Fields */}
             <input
-              className="py-2 px-4 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="py-2 px-4 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 font-poppins "
               type="text"
               placeholder={getTranslation("name")}
               value={name}

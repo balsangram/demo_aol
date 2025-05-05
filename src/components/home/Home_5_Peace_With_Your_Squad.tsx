@@ -85,70 +85,98 @@ function Home_5_Peace_With_Your_Squad() {
 
   return (
     <>
-      {loading && (
-        <SkeletonTheme>
-          {[1].map((_, i) => (
-            <div key={i} className="w-full text-center my-4">
-              {/* Headline Skeleton */}
-              <Skeleton
-                height={30}
-                width={200}
-                className="mx-auto sb:mb-4"
-                style={{ borderRadius: "8px" }}
-              />
+      {/* Desktop View */}
+      <div className="w-full text-center sm:my-4 px-4 mt-4 sm:block hidden">
+        <h1 className="text-3xl font-bold text-center font-cinzel ">
+          {whatsNewTranslations[language] || whatsNewTranslations["en"]}
+        </h1>
 
-              {/* Card Grid Skeletons */}
-              <div className="flex gap-4 flex-wrap justify-center pb-12">
-                {[1, 2, 3, 4].map((_, j) => (
-                  <Skeleton
-                    key={j}
-                    height={240}
-                    width={240}
-                    className="rounded-xl"
-                    style={{ borderRadius: "1rem" }}
-                  />
-                ))}
-              </div>
-            </div>
-          ))}
-        </SkeletonTheme>
-      )}
-
-      {!loading && (
-        <section className=" sm:py-2 pt-4 px-4">
-          <div className="max-w-7xl mx-auto">
-            <h1 className="text-3xl font-bold text-center font-cinzel">
-              {/* WHATS'S NEW */}
-
-              {whatsNewTranslations[language] || whatsNewTranslations["en"]}
-            </h1>
-
-            <div className="relative z-0  ">
-              <Carousel
-                responsive={responsive}
-                infinite={true}
-                autoPlay={true}
-                autoPlaySpeed={3000}
-                keyBoardControl={true}
-                customLeftArrow={<CustomLeftArrow />}
-                customRightArrow={<CustomRightArrow />}
-                containerClass="carousel-container relative"
-                // rtl={true}
+        {loading ? (
+          <div className="flex gap-6 flex-wrap justify-center sm:pb-12">
+            {[1, 2, 3, 4].map((_, index) => (
+              <div
+                key={index}
+                className="my-12 flex flex-col items-center justify-center p-4  rounded-2xl w-[140px] h-[140px] sm:w-[200px] sm:h-[200px] md:w-[240px] md:h-[240px]"
               >
-                {slides.map((slide, index) => (
-                  <div key={index} className="">
-                    <CarouselCard
-                      img={slide.img}
-                      link={slide.link}
-                      name={slide.name}
-                    />
-                  </div>
-                ))}
-              </Carousel>
-            </div>
+                <Skeleton height="15rem" width="15rem" />
+              </div>
+            ))}
           </div>
-        </section>
-      )}
+        ) : (
+          <Carousel
+            responsive={responsive}
+            infinite
+            autoPlay
+            autoPlaySpeed={2000}
+            keyBoardControl
+            customLeftArrow={<CustomLeftArrow />}
+            customRightArrow={<CustomRightArrow />}
+            containerClass="carousel-container relative"
+          >
+            {slides.map((slide, index) => (
+              <div
+                className="flex-shrink-0"
+                key={index}
+                onClick={() => {
+                  const link = slide?.link || "#";
+                  if (link !== "#") window.open(link, "_blank");
+                }}
+              >
+                <CarouselCard
+                  img={slide.img}
+                  // link={slide.link}
+                  // link={slide?.link ? slide.link : "#"}
+                  name={slide.name}
+                />
+              </div>
+            ))}
+          </Carousel>
+        )}
+      </div>
+
+      {/* Mobile View */}
+      <div className="block sm:hidden">
+        <h1
+          className="text-[24px] font-bold text-center font-cinzel mb-6"
+          style={{
+            lineHeight: "2rem",
+          }}
+        >
+          {whatsNewTranslations[language] || whatsNewTranslations["en"]}
+        </h1>
+
+        <div className="flex overflow-x-auto gap-4 pb-2 px-1">
+          {loading
+            ? [...Array(2)].map((_, index) => (
+                <div
+                  key={index}
+                  className=" flex-shrink-0  rounded-2xl my-[3rem] h-[15rem] w-[10rem] gap-8"
+                >
+                  <Skeleton
+                    height="15rem"
+                    width="10rem"
+                    className=" mb-4 rounded-2xl mx-4"
+                  />
+                </div>
+              ))
+            : slides.map((slide, index) => (
+                <div
+                  key={index}
+                  className="min-w-[200px] flex-shrink-0"
+                  onClick={() => {
+                    const link = slide?.link || "#";
+                    if (link !== "#") window.open(link, "_blank");
+                  }}
+                >
+                  <CarouselCard
+                    img={slide.img}
+                    link={slide.link}
+                    name={slide.name}
+                  />
+                </div>
+              ))}
+        </div>
+      </div>
     </>
   );
 }

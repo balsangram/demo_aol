@@ -8,6 +8,9 @@ import { youtubeLink } from "../../allapi/api";
 import CustomLeftArrow from "../Carousel/CustomLeftArrow";
 import CustomRightArrow from "../Carousel/CustomRightArrow";
 import { useLanguage } from "../../context/LanguageContext";
+import CarouselCardYoutube from "../cards/CarouselCardYoutube";
+// import CarouselCard from "../cards/CarouselCard";
+// import CarouselCardYoutube from "../cards/CarouselCardYoutube";
 
 interface YouTubeVideo {
   YouTubeLink: string;
@@ -105,42 +108,90 @@ const Home_6_Peace_Of_Mind: React.FC = () => {
   return (
     <section className="px-4">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-3xl font-bold text-center mb-8 sm:mb-8 font-cinzel">
+        <h1
+          className="text-[24px] font-bold text-center font-cinzel pb-8"
+          style={{
+            lineHeight: "2rem",
+          }}
+        >
           {peaceOfMindTranslations[language] || peaceOfMindTranslations["en"]}
         </h1>
-
-        <div className="relative z-0">
-          <Carousel
-            responsive={responsive}
-            infinite
-            autoPlay
-            autoPlaySpeed={2000}
-            keyBoardControl
-            customLeftArrow={<CustomLeftArrow />}
-            customRightArrow={<CustomRightArrow />}
-            containerClass="carousel-container relative"
-            rtl
-          >
-            {sriVideos.map((video, index) => (
-              <div key={index} className="px-2 z-0">
-                <a
-                  href={video.YouTubeLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block w-full h-[200px] sm:h-[250px] overflow-hidden rounded-xl shadow-md"
-                >
-                  <video
-                    className="w-full h-full object-cover pointer-events-none"
-                    poster={video.thumbnail}
-                    muted
-                  >
-                    <source src={video.YouTubeLink} type="video/mp4" />
-                    {/* Your browser does not support the video tag. */}
-                  </video>
-                </a>
+        {loading ? (
+          <div className="flex overflow-x-auto gap-8 pb-2 px-1 ">
+            {[1, 2, 3].map((_, index) => (
+              <div
+                key={index}
+                className=" flex-shrink-0  rounded-2xl my-[3rem] h-[12rem] w-[20rem] gap-8"
+              >
+                <Skeleton height="12rem" width="20rem" className=" " />
               </div>
             ))}
-          </Carousel>
+          </div>
+        ) : (
+          <div className="relative z-0 hidden sm:block">
+            <Carousel
+              responsive={responsive}
+              infinite
+              autoPlay
+              autoPlaySpeed={2000}
+              keyBoardControl
+              customLeftArrow={<CustomLeftArrow />}
+              customRightArrow={<CustomRightArrow />}
+              containerClass="carousel-container relative"
+              rtl
+            >
+              {sriVideos.map((video, index) => (
+                <div key={index} className="px-2 z-0 py-12">
+                  <a
+                    // href={video.YouTubeLink}
+                    href={video?.YouTubeLink ? video.YouTubeLink : "#"}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block sm:w-full w-[220px] h-[120px] sm:h-[250px] overflow-hidden rounded-xl shadow-md"
+                  >
+                    <video
+                      className="w-full h-full object-cover pointer-events-none "
+                      poster={video.thumbnail}
+                      muted
+                    >
+                      <source src={video.YouTubeLink} type="video/mp4" />
+                      {/* Your browser does not support the video tag. */}
+                    </video>
+                  </a>
+                </div>
+              ))}
+            </Carousel>
+          </div>
+        )}
+        <div className="relative z-0 sm:hidden overflow-x-auto flex gap-4 pb-4">
+          {loading
+            ? [...Array(2)].map((_, index) => (
+                <div
+                  key={index}
+                  className="flex-shrink-0 rounded-2xl my-12 h-[15rem] w-[10rem] gap-8"
+                >
+                  <Skeleton
+                    height="15rem"
+                    width="10rem"
+                    className="mb-4 rounded-2xl mx-4"
+                  />
+                </div>
+              ))
+            : sriVideos.map((slide, index) => (
+                <div
+                  key={index}
+                  className="min-w-[200px] flex-shrink-0 cursor-pointer"
+                  onClick={() => {
+                    const link = slide?.YouTubeLink || "#";
+                    if (link !== "#") window.open(link, "_blank");
+                  }}
+                >
+                  <CarouselCardYoutube
+                    img={slide.thumbnail}
+                    link={slide.YouTubeLink}
+                  />
+                </div>
+              ))}
         </div>
       </div>
     </section>

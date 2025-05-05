@@ -19,29 +19,29 @@ function Home_2_Experience_Center_Digitally() {
   const { language: selectedLanguage, setLanguage } = useLanguage(); // Use context here
 
   const translations: { [key: string]: string } = {
-    en: "Experience Center Digitally",
-    hi: "डिजिटल रूप में अनुभव केंद्र",
-    kn: "ಡಿಜಿಟಲ್ ಅನುಭವ ಕೇಂದ್ರ",
-    ta: "டிஜிட்டல் அனுபவ மையம்",
-    te: "డిజిటల్ అనుభవ కేంద్రం",
-    gu: "ડિજિટલ અનુભવ કેન્દ્ર",
-    mr: "डिजिटल अनुभव केंद्र",
-    ml: "ഡിജിറ്റൽ അനുഭവ കേന്ദ്രം",
-    pa: "ਡਿਜੀਟਲ ਅਨੁਭਵ ਕੇਂਦਰ",
-    bn: "ডিজিটাল অভিজ্ঞতা কেন্দ্র",
-    ru: "Центр цифрового опыта",
-    es: "Centro de experiencia digital",
-    zh: "数字体验中心",
-    mn: "Дижитал туршлагын төв",
-    pl: "Centrum Doświadczeń Cyfrowych",
-    bg: "Център за дигитално изживяване",
-    fr: "Centre d'expérience numérique",
-    de: "Digitales Erlebniszentrum",
-    nl: "Digitaal Ervaringscentrum",
-    it: "Centro di Esperienza Digitale",
-    pt: "Centro de Experiência Digital",
-    ja: "デジタル体験センター",
-    vi: "Trung tâm trải nghiệm kỹ thuật số",
+    en: "EXPERIENCE THE CENTER DIGITALLY",
+    hi: "केंद्र को डिजिटल रूप से अनुभव करें",
+    kn: "ಕೇಂದ್ರವನ್ನು ಡಿಜಿಟಲ್ ರೂಪದಲ್ಲಿ ಅನುಭವಿಸಿ",
+    ta: "மையத்தை டிஜிட்டலாக அனுபவிக்கவும்",
+    te: "కేంద్రాన్ని డిజిటల్‌గా అనుభవించండి",
+    gu: "કેન્દ્રને ડિજિટલ રીતે અનુભવો",
+    mr: "केंद्राचा डिजिटल अनुभव घ्या",
+    ml: "സെന്ററെ ഡിജിറ്റലായി അനുഭവിക്കൂ",
+    pa: "ਕੇਂਦਰ ਨੂੰ ਡਿਜੀਟਲ ਤਰੀਕੇ ਨਾਲ ਅਨੁਭਵ ਕਰੋ",
+    bn: "কেন্দ্রটিকে ডিজিটালভাবে অনুভব করুন",
+    ru: "Ощутите центр в цифровом формате",
+    es: "Experimenta el centro digitalmente",
+    zh: "数字化体验中心",
+    mn: "Төвийг дижитал байдлаар мэдрээрэй",
+    pl: "Doświadcz centrum cyfrowo",
+    bg: "Изживейте центъра дигитално",
+    fr: "Découvrez le centre numériquement",
+    de: "Erleben Sie das Zentrum digital",
+    nl: "Ervaar het centrum digitaal",
+    it: "Vivi il centro digitalmente",
+    pt: "Experimente o centro digitalmente",
+    ja: "センターをデジタルで体験してください",
+    vi: "Trải nghiệm trung tâm theo cách kỹ thuật số",
   };
 
   useEffect(() => {
@@ -72,7 +72,7 @@ function Home_2_Experience_Center_Digitally() {
   return (
     <>
       {loading ? (
-        <div className="w-full text-center sm:my-4 px-4">
+        <div className="w-full text-center sm:my-4 px-4 mt-4 mb-6">
           {/* Header Skeleton */}
           <Skeleton
             height={30}
@@ -82,34 +82,43 @@ function Home_2_Experience_Center_Digitally() {
           />
 
           {/* Responsive Skeleton Cards */}
-          <div className="flex gap-6 flex-wrap justify-center pb-12">
+          <div className="flex gap-6 flex-wrap justify-center sm:pb-12">
             {[1, 2, 3, 4].map((_, index) => (
               <div
                 key={index}
-                className="flex flex-col items-center justify-center p-6 bg-[#ffffff7e] rounded-[16px] w-[150px] h-[150px] sm:w-[15rem] sm:h-[15rem]"
+                className="flex flex-col items-center justify-center p-4 bg-white/50 rounded-2xl w-[140px] h-[140px] sm:w-[200px] sm:h-[200px] md:w-[240px] md:h-[240px]"
               >
-                <Skeleton
-                  height="5rem"
-                  width="5rem"
-                  circle
-                  style={{ marginBottom: "1rem" }}
-                />
-                <Skeleton width="70%" height="1.5rem" />
+                <div className="mb-3">
+                  <Skeleton height="5rem" width="5rem" circle />
+                </div>
+                <div className="w-[70%]">
+                  <Skeleton
+                    height="1rem"
+                    baseColor="#e0e0e0"
+                    highlightColor="#f5f5f5"
+                  />
+                </div>
               </div>
             ))}
           </div>
         </div>
       ) : (
-        <div className="text-center py-8 px-4 ">
-          <h2 className=" text-2xl sm:text-3xl font-bold font-[Cinzel] mb-8">
+        <div className="text-center px-4 ">
+          <h2
+            className=" text-[24px] sm:text-3xl   font-bold font-[Cinzel] "
+            style={{
+              lineHeight: "2rem",
+            }}
+          >
             {translations[selectedLanguage] || translations["en"]}
           </h2>
 
-          <div className="flex flex-wrap justify-center gap-6 ">
+          <div className="flex flex-wrap justify-center gap-6 py-12">
             {items.map((item, index) => (
               <Card
                 key={index}
-                link={item.link}
+                // link={item.link}
+                link={item?.link ? item.link : "#"}
                 name={item.name}
                 img={item.img}
               />

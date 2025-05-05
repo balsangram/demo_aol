@@ -28,7 +28,7 @@ export const userType_action = `${API_URL}/aol/displayAction`;
 export const Live_Link = `${API_URL}/aol/display_live_link`;
 
 // live Date Time 
-export const Live_Date_Time = `${API_URL}/aol/display_live_date_time`;
+export const Live_Date_Time = `${API_URL}/aol/display_live_date_time_language`;
 
 // global search 
 export const global_search = `${API_URL}/aol/card_search`;

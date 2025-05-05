@@ -88,15 +88,18 @@ function Internal2() {
             {[1, 2, 3, 4].map((_, index) => (
               <div
                 key={index}
-                className="flex flex-col items-center justify-center p-6 bg-[#ffffff7e] rounded-[16px] w-[150px] h-[150px] sm:w-[15rem] sm:h-[15rem]"
+                className="flex flex-col items-center justify-center p-4 bg-white/50 rounded-2xl w-[140px] h-[140px] sm:w-[200px] sm:h-[200px] md:w-[240px] md:h-[240px]"
               >
-                <Skeleton
-                  height="5rem"
-                  width="5rem"
-                  circle
-                  style={{ marginBottom: "1rem" }}
-                />
-                <Skeleton width="70%" height="1.5rem" />
+                <div className="mb-3">
+                  <Skeleton height="5rem" width="5rem" circle />
+                </div>
+                <div className="w-[70%]">
+                  <Skeleton
+                    height="1rem"
+                    baseColor="#e0e0e0"
+                    highlightColor="#f5f5f5"
+                  />
+                </div>
               </div>
             ))}
           </div>

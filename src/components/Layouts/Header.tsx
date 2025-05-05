@@ -93,11 +93,7 @@ const Header = () => {
            "
           >
             {/* Menu Button */}
-            <div
-              className="lg:w-[33%]
-          
-             "
-            >
+            <div className="lg:w-[33%]">
               <button
                 type="button"
                 className="m-auto collapse-icon flex-none dark:text-[#d0d2d6] hover:text-primary dark:hover:text-primary flex lg:hidden ltr:ml-2 rtl:mr-2 p-2 rounded-full bg-white-light/40 dark:bg-dark/40 hover:bg-white-light/90 dark:hover:bg-dark/60"
@@ -118,7 +114,7 @@ const Header = () => {
                 className="main-logo flex items-center shrink-0 m-auto pl-3"
               >
                 <img
-                  className="w-32 ml-[1.8rem] sm:ml-0 rtl:-mr-1 inline "
+                  className="w-32 ml-[1.8rem] md:ml-[15rem] lg:ml-[-1rem] sm:ml-0 rtl:-mr-1 inline "
                   src={logo}
                   alt="logo"
                 />
@@ -133,7 +129,7 @@ const Header = () => {
             >
               {/* 🔔 Notification Icon */}
               <div
-                className="w-10 h-10 flex items-center justify-center cursor-pointer relative"
+                className="w-10 h-10 flex items-center justify-center cursor-pointer relative "
                 onClick={() => setNotificationOpen(!notificationOpen)}
               >
                 <NotificationsNoneIcon className="text-[#050916] mr-3" />
@@ -147,7 +143,7 @@ const Header = () => {
               {notificationOpen && (
                 <div
                   ref={notificationRef}
-                  className="absolute top-14 right-0 z-50 bg-white dark:bg-dark border border-gray-200 dark:border-gray-700 rounded-lg shadow-md p-4 w-80 max-h-96 overflow-y-auto mr-[-2rem] sm:mr-0"
+                  className="absolute top-14 right-0 z-50 bg-white dark:bg-dark border border-gray-200 dark:border-gray-700 rounded-lg shadow-md p-4 w-80 max-h-96 overflow-y-auto mr-2 sm:mr-0"
                 >
                   <h4 className="text-lg font-semibold text-gray-800 dark:text-white mb-2">
                     Notifications

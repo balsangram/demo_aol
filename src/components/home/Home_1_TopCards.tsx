@@ -108,29 +108,29 @@ const items: Item[] = [
   },
   {
     Contents: {
-      en: "Visitor Service",
-      hi: "आगंतुक सेवा",
-      kn: "ಭೇಟಿಯಾಳು ಸೇವೆ",
-      ta: "பார்வையாளர் சேவை",
-      te: "సందర్శక సేవ",
-      gu: "મુલાકાત સેવા",
-      mr: "पर्यटक सेवा",
-      ml: "സന്ദർശക സേവനം",
-      pa: "ਦਰਸ਼ਕ ਸੇਵਾ",
-      bn: "দর্শনার্থী পরিষেবা",
-      ru: "Сервис для посетителей",
-      es: "Servicio para Visitantes",
+      en: "Visitor Services",
+      hi: "आगंतुक सेवाएं",
+      kn: "ಸಂದರ್ಶಕರ ಸೇವೆಗಳು",
+      ta: "பார்வையாளர் சேவைகள்",
+      te: "సందర్శక సేవలు",
+      gu: "મુલાકાત સેવાઓ",
+      mr: "पर्यटक सेवाएं",
+      ml: "സന്ദർശക സേവനങ്ങൾ",
+      pa: "ਦਰਸ਼ਕ ਸੇਵਾਵਾਂ",
+      bn: "দর্শনার্থী পরিষেবাসমূহ",
+      ru: "Сервисы для посетителей",
+      es: "Servicios para Visitantes",
       zh: "访客服务",
-      mn: "Зочдын үйлчилгээ",
-      pl: "Obsługa Gości",
+      mn: "Зочдод зориулсан үйлчилгээ",
+      pl: "Usługi dla gości",
       bg: "Услуги за посетители",
-      fr: "Service des Visiteurs",
-      de: "Besucherservice",
-      nl: "Bezoekersservice",
-      it: "Servizio Visitatori",
-      pt: "Serviço de Visitantes",
+      fr: "Services aux visiteurs",
+      de: "Besucherservices",
+      nl: "Bezoekersdiensten",
+      it: "Servizi per i visitatori",
+      pt: "Serviços para visitantes",
       ja: "訪問者サービス",
-      vi: "Dịch vụ khách tham quan",
+      vi: "Các dịch vụ khách tham quan",
     },
     Links: "http://aolic.org/kiosk",
     img: img4,
@@ -147,7 +147,7 @@ const Home_1_TopCards: React.FC = () => {
   }, []);
 
   return (
-    <div className="px-4 pt-8 sm:pt-0">
+    <div className="px-4 py-8 sm:pt-0 ">
       <div className="flex flex-wrap justify-center gap-6">
         {loading ? (
           items.map((_, index) => (
@@ -155,8 +155,16 @@ const Home_1_TopCards: React.FC = () => {
               key={index}
               className="flex flex-col items-center justify-center p-4 bg-white/50 rounded-2xl w-[140px] h-[140px] sm:w-[200px] sm:h-[200px] md:w-[240px] md:h-[240px]"
             >
-              <Skeleton height="5rem" width="5rem" circle />
-              <Skeleton width="70%" height="1.5rem" className="mt-2" />
+              <div className="mb-3">
+                <Skeleton height="5rem" width="5rem" circle />
+              </div>
+              <div className="w-[70%]">
+                <Skeleton
+                  height="1rem"
+                  baseColor="#e0e0e0"
+                  highlightColor="#f5f5f5"
+                />
+              </div>
             </div>
           ))
         ) : (
@@ -164,7 +172,8 @@ const Home_1_TopCards: React.FC = () => {
             {items.map((item, index) => (
               <Card
                 key={index}
-                link={item.Links}
+                // link={item.Links}
+                link={item?.Links ? item.Links : "#"}
                 name={item.Contents[language] || item.Contents["en"]}
                 img={item.img}
               />

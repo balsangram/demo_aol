@@ -7,7 +7,7 @@ interface CardProps {
   img?: string;
 }
 
-const CarouselCard: React.FC<CardProps> = ({ link = "#", name, img }) => {
+const CarouselCard2: React.FC<CardProps> = ({ link = "#", name, img }) => {
   return (
     <div
       className="rounded-lg shadow-2xl flex flex-col items-center p-10 transition-all duration-500 ease-in-out text-[#5A382D] hover:text-[#7B480F] hover:scale-105 hover:font-bold cursor-pointer w-[10rem] sm:w-[15rem]"
@@ -34,14 +34,14 @@ const CarouselCard: React.FC<CardProps> = ({ link = "#", name, img }) => {
         href={link}
         target="_blank"
         rel="noopener noreferrer"
-        className="rounded-lg w-full text-center font-bold bg-[rgba(46,44,44,0.42)] text-white h-16 flex items-center justify-center rounded-b-lg bottom-0 absolute left-0 text-[16px] sm:text-xl"
+        className="rounded-lg w-full text-center  font-bold bg-[rgba(46,44,44,0.42)] text-white h-16 flex items-center justify-center rounded-b-lg bottom-0 absolute left-0 text-[16px] sm:text-xl"
         style={{ backdropFilter: "blur(0px)" }} // Smooth glass effect
       >
-        {name && name.length > 10 ? name.slice(0, 10) + "..." : name}
+        {name && name.length > 10 ? "..." + name.slice(0, 10) : name}
         {/* {name} */}
       </a>
     </div>
   );
 };
 
-export default CarouselCard;
+export default CarouselCard2;

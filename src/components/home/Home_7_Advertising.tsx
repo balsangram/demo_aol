@@ -29,29 +29,29 @@ const responsive = {
 };
 
 const upcomingProgramsTranslations: { [key: string]: string } = {
-  en: "UPCOMING PROGRAMS/ACTIVITIES AT THE CENTER",
-  hi: "केंद्र में आगामी कार्यक्रम / गतिविधियाँ",
-  kn: "ಕೇಂದ್ರದಲ್ಲಿ ನಿರೀಕ್ಷಿತ ಕಾರ್ಯಕ್ರಮಗಳು / ಚಟುವಟಿಕೆಗಳು",
-  ta: "மையத்தில் வரவிருக்கும் நிகழ்ச்சிகள் / செயல்பாடுகள்",
-  te: "కేంద్రంలో రాబోయే కార్యక్రమాలు / కార్యకలాపాలు",
-  gu: "કેન્દ્રમાં આવનારા કાર્યક્રમો / પ્રવૃત્તિઓ",
-  mr: "केंद्रातील आगामी कार्यक्रम / क्रियाकलाप",
-  ml: "കേന്ദ്രത്തിലെ വരാനിരിക്കുന്ന പരിപാടികളും പ്രവർത്തനങ്ങളും",
-  pa: "ਕੇਂਦਰ ਵਿੱਚ ਆਉਣ ਵਾਲੇ ਕਾਰਜਕ੍ਰਮ / ਗਤਿਵਿਧੀਆਂ",
-  bn: "কেন্দ্রে আসন্ন প্রোগ্রাম / কার্যকলাপ",
-  ru: "Предстоящие программы / мероприятия в центре",
-  es: "Próximos programas/actividades en el centro",
-  zh: "中心即将举行的节目/活动",
-  mn: "Төвд болох хөтөлбөрүүд / үйл ажиллагаа",
-  pl: "Nadchodzące programy / działania w centrum",
-  bg: "Предстоящи програми / дейности в центъра",
-  fr: "Programmes / activités à venir au centre",
-  de: "Bevorstehende Programme / Aktivitäten im Zentrum",
-  nl: "Aankomende programma's / activiteiten in het centrum",
-  it: "Prossimi programmi / attività al centro",
-  pt: "Próximos programas / atividades no centro",
-  ja: "センターでの今後のプログラム/活動",
-  vi: "Chương trình / hoạt động sắp tới tại trung tâm",
+  en: "UPCOMING PROGRAMS/ACTIVITIES",
+  hi: "आगामी कार्यक्रम / गतिविधियाँ",
+  kn: "ನಿರೀಕ್ಷಿತ ಕಾರ್ಯಕ್ರಮಗಳು / ಚಟುವಟಿಕೆಗಳು",
+  ta: "வரவிருக்கும் நிகழ்ச்சிகள் / செயல்பாடுகள்",
+  te: "రాబోయే కార్యక్రమాలు / కార్యకలాపాలు",
+  gu: "આવનારા કાર્યક્રમો / પ્રવૃત્તિઓ",
+  mr: "आगामी कार्यक्रम / क्रियाकलाप",
+  ml: "വരാനിരിക്കുന്ന പരിപാടികളും പ്രവർത്തനങ്ങളും",
+  pa: "ਆਉਣ ਵਾਲੇ ਕਾਰਜਕ੍ਰਮ / ਗਤਿਵਿਧੀਆਂ",
+  bn: "আসন্ন প্রোগ্রাম / কার্যকলাপ",
+  ru: "Предстоящие программы / мероприятия",
+  es: "Próximos programas / actividades",
+  zh: "即将举行的节目/活动",
+  mn: "Удахгүй болох хөтөлбөрүүд / үйл ажиллагаа",
+  pl: "Nadchodzące programy / działania",
+  bg: "Предстоящи програми / дейности",
+  fr: "Programmes / activités à venir",
+  de: "Bevorstehende Programme / Aktivitäten",
+  nl: "Aankomende programma's / activiteiten",
+  it: "Prossimi programmi / attività",
+  pt: "Próximos programas / atividades",
+  ja: "今後のプログラム/活動",
+  vi: "Chương trình / hoạt động sắp tới",
 };
 
 const Home_7_Advertising: React.FC = () => {
@@ -92,24 +92,26 @@ const Home_7_Advertising: React.FC = () => {
   return (
     <div>
       {loading && (
-        <div className="flex gap-4 flex-wrap justify-center pb-12">
-          {[1, 2, 3].map((_, j) => (
-            <Skeleton
-              key={j}
-              height={300}
-              width="100%"
-              className="rounded-xl"
-              style={{ borderRadius: "1rem" }}
-            />
+        <div className="flex overflow-x-auto gap-8 pb-2 px-1 ">
+          {[1, 2, 3, 4].map((_, index) => (
+            <div
+              key={index}
+              className=" flex-shrink-0  rounded-2xl my-[3rem] h-[12rem] w-[22rem] gap-8"
+            >
+              <Skeleton height="15rem" width="22rem" className=" " />
+            </div>
           ))}
         </div>
       )}
       {!loading && (
-        <section className="py-8 sm:py-12 px-4">
+        <section className="pb-8 sm:pb-12 px-4">
           <div className="max-w-7xl mx-auto">
-            <h1 className="text-3xl font-bold text-center mb-8 sm:mb-12 font-cinzel">
-              {/* ADVERTISEMENT BAR */}
-              {/* UPCOMING PROGRAMS/ ACTIVITIES AT THE CENTER */}
+            <h1
+              className="text-[24px] font-bold text-center mb-8 sm:mb-12 mt-0 font-cinzel"
+              style={{
+                lineHeight: "2rem",
+              }}
+            >
               {upcomingProgramsTranslations[language] ||
                 upcomingProgramsTranslations["en"]}
             </h1>
@@ -128,7 +130,12 @@ const Home_7_Advertising: React.FC = () => {
               >
                 {ads.map((ad, index) => (
                   <div key={index}>
-                    <a href={ad.link} target="_blank" rel="noopener noreferrer">
+                    <a
+                      // href={ad.link}
+                      href={ad?.link ? ad.link : "#"}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       <img
                         src={ad.img}
                         alt={`Advertisement ${index + 1}`}

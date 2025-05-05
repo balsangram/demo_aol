@@ -74,24 +74,22 @@ const Footer = () => {
               alt="Email"
               className="w-5 h-5"
             />
-            <p className="text-[12px]">{email.contactName}</p>
+            <p className="text-[12px] text-[#0E1726]">{email.contactName}</p>
           </a>
         )}
 
-        {call && (
+        {call?.contactLink && (
           <a
-            href={`tel:${call.contactLink}`} // Using 'tel:' to trigger the phone dialer
-            target="_blank"
-            rel="noopener noreferrer"
-            className="bg-[#ffffff7b] hover:bg-[#5f99aebd] transition rounded-[5px] p-1 h-[2rem] flex justify-start pl-3 gap-[1rem] items-center text-sm"
-            style={{ border: "2px solid #fff" }}
+            href={`tel:${call.contactLink}`}
+            className="bg-[#ffffff7b] hover:bg-[#5f99aebd] transition rounded-[5px] p-1 h-[2rem] flex justify-start pl-3 gap-[1rem] items-center text-sm border-2 border-white"
+            aria-label={`Call ${call.contactName}`}
           >
             <img
-              src={call.contactImage} // Replace with actual icon
-              alt="Call"
+              src={call.contactImage}
+              alt={`Call icon for ${call.contactName}`}
               className="w-5 h-5"
             />
-            <p className="text-[12px]">{call.contactName}</p>
+            <p className="text-[12px] text-[#0E1726]">{call.contactName}</p>
           </a>
         )}
 
@@ -108,7 +106,7 @@ const Footer = () => {
               alt="Message"
               className="w-5 h-5"
             />
-            <p className="text-[12px]">{message.contactName}</p>
+            <p className="text-[12px] text-[#0E1726]">{message.contactName}</p>
           </a>
         )}
 
@@ -125,7 +123,7 @@ const Footer = () => {
               alt="Drop"
               className="w-5 h-5"
             />
-            <p className="text-[12px]">{drop.contactName}</p>
+            <p className="text-[12px] text-[#0E1726]">{drop.contactName}</p>
           </a>
         )}
       </div>
