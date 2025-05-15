@@ -148,7 +148,7 @@ const Home_1_TopCards: React.FC = () => {
 
   return (
     <div className="px-4 pt-10 lg:pt-0">
-      <div className="flex flex-wrap justify-center gap-6 ">
+      <div className="flex flex-wrap justify-center gap-6">
         {loading ? (
           items.map((_, index) => (
             <div
@@ -168,7 +168,7 @@ const Home_1_TopCards: React.FC = () => {
             </div>
           ))
         ) : (
-          <div className="flex flex-wrap justify-center gap-6 pb-12 ">
+          <div className="flex flex-wrap justify-center gap-3 pb-12  m-auto">
             {items.map((item, index) => (
               <Card
                 key={index}

@@ -49,6 +49,7 @@ const Home_4_Stay_Updated: React.FC = () => {
       try {
         const response = await axios.get(
           `${all_Card}/Stay Updated/${language}`
+          // `${all_Card}/STAY UPDATED/${language}`
         );
         setItems(response.data);
       } catch (error) {
@@ -107,7 +108,7 @@ const Home_4_Stay_Updated: React.FC = () => {
           >
             {stayUpdatedTranslations[language] || stayUpdatedTranslations["en"]}
           </h2>
-          <div className="flex flex-wrap justify-center gap-6 py-12 ">
+          <div className="flex flex-wrap justify-center gap-3 py-12 ">
             {items.map((item, index) => (
               <Card
                 key={index}

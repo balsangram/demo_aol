@@ -3,6 +3,7 @@ import { Navigate } from "react-router-dom";
 import PrivateRoute from "./PrivateRoute"; // Import the PrivateRoute
 import Login from "../pages/auth/Login";
 import Profile from "../pages/profile/Profile";
+import Direction from "../pages/direction/Direction";
 
 const Home = lazy(() => import("../pages/Home"));
 const Internal = lazy(() => import("../pages/internal/Internal"));
@@ -68,6 +69,26 @@ const routes = [
   },
   {
     path: "/profile",
+    element: (
+      <PrivateRoute>
+        <Suspense fallback={<div>Loading...</div>}>
+          <Profile />
+        </Suspense>
+      </PrivateRoute>
+    ),
+  },
+  {
+    path: "/display_direction",
+    element: (
+      <PrivateRoute>
+        <Suspense fallback={<div>Loading...</div>}>
+          <Direction />
+        </Suspense>
+      </PrivateRoute>
+    ),
+  },
+  {
+    path: "/direction_details",
     element: (
       <PrivateRoute>
         <Suspense fallback={<div>Loading...</div>}>

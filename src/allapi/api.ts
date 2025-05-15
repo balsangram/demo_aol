@@ -4,13 +4,13 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 // export const USER_TYPE2_API = `${API_URL}/user/action/Teacher`;
 
-export const Experience_Center_Digitally = `${API_URL}/aol/showAllCards/Experience Center Digitally`;
+export const Experience_Center_Digitally = `${API_URL}/aol/showAllCards/EXPERIENCE THE CENTER DIGITALLY`;
 
-export const Facilities_Services_at_Center = `${API_URL}/aol/showAllCards/Facilities & Services at Center`;
+export const Facilities_Services_at_Center = `${API_URL}/aol/showAllCards/FACILITIES & SERVICES`;
 
 export const Stay_Updated = `${API_URL}/aol/showAllCards/Stay Updated`;
 
-export const Experience_Peace_With_Your_Squad = `${API_URL}/aol/showAllCards/Experience Peace With Your Squad`;
+export const Experience_Peace_With_Your_Squad = `${API_URL}/aol/showAllCards/WHAT'S NEW`;
 
 // YouTube link 
 export const youtubeLink = `${API_URL}/aol/displayWebYoutubeLinks`;
@@ -38,6 +38,7 @@ export const global_search = `${API_URL}/aol/card_search`;
 export const display_all_notification = `${API_URL}/aol/display_notification`;
 
 export const addToken = `${API_URL}/aol/deviceToken`;
+export const logout = `${API_URL}/aol/logout`;
 
 // footer 
 export const footer_social = `${API_URL}/aol/social_media`;
@@ -59,3 +60,10 @@ export const all_Card = `${API_URL}/aol/Card_language`;
 export const all_action = `${API_URL}/aol/action_language`;
 export const all_user_Type = `${API_URL}/aol/userType_language`;
 export const all_search = `${API_URL}/aol/searchCard_language`;
+
+// direction
+export const all_directions = `${API_URL}/aol/display_direction`;
+
+export const get_direction_names = `${API_URL}/aol/get_direction_names`;
+
+export const display_single_data = `${API_URL}/aol/get_perticular_card`;

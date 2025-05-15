@@ -72,6 +72,8 @@ function Home_5_Peace_With_Your_Squad() {
       try {
         const response = await axios.get(
           `${all_Card}/Experience Peace With Your Squad/${language}`
+
+          // `${all_Card}/WHAT'S NEW/${language}`
         );
         setSlides(response.data);
       } catch (error) {

@@ -68,12 +68,12 @@ const Card: React.FC<CardProps> = ({ link, name, onEdit, img }) => {
   return (
     <>
       <div
-        className=" flex  sm:py-10 py-4 
-                 transition-all duration-500 ease-in-out
-                 bg-[#ffffffa3]
-                  text-[#06202B]
-                  hover:font-bold  hover:scale-105 
-                  flex-col  cursor-pointer min-w-6  h-[130px] w-[130px] sm:w-[15rem] sm:h-[15rem] md:rounded-[4px] rounded-[16px]"
+        className="flex sm:p-10 p-4 
+       transition-all duration-500 ease-in-out
+       bg-[#ffffff7e]
+       text-[#06202B]
+       hover:font-bold hover:scale-105 hover:px-7
+       flex-col cursor-pointer min-w-6 h-[140px] w-[140px] sm:w-[15rem] sm:h-[15rem] md:rounded-[4px] rounded-[16px]"
         onClick={handleClick}
       >
         <img
@@ -86,7 +86,7 @@ const Card: React.FC<CardProps> = ({ link, name, onEdit, img }) => {
             borderRadius: "5rem",
           }}
         />
-        <p className=" text-[#06202B] text-center m-auto text-[12px] sm:text-base flex justify-center items-center w-full font-bold">
+        <p className="text-center m-auto text-[14px] sm:text-[16px] h-20 sm:mt-4 mt-1 flex justify-center items-center font-bold">
           {name.length > maxChar ? name.slice(0, maxChar) + "..." : name}
         </p>
       </div>

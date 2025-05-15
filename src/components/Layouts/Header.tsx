@@ -175,7 +175,9 @@ const Header = () => {
               )}
               {/* <a href="tel:${sosNo}"> */}
               <a href={`tel:${sosNo}`}>
-                <button className="text-red-500 font-bold p-4">SOS</button>
+                <button className="text-red-500 font-bold font-poppins p-4">
+                  SOS
+                </button>
               </a>
 
               {/* 🔍 Search */}

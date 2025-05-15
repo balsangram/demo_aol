@@ -60,7 +60,8 @@ const Home_3_Facilities_and_Services_at_Center = () => {
       setLoading(true);
       try {
         const response = await axios.get(
-          `${all_Card}/Facilities & Services at Center/${language}`
+           `${all_Card}/Facilities & Services at Center/${language}`
+          // `${all_Card}/FACILITIES & SERVICES/${language}`
         );
         setSlides(response.data);
       } catch (error) {
@@ -149,7 +150,7 @@ const Home_3_Facilities_and_Services_at_Center = () => {
           {translatedTitle}
         </h1>
 
-        <div className="flex overflow-x-auto gap-4 pb-2 px-1">
+        <div className="flex overflow-x-auto gap-3 pb-2 px-1">
           {loading
             ? [...Array(2)].map((_, index) => (
                 <div

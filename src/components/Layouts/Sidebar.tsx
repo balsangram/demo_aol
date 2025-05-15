@@ -10,6 +10,9 @@ import LiveTvIcon from "@mui/icons-material/LiveTv";
 import PersonIcon from "@mui/icons-material/Person";
 import logo from "../../../public/assets/logo/AOL LOGO BANGALORE ASHRAM BLACK.png";
 import { useLanguage } from "../../context/LanguageContext";
+import DirectionsIcon from "@mui/icons-material/Directions";
+import { logout } from "../../allapi/api";
+import axios from "axios";
 
 type Translations = {
   [key: string]: {
@@ -191,12 +194,27 @@ const Sidebar = () => {
   }, [location]);
 
   function handleLogout() {
+    const token = localStorage.getItem("aolfcmToken"); // Make sure you're saving the device token in localStorage after login or FCM registration
+
     localStorage.removeItem("email");
     localStorage.removeItem("username");
     localStorage.removeItem("userLoggedIn");
     localStorage.removeItem("phone");
     localStorage.removeItem("aadhar");
+    localStorage.removeItem("aolfcmToken"); // remove token from localStorage
+    //  clearToken();
     console.log("Logged out successfully");
+
+    // Call logout API
+    axios
+      .post(logout, { token }) // Send token in the body
+      .then((response) => {
+        console.log("Logout API response:", response.data);
+      })
+      .catch((error) => {
+        console.log("Logout API error:", error.response?.data || error.message);
+      });
+
     navigate("/login");
   }
 
@@ -264,6 +282,21 @@ const Sidebar = () => {
                       <div className="flex items-center gap-2">
                         <LaunchIcon />
                         <span>{t("Internal Logins")}</span>
+                      </div>
+                    </NavLink>
+                  </li>
+                  <li className="nav-item">
+                    <NavLink
+                      to="/display_direction"
+                      className="group"
+                      style={{
+                        backgroundColor: "#fff",
+                        borderRadius: "12px",
+                      }}
+                    >
+                      <div className="flex items-center gap-2">
+                        <DirectionsIcon />
+                        <span>{t("Directions")}</span>
                       </div>
                     </NavLink>
                   </li>
