@@ -10,6 +10,7 @@ interface cards {
   link: string;
   name: string;
   img: string;
+  _id: string;
 }
 
 function Home_2_Experience_Center_Digitally() {
@@ -52,6 +53,7 @@ function Home_2_Experience_Center_Digitally() {
           `${all_Card}/Experience Center Digitally/${selectedLanguage}`
           // `${all_Card}/EXPERIENCE THE CENTER DIGITALLY/${selectedLanguage}`
         );
+        console.log("🚀 ~ fetchData ~ response:", response);
         // const response = await axios.get(Experience_Center_Digitally);
         setItems(response.data);
       } catch (error) {
@@ -118,6 +120,7 @@ function Home_2_Experience_Center_Digitally() {
             {items.map((item, index) => (
               <Card
                 key={index}
+                id={item._id}
                 // link={item.link}
                 link={item?.link ? item.link : "#"}
                 name={item.name}

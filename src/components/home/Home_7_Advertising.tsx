@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import { Advertisement_Img } from "../../allapi/api";
+import { add_LinkLog, Advertisement_Img } from "../../allapi/api";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import CustomLeftArrow from "../Carousel/CustomLeftArrow";
@@ -89,6 +89,31 @@ const Home_7_Advertising: React.FC = () => {
     fetchAds();
   }, []);
 
+  const clickLinkLog = () => {
+    const userId = localStorage.getItem("userId");
+    if (!userId) {
+      console.error("User ID not found in localStorage");
+      return;
+    }
+
+    const payload = {
+      userId: userId,
+      // cardId: id,
+      cardName: name,
+    };
+
+    console.log("Logging click:", payload);
+
+    axios
+      .post(add_LinkLog, payload)
+      .then((response) => {
+        console.log("Log response:", response);
+      })
+      .catch((error) => {
+        console.error("Error logging click:", error);
+      });
+  };
+
   return (
     <div>
       {loading && (
@@ -135,6 +160,9 @@ const Home_7_Advertising: React.FC = () => {
                       href={ad?.link ? ad.link : "#"}
                       target="_blank"
                       rel="noopener noreferrer"
+                      onClick={() => {
+                        clickLinkLog({ name: ad.title });
+                      }}
                     >
                       <img
                         src={ad.img}

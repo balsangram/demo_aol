@@ -15,6 +15,7 @@ interface Card {
   link: string;
   img: string;
   name: string;
+  _id: string;
 }
 
 const whatsNewTranslations: { [key: string]: string } = {
@@ -125,6 +126,7 @@ function Home_5_Peace_With_Your_Squad() {
                 }}
               >
                 <CarouselCard
+                  id={slide._id}
                   img={slide.img}
                   // link={slide.link}
                   // link={slide?.link ? slide.link : "#"}
@@ -171,6 +173,7 @@ function Home_5_Peace_With_Your_Squad() {
                   }}
                 >
                   <CarouselCard
+                    id={slide._id}
                     img={slide.img}
                     link={slide.link}
                     name={slide.name}

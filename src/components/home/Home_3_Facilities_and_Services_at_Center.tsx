@@ -15,6 +15,7 @@ interface Card {
   link: string;
   img: string;
   name: string;
+  _id: string;
 }
 
 const responsive = {
@@ -60,7 +61,7 @@ const Home_3_Facilities_and_Services_at_Center = () => {
       setLoading(true);
       try {
         const response = await axios.get(
-           `${all_Card}/Facilities & Services at Center/${language}`
+          `${all_Card}/Facilities & Services at Center/${language}`
           // `${all_Card}/FACILITIES & SERVICES/${language}`
         );
         setSlides(response.data);
@@ -126,6 +127,7 @@ const Home_3_Facilities_and_Services_at_Center = () => {
               >
                 <div key={index}>
                   <CarouselCard2
+                    id={slide._id}
                     img={slide.img}
                     // link={slide.link}
                     // link={slide?.link ? slide.link : "#"}
@@ -137,7 +139,6 @@ const Home_3_Facilities_and_Services_at_Center = () => {
           </Carousel>
         )}
       </div>
-
       {/* Mobile View */}
       <div className="block sm:hidden">
         {/* <h1 className="text-3xl font-bold text-center font-cinzel mb-6"> */}
@@ -174,6 +175,7 @@ const Home_3_Facilities_and_Services_at_Center = () => {
                   }}
                 >
                   <CarouselCard
+                    id={slide._id}
                     img={slide.img}
                     link={slide.link}
                     name={slide.name}

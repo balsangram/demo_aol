@@ -1,20 +1,72 @@
 import { toast, ToastContainer } from "react-toastify";
 import React from "react";
+import axios from "axios";
+import { add_LinkLog } from "../../allapi/api";
 
 interface CardProps {
   link?: string;
-  //   name: string;
+  name: string;
   img?: string;
+  id: string;
 }
 
 const CarouselCardYoutube: React.FC<CardProps> = ({
   link = "#",
-  //   name,
+  name,
   img,
+  id,
 }) => {
+  const clickLinkLog = () => {
+    const userId = localStorage.getItem("userId");
+    if (!userId) {
+      console.error("User ID not found in localStorage");
+      return;
+    }
+
+    const payload = {
+      userId: userId,
+      cardId: id,
+      cardName: name,
+    };
+
+    console.log("Logging click:", payload);
+
+    axios
+      .post(add_LinkLog, payload)
+      .then((response) => {
+        console.log("Log response:", response);
+      })
+      .catch((error) => {
+        console.error("Error logging click:", error);
+      });
+  };
+
+  const notify = () => {
+    toast.info("Coming Soon!", {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      theme: "light",
+      style: {
+        backgroundColor: "#E0F7FA",
+        color: "#004D40",
+        fontWeight: "600",
+        fontSize: "14px",
+        padding: "12px 16px",
+        borderRadius: "10px",
+        boxShadow: "0 4px 8px rgba(0, 77, 64, 0.2)",
+        maxWidth: "90vw",
+        wordWrap: "break-word",
+      },
+    });
+  };
   return (
     <div
       className="rounded-lg shadow-2xl flex flex-col items-center p-10 transition-all duration-500 ease-in-out text-[#5A382D] hover:text-[#7B480F] hover:scale-105 hover:font-bold cursor-pointer w-[10rem] sm:w-[15rem]"
+      onClick={clickLinkLog}
       style={{
         height: "120px",
         width: "220px",

@@ -59,7 +59,7 @@ function ExperiencePeace() {
         }}
       >
         {items.map((item, index) => (
-          <Card key={index} link={item.link} name={item.name} img={item.img} />
+          <Card  key={index} link={item.link} name={item.name} img={item.img} />
         ))}
       </div>
     </div>

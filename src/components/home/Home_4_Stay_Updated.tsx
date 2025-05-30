@@ -11,6 +11,7 @@ interface CardItem {
   name: string;
   link: string;
   img: string;
+  _id: string;
 }
 
 const Home_4_Stay_Updated: React.FC = () => {
@@ -111,6 +112,7 @@ const Home_4_Stay_Updated: React.FC = () => {
           <div className="flex flex-wrap justify-center gap-3 py-12 ">
             {items.map((item, index) => (
               <Card
+                id={item._id}
                 key={index}
                 link={item?.link ? item.link : "#"}
                 name={item.name}

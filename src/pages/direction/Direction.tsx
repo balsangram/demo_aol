@@ -1,8 +1,10 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import Select from "react-select"; // Import react-select
 import DirectionCard from "../../components/cards/DirectionCard";
 import { display_single_data, get_direction_names } from "../../allapi/api";
 import map from "../../../public/assets/map/map.png";
+import { useLocation } from "react-router-dom";
 
 interface DirectionType {
   _id: string;
@@ -26,12 +28,16 @@ const Direction: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [distance, setDistance] = useState<number | null>(null);
+  const location = useLocation();
+  console.log(location.state.direction, "location");
 
   // Fetch directions list from API
   useEffect(() => {
     const fetchDirections = async () => {
       try {
-        const response = await axios.get(get_direction_names);
+        const response = await axios.get(
+          `${get_direction_names}/${location.state.direction}`
+        );
         if (Array.isArray(response.data)) {
           setDirections(response.data);
         } else {
@@ -112,75 +118,94 @@ const Direction: React.FC = () => {
     }
   };
 
+  // Options for react-select
+  const directionOptions = directions.map((dir) => ({
+    value: dir.directionName,
+    label: dir.directionName,
+  }));
+
+  // Custom styles for react-select to match existing design
+  const customStyles = {
+    control: (provided: any) => ({
+      ...provided,
+      backgroundColor: "#fffcfc80",
+      borderColor: "#d1d5db",
+      borderRadius: "0.375rem",
+      padding: "0.5rem",
+      maxWidth: "20rem",
+      outline: "none",
+      fontFamily: "Poppins, sans-serif",
+    }),
+    menu: (provided: any) => ({
+      ...provided,
+      maxWidth: "20rem",
+    }),
+    option: (provided: any) => ({
+      ...provided,
+      fontFamily: "Poppins, sans-serif",
+    }),
+  };
+
   return (
     <div className="p-6 min-h-[75vh]">
-      <h1 className="text-3xl font-bold mb-6 text-center text-black  font-[Cinzel]">
+      <h1 className="text-3xl font-bold mb-6 text-center text-black font-[Cinzel]">
         Directions
       </h1>
 
-      <div className="flex flex-col lg:flex-row justify-center items-start gap-8 ">
-        <div className="w-full ">
-          <div className=" flex justify-center items-center flex-col gap-2 m-4">
+      <div className="flex flex-col lg:flex-row justify-center items-start gap-8">
+        <div className="w-full">
+          <div className="flex justify-center items-center flex-col gap-2 m-4">
             {/* First Direction Dropdown */}
-            <div className="flex sm:flex-row flex-col w-[20rem] sm:w-[25rem] justify-between sm:items-center gap-2 font-poppins  ">
-              <span className="w-[7rem] ">Source:</span>
-              <select
-                value={selectedDirection1}
-                onChange={(e) =>
+            <div className="flex sm:flex-row flex-col w-[20rem] sm:w-[25rem] justify-between sm:items-center gap-2 font-poppins">
+              <span className="w-[7rem]">Source:</span>
+              <Select
+                options={directionOptions.filter(
+                  (option) => option.value !== selectedDirection2
+                )}
+                value={directionOptions.find(
+                  (option) => option.value === selectedDirection1
+                )}
+                onChange={(option) =>
                   handleSelection(
-                    e.target.value,
+                    option ? option.value : "",
                     setSelectedCard1,
                     setSelectedDirection1
                   )
                 }
-                className="w-full px-4 py-2 border bg-[#fffcfc80] border-b-gray-300 rounded-md max-w-[20rem] outline-none "
-              >
-                <option value="" className="font-poppins">
-                  Select First Direction
-                </option>
-                {directions
-                  .filter((dir) => dir.directionName !== selectedDirection2)
-                  .map((dir) => (
-                    <option key={dir._id} value={dir.directionName}>
-                      {dir.directionName}
-                    </option>
-                  ))}
-              </select>
+                placeholder="Select First Direction"
+                className="w-[20rem]"
+                styles={customStyles}
+                isClearable
+              />
             </div>
             {/* Second Direction Dropdown */}
-            <div className="flex sm:flex-row flex-col    w-[20rem] sm:w-[25rem]  justify-between sm:items-center gap-2 font-poppins  ">
-              <span className="w-[7rem] ">Destination:</span>
-              <select
-                value={selectedDirection2}
-                onChange={(e) =>
+            <div className="flex sm:flex-row flex-col w-[20rem] sm:w-[25rem] justify-between sm:items-center gap-2 font-poppins">
+              <span className="w-[7rem]">Destination:</span>
+              <Select
+                options={directionOptions.filter(
+                  (option) => option.value !== selectedDirection1
+                )}
+                value={directionOptions.find(
+                  (option) => option.value === selectedDirection2
+                )}
+                onChange={(option) =>
                   handleSelection(
-                    e.target.value,
+                    option ? option.value : "",
                     setSelectedCard2,
                     setSelectedDirection2
                   )
                 }
-                className="w-full px-4 py-2 border bg-[#fffcfc80] rounded-md max-w-[20rem] outline-none"
-              >
-                <div className="">
-                  <option value="" className="font-poppins">
-                    Select Second Direction
-                  </option>
-                  {directions
-                    .filter((dir) => dir.directionName !== selectedDirection1)
-                    .map((dir) => (
-                      <option key={dir._id} value={dir.directionName}>
-                        {dir.directionName}
-                      </option>
-                    ))}
-                </div>
-              </select>
+                placeholder="Select Second Direction"
+                className="w-[20rem]"
+                styles={customStyles}
+                isClearable
+              />
             </div>
           </div>
 
           {/* Display selected direction cards */}
-
           {selectedCard1 || selectedCard2 ? (
-            <div className="flex flex-wrap justify-center gap-2 sm:gap-4  ">
+            <div className="flex flex-wrap justify-center gap-2 sm:gap-4 ">
               {selectedCard1 && (
                 <DirectionCard
                   directionName={selectedCard1.directionName}
@@ -197,19 +222,12 @@ const Direction: React.FC = () => {
               )}
             </div>
           ) : (
-            <div className=" flex justify-center">
-              <img src={map} className="h-[40vh] " alt="" />
+            <div className="flex justify-center">
+              <img src={map} className="h-[40vh]" alt="" />
             </div>
           )}
         </div>
       </div>
-
-      {/* Display Distance */}
-      {/* {distance !== null && (
-        <p className="text-center my-4 text-lg font-semibold text-blue-700">
-          Distance: {distance} km (straight-line)
-        </p>
-      )} */}
 
       {/* Navigation Button */}
       {selectedCard1 && selectedCard2 && (

@@ -194,8 +194,9 @@ const Sidebar = () => {
   }, [location]);
 
   function handleLogout() {
-    const token = localStorage.getItem("aolfcmToken"); // Make sure you're saving the device token in localStorage after login or FCM registration
+    const userId = localStorage.getItem("userId"); // Make sure you're saving the device token in localStorage after login or FCM registration
 
+    localStorage.removeItem("userId");
     localStorage.removeItem("email");
     localStorage.removeItem("username");
     localStorage.removeItem("userLoggedIn");
@@ -203,17 +204,21 @@ const Sidebar = () => {
     localStorage.removeItem("aadhar");
     localStorage.removeItem("aolfcmToken"); // remove token from localStorage
     //  clearToken();
-    console.log("Logged out successfully");
+    // console.log("Logged out successfully");
+    // console.log(token, "token");
 
     // Call logout API
+    // =====
+
     axios
-      .post(logout, { token }) // Send token in the body
+      .post(logout, { userId })
       .then((response) => {
-        console.log("Logout API response:", response.data);
+        console.log(response, "response");
       })
       .catch((error) => {
         console.log("Logout API error:", error.response?.data || error.message);
       });
+    // =====
 
     navigate("/login");
   }
@@ -287,21 +292,6 @@ const Sidebar = () => {
                   </li>
                   <li className="nav-item">
                     <NavLink
-                      to="/display_direction"
-                      className="group"
-                      style={{
-                        backgroundColor: "#fff",
-                        borderRadius: "12px",
-                      }}
-                    >
-                      <div className="flex items-center gap-2">
-                        <DirectionsIcon />
-                        <span>{t("Directions")}</span>
-                      </div>
-                    </NavLink>
-                  </li>
-                  <li className="nav-item">
-                    <NavLink
                       to="/live_link"
                       className="group"
                       style={{
@@ -312,6 +302,21 @@ const Sidebar = () => {
                       <div className="flex items-center gap-2">
                         <LiveTvIcon />
                         <span>{t("Live Video")}</span>
+                      </div>
+                    </NavLink>
+                  </li>
+                  <li className="nav-item">
+                    <NavLink
+                      to="/choose_direction"
+                      className="group"
+                      style={{
+                        backgroundColor: "#fff",
+                        borderRadius: "12px",
+                      }}
+                    >
+                      <div className="flex items-center gap-2">
+                        <DirectionsIcon />
+                        <span>{t("Directions")}</span>
                       </div>
                     </NavLink>
                   </li>

@@ -4,6 +4,7 @@ import PrivateRoute from "./PrivateRoute"; // Import the PrivateRoute
 import Login from "../pages/auth/Login";
 import Profile from "../pages/profile/Profile";
 import Direction from "../pages/direction/Direction";
+import ChooseDirection from "../pages/direction/ChooseDirection";
 
 const Home = lazy(() => import("../pages/Home"));
 const Internal = lazy(() => import("../pages/internal/Internal"));
@@ -78,12 +79,22 @@ const routes = [
     ),
   },
   {
+    path: "/choose_direction",
+    element: (
+      <PrivateRoute>
+        <Suspense fallback={<div>Loading...</div>}>
+          <ChooseDirection />
+        </Suspense>
+      </PrivateRoute>
+    ),
+  },
+  {
     path: "/display_direction",
     element: (
       <PrivateRoute>
         <Suspense fallback={<div>Loading...</div>}>
-          <Direction />
-        </Suspense>
+          <Direction /> 
+        </Suspense> 
       </PrivateRoute>
     ),
   },

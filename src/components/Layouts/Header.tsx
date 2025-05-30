@@ -6,21 +6,29 @@ import MenuIcon from "@mui/icons-material/Menu";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import logo from "../../../public/assets/logo/AOL LOGO BANGALORE ASHRAM BLACK.png";
 import GlobalSearch from "../search/GlobalSearch";
+import moment from "moment";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import favouriteImg from "../../../src/assets/icon/favourite.png";
 
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import { display_all_notification, display_sos } from "../../allapi/api";
+import {
+  // display_all_notification,
+  display_sos,
+  display_user_notification,
+} from "../../allapi/api";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 
-interface NotificationType {
+interface NotificationItem {
   title?: string;
   body?: string;
+  createdAt?: string;
   [key: string]: any;
 }
 
 const Header = () => {
   const [notificationOpen, setNotificationOpen] = useState(false);
-  const [notifications, setNotifications] = useState<NotificationType[]>([]);
+  const [notifications, setNotifications] = useState<NotificationItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [sosNo, SetSosNo] = useState();
   const notificationRef = useRef<HTMLDivElement>(null);
@@ -28,14 +36,52 @@ const Header = () => {
   const themeConfig = useSelector((state: IRootState) => state.themeConfig);
   const dispatch = useDispatch();
 
+  const userId = localStorage.getItem("userId");
+
   // Fetch notifications
   useEffect(() => {
     const fetchNotifications = async () => {
       if (!notificationOpen) return;
       setLoading(true);
       try {
-        const response = await axios.get(display_all_notification);
-        setNotifications(response.data || []);
+        const response = await axios.get(
+          `${display_user_notification}/${userId}`
+        );
+
+        const formattedNotifications = response.data.data.map(
+          (notification: NotificationItem) => {
+            const [day, month, year, time] =
+              notification.createdAt?.split(/[- ]/) || [];
+            const correctDate = `${year}-${month}-${day}T${time}`;
+            const dateTime = new Date(correctDate);
+
+            const now = new Date();
+            let formattedDate;
+
+            if (dateTime.toDateString() === now.toDateString()) {
+              formattedDate = dateTime.toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: true,
+              });
+            } else if (dateTime > new Date(now.setDate(now.getDate() - 7))) {
+              formattedDate = moment(
+                `${day}-${month}-${year} ${time}`,
+                "DD-MM-YYYY HH:mm:ss"
+              ).fromNow();
+            } else {
+              formattedDate = dateTime.toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              });
+            }
+
+            return { ...notification, formattedDate };
+          }
+        );
+
+        setNotifications(formattedNotifications);
       } catch (error) {
         console.error("Error fetching notifications:", error);
       } finally {
@@ -43,13 +89,12 @@ const Header = () => {
       }
     };
     fetchNotifications();
-  }, [notificationOpen]);
+  }, [notificationOpen, userId]);
 
   useEffect(() => {
     axios
       .get(display_sos)
       .then((response) => {
-        // console.log(response);
         SetSosNo(response.data.phoneNumber);
       })
       .catch((error) => {
@@ -87,12 +132,7 @@ const Header = () => {
         }`}
       >
         <div className="shadow-sm z-[4] bg-[#A7E6F8]">
-          {/* <div className="shadow-sm bg-[#A7E6F8] z-[4]"> */}
-          <div
-            className="relative flex lg:justify-between w-full items-center sm:px-5 py-2.5 
-       
-           "
-          >
+          <div className="relative flex lg:justify-between w-full items-center sm:px-5 py-2.5">
             {/* Menu Button */}
             <div className="lg:w-[33%]">
               <button
@@ -105,17 +145,13 @@ const Header = () => {
             </div>
 
             {/* Logo */}
-            <div
-              className="ml-4 lg:w-[33%] w-[80%] m-auto horizontal-logo flex lg:hidden lg:justify-center items-center ltr:mr-2 rtl:ml-2 
-        
-             "
-            >
+            <div className="ml-4 lg:w-[33%] w-[80%] m-auto horizontal-logo flex lg:hidden lg:justify-center items-center ltr:mr-2 rtl:ml-2">
               <Link
                 to="/"
                 className="main-logo flex items-center shrink-0 m-auto pl-3"
               >
                 <img
-                  className="w-32 ml-[1.8rem] md:ml-[1.5rem] lg:ml-[-1rem] sm:ml-0 rtl:-mr-1 inline "
+                  className="w-32 ml-[1.8rem] md:ml-[1.5rem] lg:ml-[-1rem] sm:ml-0 rtl:-mr-1 inline"
                   src={logo}
                   alt="logo"
                 />
@@ -123,24 +159,17 @@ const Header = () => {
             </div>
 
             {/* Right side: Notification + Search */}
-            <div
-              className="lg:w-[33%] flex sm:justify-end items-center flex-row-reverse relative
-          
-             "
-            >
-              {/* 🔔 Notification Icon */}
+            <div className="lg:w-[33%] flex sm:justify-end items-center flex-row-reverse relative">
+              {/* Notification Icon */}
               <div
-                className="w-10 h-10 flex items-center justify-center cursor-pointer relative "
+                className="w-10 h-10 flex items-center justify-center cursor-pointer relative"
                 onClick={() => setNotificationOpen(!notificationOpen)}
               >
                 <NotificationsNoneIcon className="text-[#050916] mr-3" />
-                {/* <NotificationsNoneIcon */}
-                {/* {notifications.length > 0 && (
-                  <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-red-600 rounded-full border border-white" />
-                )} */}
+                {notifications.length > 0 && <></>}
               </div>
 
-              {/* 🔽 Notification Dropdown */}
+              {/* Notification Dropdown */}
               {notificationOpen && (
                 <div
                   ref={notificationRef}
@@ -160,8 +189,8 @@ const Header = () => {
                         >
                           <strong>{note.title || "Untitled"}</strong>
                           <div>{note.body || "No content"}</div>
-                          <div className="w-full flex flex-row-reverse">
-                            {note.time || "No time"}{" "}
+                          <div className="w-full flex flex-row-reverse text-xs text-gray-500">
+                            {note.formattedDate || ""}
                           </div>
                         </li>
                       ))}
@@ -173,15 +202,21 @@ const Header = () => {
                   )}
                 </div>
               )}
-              {/* <a href="tel:${sosNo}"> */}
+
+              <div className="mx-2">
+                {/* <FavoriteIcon className="text-red-500" /> */}
+                <span className="">
+                  <img src={favouriteImg} alt="" className="h-8 w-12" />
+                </span>
+              </div>
               <a href={`tel:${sosNo}`}>
                 <button className="text-red-500 font-bold font-poppins p-4">
                   SOS
                 </button>
               </a>
 
-              {/* 🔍 Search */}
-              <div className="w-full flex abs ">
+              {/* Search */}
+              <div className="w-full flex abs">
                 <GlobalSearch />
               </div>
             </div>

@@ -22,6 +22,9 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Toaster } from "react-hot-toast";
 
+const userId = localStorage.getItem("userId");
+console.log("🚀 ~ userId:", userId);
+
 // import { requestForToken } from "../firebase-messaging"; // adjust the path if needed
 
 function App({ children }: PropsWithChildren) {
@@ -63,15 +66,14 @@ function App({ children }: PropsWithChildren) {
     themeConfig.semidark,
   ]);
   // function App() {
-  useEffect(() => {
-    requestForToken(); // Get token on app load
-    // requestPermission();
-  }, []);
-  console.log("updated 2-5-2025");
+  // useEffect(() => {
+  //   requestForToken(); // Get token on app load
+  //   // requestPermission();
+  // }, []);
+  console.log("updated 20-5-2025");
 
   return (
     <>
-    
       <Toaster
         position="top-right"
         toastOptions={{
@@ -90,7 +92,6 @@ function App({ children }: PropsWithChildren) {
           themeConfig.rtlClass
         } main-section antialiased relative font-nunito text-sm font-normal`}
       >
-        
         {children}
       </div>
       {/* <FirebaseToastContainer /> */}

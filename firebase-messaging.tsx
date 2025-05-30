@@ -1,5 +1,4 @@
 import axios from "axios";
-
 import { initializeApp } from "firebase/app";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
 import { addToken } from "./src/allapi/api";
@@ -24,7 +23,11 @@ const app = initializeApp(firebaseConfig);
 const messaging = getMessaging(app);
 
 // Request permission and get token
-export const requestForToken = async (): Promise<void> => {
+export const requestForToken = async (
+  username: string,
+  email: string,
+  phone: string
+): Promise<void> => {
   try {
     // Check for notification permission
     const permission = await Notification.requestPermission();
@@ -38,16 +41,26 @@ export const requestForToken = async (): Promise<void> => {
       if (token) {
         console.log("FCM Web Token:", token);
         localStorage.setItem("aolfcmToken", token);
-        const username = localStorage.getItem("username");
-        const email = localStorage.getItem("email");
-        const phone = localStorage.getItem("phone");
-        console.log(username, email, phone);
+        // const username = localStorage.getItem("username");
+        // const email = localStorage.getItem("email");
+        // const phone = localStorage.getItem("phone");
+        // let userId = "";
+        console.log(username, email, phone, "details");
 
         // Send token to your backend
         axios
-          .post(addToken, { token, username, email, phone })
+          .post(addToken, { token })
           .then((response) => {
             console.log(response, "response");
+            console.log(response.data.UserDetails._id, "id");
+            const userId = response?.data?.UserDetails?._id;
+            console.log(userId, "id");
+
+            // ✅ Save userId in localStorage
+            if (userId) {
+              localStorage.setItem("userId", userId.trim());
+              // toast.success("Token successfully sent to server!");
+            }
             // notify("Token successfully sent to server!");
           })
           .catch((error) => {
