@@ -211,7 +211,7 @@ const Sidebar = () => {
     // =====
 
     axios
-      .post(logout, { userId })
+      .patch(logout, { userId })
       .then((response) => {
         console.log(response, "response");
       })

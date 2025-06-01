@@ -37,30 +37,32 @@ export const requestForToken = async (
       const token = await getToken(messaging, {
         vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY, // Corrected to VITE_ prefix
       });
+      const id = localStorage.getItem("userId");
+      console.log("🚀 ~ id:", id);
 
-      if (token) {
+      if (token && id) {
         console.log("FCM Web Token:", token);
         localStorage.setItem("aolfcmToken", token);
         // const username = localStorage.getItem("username");
         // const email = localStorage.getItem("email");
         // const phone = localStorage.getItem("phone");
         // let userId = "";
-        console.log(username, email, phone, "details");
+        // console.log(username, email, phone, "details");
 
         // Send token to your backend
         axios
-          .post(addToken, { token })
+          .post(addToken, { id, token })
           .then((response) => {
             console.log(response, "response");
-            console.log(response.data.UserDetails._id, "id");
-            const userId = response?.data?.UserDetails?._id;
-            console.log(userId, "id");
+            // console.log(response.data.UserDetails._id, "id");
+            // const userId = response?.data?.UserDetails?._id;
+            // console.log(userId, "id");
 
-            // ✅ Save userId in localStorage
-            if (userId) {
-              localStorage.setItem("userId", userId.trim());
-              // toast.success("Token successfully sent to server!");
-            }
+            // // ✅ Save userId in localStorage
+            // if (userId) {
+            //   localStorage.setItem("userId", userId.trim());
+            //   // toast.success("Token successfully sent to server!");
+            // }
             // notify("Token successfully sent to server!");
           })
           .catch((error) => {

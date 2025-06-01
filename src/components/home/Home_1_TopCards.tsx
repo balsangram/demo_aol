@@ -1,18 +1,19 @@
 // src/components/Home_1_TopCards.tsx
 import React, { useState, useEffect } from "react";
 import { useLanguage } from "../../context/LanguageContext";
-import Card from "../cards/Card";
 import img1 from "../../assets/images/guruji1.jpg";
 import img2 from "../../assets/images/guruji2.png";
 import img3 from "../../assets/images/guruji3.jpg";
 import img4 from "../../assets/images/guruji4.png";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 
 // Define type for the content of each item
 interface Item {
   Contents: {
-    [key: string]: string; // { [languageCode: string]: text }
+    [key: string]: string;
   };
   Links: string;
   img: string;
@@ -137,14 +138,49 @@ const items: Item[] = [
   },
 ];
 
-const Home_1_TopCards: React.FC = () => {
-  const { language } = useLanguage(); // Use the current language from context
-  const [loading, setLoading] = useState<boolean>(true);
+const FAVORITES_STORAGE_KEY = "favoriteCards";
 
+const Home_1_TopCards: React.FC = () => {
+  const { language } = useLanguage();
+  const [loading, setLoading] = useState<boolean>(true);
+  const [favorites, setFavorites] = useState<{ [key: number]: boolean }>({});
+
+  // Load favorites from localStorage when component mounts
   useEffect(() => {
+    const savedFavorites = localStorage.getItem(FAVORITES_STORAGE_KEY);
+    if (savedFavorites) {
+      try {
+        setFavorites(JSON.parse(savedFavorites));
+      } catch (error) {
+        console.error("Failed to parse saved favorites", error);
+      }
+    }
     const timer = setTimeout(() => setLoading(false), 1000);
     return () => clearTimeout(timer);
   }, []);
+
+  // Save favorites to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(favorites));
+  }, [favorites]);
+
+  const toggleFavorite = (index: number) => {
+    setFavorites((prev) => {
+      const newFavorites = {
+        ...prev,
+        [index]: !prev[index],
+      };
+      return newFavorites;
+    });
+  };
+
+  const handleClick = (link: string) => {
+    window.open(link, "_blank");
+  };
+
+  const logCardClick = (title: string) => {
+    console.log(`Card clicked: ${title}`);
+  };
 
   return (
     <div className="px-4 pt-10 lg:pt-0">
@@ -168,16 +204,57 @@ const Home_1_TopCards: React.FC = () => {
             </div>
           ))
         ) : (
-          <div className="flex flex-wrap justify-center gap-3 pb-12  m-auto">
-            {items.map((item, index) => (
-              <Card
-                key={index}
-                // link={item.Links}
-                link={item?.Links ? item.Links : "#"}
-                name={item.Contents[language] || item.Contents["en"]}
-                img={item.img}
-              />
-            ))}
+          <div className="flex flex-wrap justify-center gap-6 pb-12 m-auto">
+            {items.map((item, index) => {
+              const name = item.Contents[language] || item.Contents.en;
+              const maxChar = 15;
+
+              return (
+                <div
+                  key={index}
+                  className="flex sm:p-10 p-2 bg-[#ffffff7e] text-[#06202B] 
+                            hover:font-bold hover:scale-105 hover:px-2 
+                            flex-col cursor-pointer min-w-6 h-[140px] 
+                            w-[140px] sm:w-[15rem] sm:h-[15rem] 
+                            md:rounded-[4px] rounded-[16px] transition-all duration-500 ease-in-out"
+                  onClick={() => {
+                    handleClick(item.Links);
+                    logCardClick(name);
+                  }}
+                >
+                  <div className="flex flex-row-reverse">
+                    {favorites[index] ? (
+                      <FavoriteIcon
+                        className="text-red-500"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toggleFavorite(index);
+                        }}
+                      />
+                    ) : (
+                      <FavoriteBorderIcon
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toggleFavorite(index);
+                        }}
+                      />
+                    )}
+                  </div>
+
+                  <img
+                    src={item.img}
+                    alt={name}
+                    className="h-20 w-20 mx-auto rounded-full"
+                  />
+
+                  <p className="text-center m-auto text-[14px] sm:text-[16px] sm:mt-4 mt-1 flex justify-center items-center font-bold h-[1rem]">
+                    {name.length > maxChar
+                      ? name.slice(0, maxChar) + "..."
+                      : name}
+                  </p>
+                </div>
+              );
+            })}
           </div>
         )}
       </div>

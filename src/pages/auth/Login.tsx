@@ -1,13 +1,15 @@
 import React, { useState, FormEvent } from "react";
 import EmailIcon from "@mui/icons-material/Email";
-import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
+import PhoneIcon from "@mui/icons-material/Phone";
 import { useNavigate } from "react-router-dom";
 import { isValidPhoneNumber, CountryCode } from "libphonenumber-js";
 import CountryList from "country-list-with-dial-code-and-flag";
 import { requestForToken } from "../../../firebase-messaging"; // Adjust import path
 import axios from "axios";
 import { LoginUser } from "../../allapi/api";
+import { Link } from "react-router-dom";
 
+// Fallback countries array
 const fallbackCountries: Country[] = [
   { code: "AF", name: "Afghanistan", dialCode: "+93", flag: "🇦🇫" },
   { code: "AL", name: "Albania", dialCode: "+355", flag: "🇦🇱" },
@@ -91,7 +93,12 @@ const fallbackCountries: Country[] = [
   { code: "ER", name: "Eritrea", dialCode: "+291", flag: "🇪🇷" },
   { code: "EE", name: "Estonia", dialCode: "+372", flag: "🇪🇪" },
   { code: "ET", name: "Ethiopia", dialCode: "+251", flag: "🇪🇹" },
-  { code: "FK", name: "Falkland Islands", dialCode: "+500", flag: "🇫🇰" },
+  {
+    code: "FK",
+    name: "Falkland Islands",
+    dialCode: "+500",
+    flagBirthdays: "🇫🇰",
+  },
   { code: "FO", name: "Faroe Islands", dialCode: "+298", flag: "🇫🇴" },
   { code: "FJ", name: "Fiji", dialCode: "+679", flag: "🇫🇯" },
   { code: "FI", name: "Finland", dialCode: "+358", flag: "🇫🇮" },
@@ -286,14 +293,6 @@ const fallbackCountries: Country[] = [
   { code: "ZW", name: "Zimbabwe", dialCode: "+263", flag: "🇿🇼" },
 ];
 
-// Debug CountryList to ensure it's an array
-console.log(
-  "CountryList:",
-  CountryList,
-  "IsArray:",
-  Array.isArray(CountryList)
-);
-
 interface Country {
   code: string;
   name: string;
@@ -301,54 +300,13 @@ interface Country {
   flag: string;
 }
 
-// Error Boundary Component
-class ErrorBoundary extends React.Component<
-  { children: React.ReactNode },
-  { hasError: boolean }
-> {
-  constructor(props: { children: React.ReactNode }) {
-    super(props);
-    this.state = { hasError: false };
-  }
-
-  static getDerivedStateFromError() {
-    return { hasError: true };
-  }
-
-  render() {
-    if (this.state.hasError) {
-      return (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-100 z-50 px-4">
-          <div className="p-6 rounded-xl bg-white shadow-xl text-center">
-            <h2 className="text-xl font-bold text-red-500">
-              Something went wrong
-            </h2>
-            <p className="text-gray-600 mt-2">
-              Please refresh the page or try again later.
-            </p>
-            <button
-              onClick={() => window.location.reload()}
-              className="mt-4 bg-[#5F99AE] hover:bg-[#85cee2] text-white py-2 px-4 rounded-full"
-            >
-              Refresh
-            </button>
-          </div>
-        </div>
-      );
-    }
-    return this.props.children;
-  }
-}
-
 function Login() {
   const navigate = useNavigate();
 
   // State declarations
   const [email, setEmail] = useState("");
-  const [username, setUsername] = useState("");
   const [phone, setPhone] = useState("");
   const [emailError, setEmailError] = useState("");
-  const [usernameError, setUsernameError] = useState("");
   const [phoneError, setPhoneError] = useState("");
   const [selectedCountry, setSelectedCountry] = useState<Country>({
     code: "IN",
@@ -356,12 +314,12 @@ function Login() {
     dialCode: "+91",
     flag: "🇮🇳",
   });
-
   const [showCountryDropdown, setShowCountryDropdown] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [apiError, setApiError] = useState("");
+  const [inputType, setInputType] = useState<"email" | "phone">("email");
 
-  // Initialize countries, with fallback if CountryList is not an array
+  // Initialize countries
   const [countries] = useState<Country[]>(
     Array.isArray(CountryList) ? CountryList : fallbackCountries
   );
@@ -371,7 +329,7 @@ function Login() {
     setSelectedCountry(country);
     setShowCountryDropdown(false);
     setSearchQuery("");
-    setPhoneError(""); // Clear phone error on country change
+    setPhoneError("");
   };
 
   // Handle flag image error
@@ -390,98 +348,77 @@ function Login() {
   const handleLogin = async (e: FormEvent) => {
     e.preventDefault();
     setEmailError("");
-    setUsernameError("");
     setPhoneError("");
     setApiError("");
 
-    // Trim all inputs and store the trimmed values
     const trimmedEmail = email.trim();
-    const trimmedUsername = username.trim();
     const trimmedPhone = phone.trim();
+    const fullPhoneNumber = trimmedPhone
+      ? `${selectedCountry.dialCode}${trimmedPhone}`
+      : "";
 
-    // Input validation
     let isValid = true;
 
-    // Email validation
-    if (!trimmedEmail) {
-      setEmailError("Email is required");
-      isValid = false;
-    } else if (email !== trimmedEmail) {
-      setEmailError("Email should not have leading or trailing spaces");
-      isValid = false;
-    } else if (!/\S+@\S+\.\S+/.test(trimmedEmail)) {
-      setEmailError("Invalid email format");
-      isValid = false;
-    }
-
-    // Username validation
-    if (!trimmedUsername) {
-      setUsernameError("Username is required");
-      isValid = false;
-    } else if (username !== trimmedUsername) {
-      setUsernameError("Username should not have leading or trailing spaces");
-      isValid = false;
-    } else if (/[^a-zA-Z\s]/.test(trimmedUsername)) {
-      setUsernameError("Username should only contain letters and spaces");
-      isValid = false;
-    } else if (trimmedUsername.length < 3) {
-      setUsernameError("Username should be at least 3 characters");
-      isValid = false;
-    }
-
-    // Phone validation
-    const fullPhoneNumber = `${selectedCountry.dialCode}${trimmedPhone}`;
-    if (!trimmedPhone) {
-      setPhoneError("Phone number is required");
-      isValid = false;
-    } else if (phone !== trimmedPhone) {
-      setPhoneError("Phone number should not have leading or trailing spaces");
-      isValid = false;
-    } else if (!/^\d+$/.test(trimmedPhone)) {
-      setPhoneError("Phone number should only contain digits");
-      isValid = false;
-    } else if (
-      !isValidPhoneNumber(fullPhoneNumber, selectedCountry.code as CountryCode)
-    ) {
-      setPhoneError("Invalid phone number");
-      isValid = false;
+    // Validation
+    if (inputType === "email") {
+      if (!trimmedEmail) {
+        setEmailError("Email is required");
+        isValid = false;
+      } else if (!/\S+@\S+\.\S+/.test(trimmedEmail)) {
+        setEmailError("Invalid email format");
+        isValid = false;
+      }
+    } else if (inputType === "phone") {
+      if (!trimmedPhone) {
+        setPhoneError("Phone number is required");
+        isValid = false;
+      } else if (
+        !isValidPhoneNumber(
+          fullPhoneNumber,
+          selectedCountry.code as CountryCode
+        )
+      ) {
+        setPhoneError("Invalid phone number");
+        isValid = false;
+      }
     }
 
     if (!isValid) return;
 
     try {
-      // Request Firebase token
-      const token = await requestForToken(
-        trimmedEmail,
-        trimmedUsername,
-        fullPhoneNumber
-      );
+      const token = await requestForToken(trimmedEmail, "", fullPhoneNumber);
 
-      // Store user data in localStorage
-      localStorage.setItem("email", trimmedEmail);
-      localStorage.setItem("username", trimmedUsername);
-      localStorage.setItem("phone", fullPhoneNumber);
+      // Save login method to localStorage
+      if (inputType === "email") {
+        localStorage.setItem("email", trimmedEmail);
+        localStorage.removeItem("phone");
+      } else {
+        localStorage.setItem("phone", fullPhoneNumber);
+        localStorage.removeItem("email");
+      }
+
       localStorage.setItem("userLoggedIn", "true");
 
-      // Send login request to backend
       const response = await axios.post(LoginUser, {
-        email: trimmedEmail,
-        phone: fullPhoneNumber,
-        // token, // Include token if available
+        email: inputType === "email" ? trimmedEmail : undefined,
+        phone: inputType === "phone" ? trimmedPhone : undefined,
+        country_code:
+          inputType === "phone" ? selectedCountry.dialCode : undefined,
+        token,
       });
 
-      // Handle successful response
-      console.log("Login successful:", response.data);
-      navigate("/"); // Navigate only on success
+      const userId = response.data.user._id;
+      localStorage.setItem("userId", userId);
+
+      const otpType = inputType === "email" ? "email" : "phone";
+
+      // ✅ Navigate to OTP page with the correct type
+      navigate("/otp", { state: { type: otpType } });
     } catch (error: any) {
       console.error("Login error:", error);
-      if (error.response) {
-        setApiError(
-          error.response.data.message || "Login failed. Please try again."
-        );
-      } else {
-        setApiError("An error occurred. Please try again later.");
-      }
+      setApiError(
+        error.response?.data.message || "Login failed. Please try again."
+      );
     }
   };
 
@@ -491,15 +428,49 @@ function Login() {
   );
 
   return (
-    <ErrorBoundary>
-      <div className="fixed inset-0 flex items-center justify-center bg-gray-100 z-50 px-4 sm:px-6 md:px-8">
-        <div className="p-6 sm:p-8 rounded-xl w-full max-w-md bg-white shadow-xl">
-          <h1 className="text-2xl font-bold text-center mb-6 sm:mb-8 text-[#0E1726] font-[Cinzel]">
-            LOGIN
-          </h1>
+    <div className="fixed inset-0 flex items-center justify-center bg-gray-100 z-50 px-4 sm:px-6 md:px-8">
+      <div className="p-6 sm:p-8 rounded-xl w-full max-w-md bg-white shadow-xl">
+        <h1 className="text-2xl font-bold text-center mb-6 sm:mb-8 text-[#0E1726] font-[Cinzel]">
+          LOGIN
+        </h1>
 
-          <form onSubmit={handleLogin} className="flex flex-col gap-4 sm:gap-5">
-            {/* Email Field */}
+        <form onSubmit={handleLogin} className="flex flex-col gap-4 sm:gap-5">
+          {/* Toggle Buttons */}
+          <div className="flex gap-2 mb-4">
+            <button
+              type="button"
+              onClick={() => {
+                setInputType("email");
+                setPhone("");
+                setPhoneError("");
+              }}
+              className={`flex-1 py-2 rounded-md text-sm sm:text-base font-semibold transition-colors ${
+                inputType === "email"
+                  ? "bg-[#5F99AE] text-white"
+                  : "bg-gray-200 text-[#0E1726]"
+              }`}
+            >
+              Email
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setInputType("phone");
+                setEmail("");
+                setEmailError("");
+              }}
+              className={`flex-1 py-2 rounded-md text-sm sm:text-base font-semibold transition-colors ${
+                inputType === "phone"
+                  ? "bg-[#5F99AE] text-white"
+                  : "bg-gray-200 text-[#0E1726]"
+              }`}
+            >
+              Phone
+            </button>
+          </div>
+
+          {/* Conditional Input Field */}
+          {inputType === "email" ? (
             <div
               className={`flex items-center border-2 rounded-md px-4 py-2.5 bg-white ${
                 emailError ? "border-red-500" : "border-[#5F99AE]"
@@ -515,34 +486,13 @@ function Login() {
                 aria-label="Email address"
               />
             </div>
-            <p className="text-red-500 text-sm min-h-[1rem]">{emailError}</p>
-
-            {/* Username Field */}
-            <div
-              className={`flex items-center border-2 rounded-md px-4 py-2.5 bg-white ${
-                usernameError ? "border-red-500" : "border-[#5F99AE]"
-              } transition-colors focus-within:border-[#85cee2]`}
-            >
-              <PersonOutlineIcon className="text-[#5F99AE] mr-2" />
-              <input
-                type="text"
-                placeholder="Username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                className="flex-1 outline-none bg-transparent text-[#0E1726] placeholder-[#5F99AE] text-sm sm:text-base"
-                aria-label="Username"
-              />
-            </div>
-            <p className="text-red-500 text-sm min-h-[1rem]">{usernameError}</p>
-
-            {/* Phone Number Field (Flag, Country Code, Phone Input) */}
+          ) : (
             <div className="relative">
               <div
                 className={`flex items-center border-2 rounded-md bg-white ${
                   phoneError ? "border-red-500" : "border-[#5F99AE]"
                 } transition-colors focus-within:border-[#85cee2]`}
               >
-                {/* Flag and Country Code Selector */}
                 <div
                   className="flex items-center px-3 py-2.5 cursor-pointer hover:bg-[#f0f9ff]"
                   onClick={() => setShowCountryDropdown(!showCountryDropdown)}
@@ -558,9 +508,7 @@ function Login() {
                     {selectedCountry.dialCode}
                   </span>
                 </div>
-                {/* Divider */}
                 <div className="w-px h-6 bg-[#5F99AE] mx-2"></div>
-                {/* Phone Input */}
                 <input
                   type="tel"
                   placeholder="Phone Number"
@@ -614,23 +562,31 @@ function Login() {
                 </div>
               )}
             </div>
-            <p className="text-red-500 text-sm min-h-[1rem]">{phoneError}</p>
+          )}
 
-            {/* API Error Message */}
-            <p className="text-red-500 text-sm min-h-[1rem]">{apiError}</p>
-
-            {/* Submit Button */}
-            <button
-              type="submit"
-              className="bg-[#5F99AE] hover:bg-[#85cee2] text-white py-2.5 rounded-full text-base sm:text-lg font-semibold transition-colors"
-              aria-label="Login"
-            >
-              Login
-            </button>
-          </form>
-        </div>
+          {/* Error Messages */}
+          <>
+            {emailError && <p className="text-red-500 text-sm">{emailError}</p>}
+            {phoneError && <p className="text-red-500 text-sm">{phoneError}</p>}
+            {apiError && <p className="text-red-500 text-sm">{apiError}</p>}
+          </>
+          {/* Submit Button */}
+          <button
+            type="submit"
+            className="bg-[#5F99AE] hover:bg-[#85cee2] text-white py-2.5 rounded-full text-base sm:text-lg font-semibold transition-colors"
+            aria-label="Login"
+          >
+            Login
+          </button>
+        </form>
+        <p className="mt-4 text-sm text-gray-600">
+          Don't have an account?{" "}
+          <Link to="/register" className="text-blue-600 hover:underline">
+            Register
+          </Link>
+        </p>
       </div>
-    </ErrorBoundary>
+    </div>
   );
 }
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { all_Card } from "../../allapi/api";
+import { all_Card, Home_Type_importance_id } from "../../allapi/api";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import CarouselCard from "../cards/CarouselCard";
@@ -55,6 +55,8 @@ const Home_3_Facilities_and_Services_at_Center = () => {
   const { language } = useLanguage();
   const [loading, setLoading] = useState(true);
   const [slides, setSlides] = useState<Card[]>([]);
+  const userId = localStorage.getItem("userId");
+
 
   useEffect(() => {
     const fetchData = async () => {

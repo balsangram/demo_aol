@@ -1,8 +1,8 @@
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { add_LinkLog, Home_user_Type_importance } from "../../allapi/api";
+import { add_LinkLog, Home_Type_importance_id, Home_user_Type_importance } from "../../allapi/api";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 
@@ -64,6 +64,18 @@ const CarouselCard: React.FC<CardProps> = ({ id, link = "#", name, img }) => {
   // console.log(id,"🚀 ~ userId:", userId);
   const isFavorite = id ? favoriteIds.includes(id) : false;
 
+  useEffect(() => {
+    axios
+      .get(`${Home_Type_importance_id}/${userId}`)
+      .then((response) => {
+        console.log(response, "Home_Type_importance_id");
+        setFavoriteIds(response.data?.CardTypes || []);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
   const toggleFavorite = async () => {
     if (!userId || !id) {
       console.error("Missing userId or cardId");
@@ -118,7 +130,7 @@ const CarouselCard: React.FC<CardProps> = ({ id, link = "#", name, img }) => {
         tabIndex={0}
         onKeyDown={(e) => e.key === "Enter" && handleCardClick(e as any)}
       >
-        <div className="flex w-full pr-2 pt-2 absolute top-0 right-0">
+        <div className="flex w-full flex-row-reverse pr-2 pt-2 absolute top-0 right-0">
           {isFavorite ? (
             <FavoriteIcon
               className="text-red-500 "

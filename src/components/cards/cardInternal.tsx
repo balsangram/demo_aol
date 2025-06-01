@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
-import { add_LinkLog } from "../../allapi/api";
+import { add_LinkLog, Home_user_Type_importance } from "../../allapi/api";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 
@@ -11,20 +11,12 @@ interface CardProps {
   onEdit?: () => void;
   img: string;
   id: string;
-  isFavorite: boolean;
-  onFavoriteToggle: (id: string) => void;
 }
 
-const Card: React.FC<CardProps> = ({
-  id,
-  link,
-  name,
-  img,
-  isFavorite,
-  onFavoriteToggle,
-}) => {
+const CardInternal: React.FC<CardProps> = ({ link, name, img }) => {
   const [maxChar, setMaxChar] = useState(15);
   const [soon, setSoon] = useState(false);
+  const [favoriteIds, setFavoriteIds] = useState<string[]>([]);
   const userId = localStorage.getItem("userId");
 
   useEffect(() => {
@@ -67,43 +59,67 @@ const Card: React.FC<CardProps> = ({
 
   const logCardClick = async () => {
     try {
-      if (!userId) return;
-      await axios.post(`${add_LinkLog}/${userId}`, {
-        cardId: id,
-      });
+      //   if (!userId) return;
+      //   const response = await axios.post(`${add_LinkLog}/${userId}`, {
+      //     cardId: id,
+      //   });
+      //   console.log("Click logged:", response.data);
     } catch (error) {
       console.error("Error logging card click:", error);
     }
   };
 
-  const handleFavoriteClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    onFavoriteToggle(id);
-  };
+  //   const toggleFavorite = async () => {
+  //     try {
+  //       if (!userId) return;
+
+  //       //   await axios.post(`${Home_user_Type_importance}/${userId}`, {
+  //       //     cardId: id,
+  //       //   });
+
+  //       setFavoriteIds((prevIds) =>
+  //         prevIds.includes(id)
+  //           ? prevIds.filter((favId) => favId !== id)
+  //           : [...prevIds, id]
+  //       );
+  //     } catch (error) {
+  //       console.error("Error toggling favorite:", error);
+  //     }
+  //   };
+
+  //   const isFavorite = favoriteIds.includes(id);
 
   return (
     <>
       <div
         className="flex sm:p-10 p-2 bg-[#ffffff7e] text-[#06202B] 
-                   hover:font-bold hover:scale-105 hover:px-2 
+                   hover:font-bold hover:scale-105 hover:px-7 
                    flex-col cursor-pointer min-w-6 h-[140px] 
                    w-[140px] sm:w-[15rem] sm:h-[15rem] 
-                   md:rounded-[4px] rounded-[16px] transition-all duration-500 ease-in-out"
+                   md:rounded-[4px] rounded-[16px] transition-all duration-500 ease-in-out "
         onClick={() => {
           handleClick();
           logCardClick();
         }}
       >
-        <div className="flex flex-row-reverse">
+        {/* <div className="flex flex-row-reverse">
           {isFavorite ? (
             <FavoriteIcon
               className="text-red-500"
-              onClick={handleFavoriteClick}
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleFavorite();
+              }}
             />
           ) : (
-            <FavoriteBorderIcon onClick={handleFavoriteClick} />
+            <FavoriteBorderIcon
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleFavorite();
+              }}
+            />
           )}
-        </div>
+        </div> */}
 
         <img src={img} alt={name} className="h-20 w-20 mx-auto rounded-full" />
 
@@ -116,4 +132,4 @@ const Card: React.FC<CardProps> = ({
   );
 };
 
-export default Card;
+export default CardInternal;

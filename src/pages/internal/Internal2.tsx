@@ -6,12 +6,14 @@ import { all_action, userType_action } from "../../allapi/api";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { useLanguage } from "../../context/LanguageContext";
+import CardInternal from "../../components/cards/cardInternal";
 
 interface card {
   action: string;
   link: string;
   img: string;
   usertype: string;
+  id: String;
 }
 
 const noActionsMessages: { [key: string]: string } = {
@@ -105,7 +107,8 @@ function Internal2() {
           </div>
         ) : internal.length > 0 ? (
           internal.map((item, index) => (
-            <Card
+            <CardInternal
+            // id={_id}
               key={index}
               link={item.link}
               name={item.action}

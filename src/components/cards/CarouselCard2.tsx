@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
-import { add_LinkLog, Home_user_Type_importance } from "../../allapi/api";
+import { add_LinkLog, Home_Type_importance_id, Home_user_Type_importance } from "../../allapi/api";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 
@@ -17,6 +17,19 @@ const CarouselCard2: React.FC<CardProps> = ({ id, link = "#", name, img }) => {
   const userId = localStorage.getItem("userId");
 
   const isFavorite = id ? favoriteIds.includes(id) : false;
+
+  useEffect(() => {
+    axios
+      .get(`${Home_Type_importance_id}/${userId}`)
+      .then((response) => {
+        console.log(response, "Home_Type_importance_id");
+        setFavoriteIds(response.data?.CardTypes || []);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
 
   const logClick = async () => {
     if (!userId || !id) {

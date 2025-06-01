@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Card from "../cards/Card";
-import { all_Card, Stay_Updated } from "../../allapi/api";
+import {
+  all_Card,
+  Home_Type_importance_id,
+  Home_user_Type_importance,
+} from "../../allapi/api";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import { useLanguage } from "../../context/LanguageContext"; // adjust path if needed
-import { ToastContainer } from "react-toastify";
+import { useLanguage } from "../../context/LanguageContext";
 
 interface CardItem {
   name: string;
@@ -17,7 +20,9 @@ interface CardItem {
 const Home_4_Stay_Updated: React.FC = () => {
   const [items, setItems] = useState<CardItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [favoriteIds, setFavoriteIds] = useState<string[]>([]);
   const { language } = useLanguage();
+  const userId = localStorage.getItem("userId");
 
   const stayUpdatedTranslations: { [key: string]: string } = {
     en: "STAY UPDATED",
@@ -45,14 +50,30 @@ const Home_4_Stay_Updated: React.FC = () => {
     vi: "LUÔN CẬP NHẬT",
   };
 
+  // Fetch favorite card IDs
+
+  useEffect(() => {
+    axios
+      .get(`${Home_Type_importance_id}/${userId}`)
+      .then((response) => {
+        console.log(response, "Home_Type_importance_id");
+        setFavoriteIds(response.data?.CardTypes || []);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+  // Fetch card data
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       try {
         const response = await axios.get(
           `${all_Card}/Stay Updated/${language}`
-          // `${all_Card}/STAY UPDATED/${language}`
         );
-        setItems(response.data);
+        console.log("🚀 ~ fetchData ~ response: 2", response);
+        setItems(response.data || []);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -61,15 +82,30 @@ const Home_4_Stay_Updated: React.FC = () => {
     };
 
     fetchData();
-  }, []);
+  }, [language]);
+
+  const handleToggleFavorite = async (cardId: string) => {
+    try {
+      if (!userId) return;
+
+      await axios.post(`${Home_user_Type_importance}/${userId}`, {
+        cardId: cardId,
+      });
+
+      setFavoriteIds((prev) =>
+        prev.includes(cardId)
+          ? prev.filter((id) => id !== cardId)
+          : [...prev, cardId]
+      );
+    } catch (error) {
+      console.error("Error toggling favorite:", error);
+    }
+  };
 
   return (
-    <>
+    <div className="home-stay-updated">
       {loading ? (
-        <div className="w-full text-center sm:my-4 px-4 mt-4">
-          {/* <ToastContainer /> */}
-
-          {/* Header Skeleton */}
+        <div className="w-full text-center sm:my-4 px-4 mt-4 mb-6">
           <Skeleton
             height={30}
             width={260}
@@ -77,52 +113,43 @@ const Home_4_Stay_Updated: React.FC = () => {
             style={{ borderRadius: "8px" }}
           />
 
-          {/* Responsive Skeleton Cards */}
           <div className="flex gap-6 flex-wrap justify-center sm:pb-12">
             {[1, 2, 3, 4].map((_, index) => (
               <div
                 key={index}
-                className="flex flex-col items-center justify-center p-4 bg-white/50 rounded-2xl w-[140px] h-[140px] sm:w-[200px] sm:h-[200px] md:w-[240px] md:h-[240px]"
+                className="flex flex-col items-center justify-center p-4 bg-white/50 rounded-2xl w-[140px] h-[140px] sm:w-[200px] sm:h-[200px]"
               >
                 <div className="mb-3">
                   <Skeleton height="5rem" width="5rem" circle />
                 </div>
                 <div className="w-[70%]">
-                  <Skeleton
-                    height="1rem"
-                    baseColor="#e0e0e0"
-                    highlightColor="#f5f5f5"
-                  />
+                  <Skeleton height="1rem" />
                 </div>
               </div>
             ))}
           </div>
         </div>
       ) : (
-        <div className="text-center px-4 ">
-          {/* <ToastContainer /> */}
-          <h2
-            className=" text-[24px] sm:text-3xl font-bold leading-relaxed font-cinzel "
-            style={{
-              lineHeight: "2rem",
-            }}
-          >
-            {stayUpdatedTranslations[language] || stayUpdatedTranslations["en"]}
+        <div className="text-center px-4">
+          <h2 className="text-2xl sm:text-3xl font-bold font-cinzel mb-12">
+            {stayUpdatedTranslations[language] || stayUpdatedTranslations.en}
           </h2>
-          <div className="flex flex-wrap justify-center gap-3 py-12 ">
-            {items.map((item, index) => (
+          <div className="flex flex-wrap justify-center gap-3 py-12">
+            {items.map((item) => (
               <Card
+                key={item._id}
                 id={item._id}
-                key={index}
-                link={item?.link ? item.link : "#"}
+                link={item.link || "#"}
                 name={item.name}
                 img={item.img}
+                isFavorite={favoriteIds.includes(item._id)}
+                onFavoriteToggle={handleToggleFavorite}
               />
             ))}
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 
