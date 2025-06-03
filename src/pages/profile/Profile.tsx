@@ -5,7 +5,20 @@ import MobileFriendlyIcon from "@mui/icons-material/MobileFriendly";
 import CardMembershipIcon from "@mui/icons-material/CardMembership";
 import GTranslateIcon from "@mui/icons-material/GTranslate";
 import EditIcon from "@mui/icons-material/Edit";
+import LogoutIcon from "@mui/icons-material/Logout";
 import { useLanguage } from "../../context/LanguageContext";
+import axios from "axios";
+import { getUser, logout, updateUser } from "../../allapi/api";
+import { useNavigate } from "react-router-dom";
+
+interface UserDetails {
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone: string;
+  aadhar: string;
+  [key: string]: any; // For any additional properties
+}
 
 interface Language {
   code: string;
@@ -26,18 +39,27 @@ interface Translations {
     save: string;
     selectLanguage: string;
     confirm: string;
-    general?: string; // Added since it's used in the component
+    general: string;
+    firstName: string;
+    lastName: string;
+    logOut: string;
   };
 }
 
-function Profile() {
+const Profile: React.FC = () => {
   const [editCard, setEditCard] = useState(false);
-  const [name, setName] = useState(localStorage.getItem("username") || "");
-  const [email, setEmail] = useState(localStorage.getItem("email") || "");
-  const [phone, setPhone] = useState(localStorage.getItem("phone") || "");
-  const [aadhar, setAadhar] = useState(localStorage.getItem("aadhar") || "");
   const [showDropdown, setShowDropdown] = useState(false);
+  const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    aadhar: "",
+  });
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
+  const userId = localStorage.getItem("userId");
   const { language, setLanguage } = useLanguage();
 
   const languages: Language[] = [
@@ -66,364 +88,518 @@ function Profile() {
     { code: "vi", label: "Vietnamese" },
   ];
 
-  const translations: Translations = {
-    en: {
-      profile: "PROFILE",
-      personalDetails: "PERSONAL DETAILS",
-      name: "Name",
-      email: "Email",
-      phone: "Phone",
-      aadhar: "Aadhar",
-      editProfile: "Edit Profile",
-      languages: "Languages",
-      cancel: "Cancel",
-      save: "Save",
-      selectLanguage: "Select Language",
-      confirm: "Confirm",
-    },
-    hi: {
-      profile: "प्रोफाइल",
-      personalDetails: "व्यक्तिगत विवरण",
-      name: "नाम",
-      email: "ईमेल",
-      phone: "फोन",
-      aadhar: "आधार",
-      editProfile: "प्रोफाइल संपादित करें",
-      languages: "भाषाएँ",
-      cancel: "रद्द करें",
-      save: "सहेजें",
-      selectLanguage: "भाषा चुनें",
-      confirm: "पुष्टि करें",
-    },
-    kn: {
-      profile: "ಪ್ರೊಫೈಲ್",
-      personalDetails: "ವೈಯಕ್ತಿಕ ವಿವರಗಳು",
-      name: "ಹೆಸರು",
-      email: "ಇಮೇಲ್",
-      phone: "ದೂರವಾಣಿ",
-      aadhar: "ಆಧಾರ್",
-      editProfile: "ಪ್ರೊಫೈಲ್ ಸಂಪಾದಿಸಿ",
-      languages: "ಭಾಷೆಗಳು",
-      cancel: "ರದ್ದುಗೊಳಿಸು",
-      save: "ಉಳಿಸಿ",
-      selectLanguage: "ಭಾಷೆ ಆರಿಸಿ",
-      confirm: "ದೃಢೀಕರಿಸಿ",
-    },
-    ta: {
-      profile: "சுயவிவரம்",
-      personalDetails: "பயனாளர் விவரங்கள்",
-      name: "பெயர்",
-      email: "மின்னஞ்சல்",
-      phone: "தொலைபேசி",
-      aadhar: "ஆதார்",
-      editProfile: "சுயவிவரத்தை தொகுக்கவும்",
-      languages: "மொழிகள்",
-      cancel: "ரத்து செய்யவும்",
-      save: "சேமிக்கவும்",
-      selectLanguage: "மொழி தேர்வு செய்யவும்",
-      confirm: "உறுதிப்படுத்தவும்",
-    },
-    te: {
-      profile: "ప్రొఫైల్",
-      personalDetails: "వ్యక్తిగత వివరాలు",
-      name: "పేరు",
-      email: "ఇమెయిల్",
-      phone: "ఫోన్",
-      aadhar: "ఆధార్",
-      editProfile: "ప్రొఫైల్ సవరించు",
-      languages: "భాషలు",
-      cancel: "రద్దు చేయి",
-      save: "సేవ్ చేయి",
-      selectLanguage: "భాషను ఎంచుకోండి",
-      confirm: "మంజూరు చేయి",
-    },
-    gu: {
-      profile: "પ્રોફાઇલ",
-      personalDetails: "વ્યક્તિગત વિગતો",
-      name: "નામ",
-      email: "ઇમેઇલ",
-      phone: "ફોન",
-      aadhar: "આધાર",
-      editProfile: "પ્રોફાઇલ સંપાદિત કરો",
-      languages: "ભાષાઓ",
-      cancel: "રદ કરો",
-      save: "સેવ કરો",
-      selectLanguage: "ભાષા પસંદ કરો",
-      confirm: "પુષ્ટિ કરો",
-    },
-    mr: {
-      profile: "प्रोफाइल",
-      personalDetails: "वैयक्तिक तपशील",
-      name: "नाव",
-      email: "ईमेल",
-      phone: "फोन",
-      aadhar: "आधार",
-      editProfile: "प्रोफाइल संपादित करा",
-      languages: "भाषा",
-      cancel: "रद्द करा",
-      save: "सुरक्षित करा",
-      selectLanguage: "भाषा निवडा",
-      confirm: "पुष्टी करा",
-    },
-    ml: {
-      profile: "പ്രൊഫൈൽ",
-      personalDetails: "വ്യക്തിഗത വിശദാംശങ്ങൾ",
-      name: "പേര്",
-      email: "ഇമെയിൽ",
-      phone: "ഫോൺ",
-      aadhar: "ആധാർ",
-      editProfile: "പ്രൊഫൈൽ തിരുത്തുക",
-      languages: "ഭാഷകൾ",
-      cancel: "റദ്ദാക്കുക",
-      save: "സേവ് ചെയ്യുക",
-      selectLanguage: "ഭാഷ തിരഞ്ഞെടുക്കുക",
-      confirm: "ഒപ്പിടുക",
-    },
-    pa: {
-      profile: "ਪ੍ਰੋਫਾਈਲ",
-      personalDetails: "ਵੈਕਤਿਕ ਵੇਰਵੇ",
-      name: "ਨਾਮ",
-      email: "ਈਮੇਲ",
-      phone: "ਫੋਨ",
-      aadhar: "ਆਧਾਰ",
-      editProfile: "ਪ੍ਰੋਫਾਈਲ ਸੰਪਾਦਿਤ ਕਰੋ",
-      languages: "ਭਾਸ਼ਾਵਾਂ",
-      cancel: "ਰੱਦ ਕਰੋ",
-      save: "ਸੇਵ ਕਰੋ",
-      selectLanguage: "ਭਾਸ਼ਾ ਚੁਣੋ",
-      confirm: "ਪੁਸ਼ਟੀ ਕਰੋ",
-    },
-    bn: {
-      profile: "প্রোফাইল",
-      personalDetails: "ব্যক্তিগত বিবরণ",
-      name: "নাম",
-      email: "ইমেইল",
-      phone: "ফোন",
-      aadhar: "আধার",
-      editProfile: "প্রোফাইল সম্পাদনা করুন",
-      languages: "ভাষাসমূহ",
-      cancel: "বাতিল করুন",
-      save: "সংরক্ষণ করুন",
-      selectLanguage: "ভাষা নির্বাচন করুন",
-      confirm: "নিশ্চিত করুন",
-    },
-    ru: {
-      profile: "Профиль",
-      personalDetails: "Персональные данные",
-      name: "Имя",
-      email: "Электронная почта",
-      phone: "Телефон",
-      aadhar: "Адхар",
-      editProfile: "Редактировать профиль",
-      languages: "Языки",
-      cancel: "Отменить",
-      save: "Сохранить",
-      selectLanguage: "Выберите язык",
-      confirm: "Подтвердить",
-    },
-    es: {
-      profile: "PERFIL",
-      personalDetails: "DETALLES PERSONALES",
-      name: "Nombre",
-      email: "Correo electrónico",
-      phone: "Teléfono",
-      aadhar: "Aadhar",
-      editProfile: "Editar perfil",
-      languages: "Idiomas",
-      cancel: "Cancelar",
-      save: "Guardar",
-      selectLanguage: "Seleccionar idioma",
-      confirm: "Confirmar",
-    },
-    zh: {
-      profile: "个人资料",
-      personalDetails: "个人信息",
-      name: "姓名",
-      email: "电子邮件",
-      phone: "电话",
-      aadhar: "Aadhar",
-      editProfile: "编辑个人资料",
-      languages: "语言",
-      cancel: "取消",
-      save: "保存",
-      selectLanguage: "选择语言",
-      confirm: "确认",
-    },
-    mn: {
-      profile: "Профайл",
-      personalDetails: "Хувийн мэдээлэл",
-      name: "Нэр",
-      email: "Имэйл",
-      phone: "Утас",
-      aadhar: "Адаар",
-      editProfile: "Профайлыг засварлах",
-      languages: "Хэлүүд",
-      cancel: "Цуцлах",
-      save: "Хадгалах",
-      selectLanguage: "Хэл сонгох",
-      confirm: "Баталгаажуулах",
-    },
-    pl: {
-      profile: "PROFIL",
-      personalDetails: "SZCZEGÓŁY OSOBOWE",
-      name: "Imię",
-      email: "Email",
-      phone: "Telefon",
-      aadhar: "Aadhar",
-      editProfile: "Edytuj profil",
-      languages: "Języki",
-      cancel: "Anuluj",
-      save: "Zapisz",
-      selectLanguage: "Wybierz język",
-      confirm: "Potwierdź",
-    },
-    bg: {
-      profile: "Профил",
-      personalDetails: "Лични данни",
-      name: "Име",
-      email: "Имейл",
-      phone: "Телефон",
-      aadhar: "Аадхар",
-      editProfile: "Редактирай профил",
-      languages: "Езици",
-      cancel: "Откажи",
-      save: "Запази",
-      selectLanguage: "Избери език",
-      confirm: "Потвърди",
-    },
-    fr: {
-      profile: "PROFIL",
-      personalDetails: "DÉTAILS PERSONNELS",
-      name: "Nom",
-      email: "E-mail",
-      phone: "Téléphone",
-      aadhar: "Aadhar",
-      editProfile: "Modifier le profil",
-      languages: "Langues",
-      cancel: "Annuler",
-      save: "Sauvegarder",
-      selectLanguage: "Sélectionner la langue",
-      confirm: "Confirmer",
-    },
-    de: {
-      profile: "PROFIL",
-      personalDetails: "PERSÖNLICHE DETAILS",
-      name: "Name",
-      email: "E-Mail",
-      phone: "Telefon",
-      aadhar: "Aadhar",
-      editProfile: "Profil bearbeiten",
-      languages: "Sprachen",
-      cancel: "Abbrechen",
-      save: "Speichern",
-      selectLanguage: "Sprache wählen",
-      confirm: "Bestätigen",
-    },
-    nl: {
-      profile: "PROFIEL",
-      personalDetails: "PERSOONLIJKE GEGEVENS",
-      name: "Naam",
-      email: "E-mail",
-      phone: "Telefoon",
-      aadhar: "Aadhar",
-      editProfile: "Bewerk profiel",
-      languages: "Talen",
-      cancel: "Annuleren",
-      save: "Opslaan",
-      selectLanguage: "Selecteer taal",
-      confirm: "Bevestigen",
-    },
-    it: {
-      profile: "PROFILO",
-      personalDetails: "DETTAGLI PERSONALI",
-      name: "Nome",
-      email: "E-mail",
-      phone: "Telefono",
-      aadhar: "Aadhar",
-      editProfile: "Modifica profilo",
-      languages: "Lingue",
-      cancel: "Annulla",
-      save: "Salva",
-      selectLanguage: "Seleziona lingua",
-      confirm: "Conferma",
-    },
-    pt: {
-      profile: "PERFIL",
-      personalDetails: "DETALHES PESSOAIS",
-      name: "Nome",
-      email: "E-mail",
-      phone: "Telefone",
-      aadhar: "Aadhar",
-      editProfile: "Editar perfil",
-      languages: "Idiomas",
-      cancel: "Cancelar",
-      save: "Salvar",
-      selectLanguage: "Selecionar idioma",
-      confirm: "Confirmar",
-    },
-    ja: {
-      profile: "プロフィール",
-      personalDetails: "個人情報",
-      name: "名前",
-      email: "メール",
-      phone: "電話",
-      aadhar: "Aadhar",
-      editProfile: "プロフィールを編集",
-      languages: "言語",
-      cancel: "キャンセル",
-      save: "保存",
-      selectLanguage: "言語を選択",
-      confirm: "確認",
-    },
-    vi: {
-      profile: "HỒ SƠ",
-      personalDetails: "THÔNG TIN CÁ NHÂN",
-      name: "Tên",
-      email: "Email",
-      phone: "Điện thoại",
-      aadhar: "Aadhar",
-      editProfile: "Chỉnh sửa hồ sơ",
-      languages: "Ngôn ngữ",
-      cancel: "Hủy bỏ",
-      save: "Lưu",
-      selectLanguage: "Chọn ngôn ngữ",
-      confirm: "Xác nhận",
-    },
-  };
+ const translations: Translations = {
+  en: {
+    profile: "PROFILE",
+    personalDetails: "PERSONAL DETAILS",
+    name: "Name",
+    email: "Email",
+    phone: "Phone",
+    aadhar: "Aadhar",
+    editProfile: "Edit Profile",
+    languages: "Languages",
+    cancel: "Cancel",
+    save: "Save",
+    selectLanguage: "Select Language",
+    confirm: "Confirm",
+    general: "General",
+    firstName: "First Name",
+    lastName: "Last Name",
+    logOut: "Log Out",
+  },
+  hi: {
+    profile: "प्रोफ़ाइल",
+    personalDetails: "व्यक्तिगत विवरण",
+    name: "नाम",
+    email: "ईमेल",
+    phone: "फ़ोन",
+    aadhar: "आधार",
+    editProfile: "प्रोफ़ाइल संपादित करें",
+    languages: "भाषाएँ",
+    cancel: "रद्द करें",
+    save: "सहेजें",
+    selectLanguage: "भाषा चुनें",
+    confirm: "पुष्टि करें",
+    general: "सामान्य",
+    firstName: "पहला नाम",
+    lastName: "अंतिम नाम",
+    logOut: "लॉग आउट",
+  },
+  kn: {
+    profile: "ಪ್ರೊಫೈಲ್",
+    personalDetails: "ವೈಯಕ್ತಿಕ ವಿವರಗಳು",
+    name: "ಹೆಸರು",
+    email: "ಇಮೇಲ್",
+    phone: "ದೂರವಾಣಿ",
+    aadhar: "ಆಧಾರ್",
+    editProfile: "ಪ್ರೊಫೈಲ್ ಸಂಪಾದಿಸಿ",
+    languages: "ಭಾಷೆಗಳು",
+    cancel: "ರದ್ದುಮಾಡಿ",
+    save: "ಉಳಿಸಿ",
+    selectLanguage: "ಭಾಷೆ ಆಯ್ಕೆಮಾಡಿ",
+    confirm: "ದೃಢೀಕರಿಸಿ",
+    general: "ಸಾಮಾನ್ಯ",
+    firstName: "ಮೊದಲ ಹೆಸರು",
+    lastName: "ಕೊನೆಯ ಹೆಸರು",
+    logOut: "ಲಾಗ್ ಔಟ್",
+  },
+  ta: {
+    profile: "சுயவிவரம்",
+    personalDetails: "தனிப்பட்ட விவரங்கள்",
+    name: "பெயர்",
+    email: "மின்னஞ்சல்",
+    phone: "தொலைபேசி",
+    aadhar: "ஆதார்",
+    editProfile: "சுயவிவரத்தை திருத்து",
+    languages: "மொழிகள்",
+    cancel: "ரத்து செய்",
+    save: "சேமிக்க",
+    selectLanguage: "மொழியைத் தேர்ந்தெடுக்கவும்",
+    confirm: "உறுதி செய்",
+    general: "பொது",
+    firstName: "முதல் பெயர்",
+    lastName: "கடைசி பெயர்",
+    logOut: "வெளியேறு",
+  },
+  te: {
+    profile: "ప్రొఫైల్",
+    personalDetails: "వ్యక్తిగత వివరాలు",
+    name: "పేరు",
+    email: "ఇమెయిల్",
+    phone: "ఫోన్",
+    aadhar: "ఆధార్",
+    editProfile: "ప్రొఫైల్ సవరించండి",
+    languages: "భాషలు",
+    cancel: "రద్దు చేయండి",
+    save: "సేవ్ చేయండి",
+    selectLanguage: "భాషను ఎంచుకోండి",
+    confirm: "నిర్ధారించండి",
+    general: "సాధారణ",
+    firstName: "మొదటి పేరు",
+    lastName: "చివరి పేరు",
+    logOut: "లాగ్ అవుట్",
+  },
+  gu: {
+    profile: "પ્રોફાઇલ",
+    personalDetails: "વ્યક્તિગત વિગતો",
+    name: "નામ",
+    email: "ઇમેઇલ",
+    phone: "ફોન",
+    aadhar: "આધાર",
+    editProfile: "પ્રોફાઇલ સંપાદિત કરો",
+    languages: "ભાષાઓ",
+    cancel: "રદ કરો",
+    save: "સેવ કરો",
+    selectLanguage: "ભાષા પસંદ કરો",
+    confirm: "ખાતરી કરો",
+    general: "સામાન્ય",
+    firstName: "પ્રથમ નામ",
+    lastName: "છેલ્લું નામ",
+    logOut: "લૉગ આઉટ",
+  },
+  mr: {
+    profile: "प्रोफाइल",
+    personalDetails: "वैयक्तिक तपशील",
+    name: "नाव",
+    email: "ईमेल",
+    phone: "फोन",
+    aadhar: "आधार",
+    editProfile: "प्रोफाइल संपादित करा",
+    languages: "भाषा",
+    cancel: "रद्द करा",
+    save: "जतन करा",
+    selectLanguage: "भाषा निवडा",
+    confirm: "खात्री करा",
+    general: "सामान्य",
+    firstName: "पहिले नाव",
+    lastName: "आडनाव",
+    logOut: "बाहेर पडा",
+  },
+  ml: {
+    profile: "പ്രൊഫൈൽ",
+    personalDetails: "സ്വകാര്യ വിവരങ്ങൾ",
+    name: "പേര്",
+    email: "ഇമെയിൽ",
+    phone: "ഫോൺ",
+    aadhar: "ആധാർ",
+    editProfile: "പ്രൊഫൈൽ എഡിറ്റ് ചെയ്യുക",
+    languages: "ഭാഷകൾ",
+    cancel: "റദ്ദാക്കുക",
+    save: "സേവ് ചെയ്യുക",
+    selectLanguage: "ഭാഷ തിരഞ്ഞെടുക്കുക",
+    confirm: "സ്ഥിരീകരിക്കുക",
+    general: "പൊതുവായ",
+    firstName: "പ്രഥമ നാമം",
+    lastName: "അവസാന നാമം",
+    logOut: "ലോഗ് ഔട്ട്",
+  },
+  pa: {
+    profile: "ਪ੍ਰੋਫਾਈਲ",
+    personalDetails: "ਨਿੱਜੀ ਵੇਰਵੇ",
+    name: "ਨਾਂ",
+    email: "ਈਮੇਲ",
+    phone: "ਫ਼ੋਨ",
+    aadhar: "ਆਧਾਰ",
+    editProfile: "ਪ੍ਰੋਫਾਈਲ ਸੋਧੋ",
+    languages: "ਭਾਸ਼ਾਵਾਂ",
+    cancel: "ਰੱਦ ਕਰੋ",
+    save: "ਸੇਵ ਕਰੋ",
+    selectLanguage: "ਭਾਸ਼ਾ ਚੁਣੋ",
+    confirm: "ਪੁਸ਼ਟੀ ਕਰੋ",
+    general: "ਆਮ",
+    firstName: "ਪਹਿਲਾ ਨਾਂ",
+    lastName: "ਆਖਰੀ ਨਾਂ",
+    logOut: "ਲਾਗ ਆਉਟ",
+  },
+  bn: {
+    profile: "প্রোফাইল",
+    personalDetails: "ব্যক্তিগত বিবরণ",
+    name: "নাম",
+    email: "ইমেল",
+    phone: "ফোন",
+    aadhar: "আধার",
+    editProfile: "প্রোফাইল সম্পাদনা করুন",
+    languages: "ভাষাসমূহ",
+    cancel: "বাতিল",
+    save: "সংরক্ষণ করুন",
+    selectLanguage: "ভাষা নির্বাচন করুন",
+    confirm: "নিশ্চিত করুন",
+    general: "সাধারণ",
+    firstName: "প্রথম নাম",
+    lastName: "শেষ নাম",
+    logOut: "লগ আউট",
+  },
+  ru: {
+    profile: "ПРОФИЛЬ",
+    personalDetails: "ЛИЧНЫЕ ДАННЫЕ",
+    name: "Имя",
+    email: "Эл. почта",
+    phone: "Телефон",
+    aadhar: "Аадхар",
+    editProfile: "Редактировать профиль",
+    languages: "Языки",
+    cancel: "Отмена",
+    save: "Сохранить",
+    selectLanguage: "Выберите язык",
+    confirm: "Подтвердить",
+    general: "Общее",
+    firstName: "Имя",
+    lastName: "Фамилия",
+    logOut: "Выйти",
+  },
+  es: {
+    profile: "PERFIL",
+    personalDetails: "DETALLES PERSONALES",
+    name: "Nombre",
+    email: "Correo electrónico",
+    phone: "Teléfono",
+    aadhar: "Aadhar",
+    editProfile: "Editar perfil",
+    languages: "Idiomas",
+    cancel: "Cancelar",
+    save: "Guardar",
+    selectLanguage: "Seleccionar idioma",
+    confirm: "Confirmar",
+    general: "General",
+    firstName: "Nombre",
+    lastName: "Apellido",
+    logOut: "Cerrar sesión",
+  },
+  zh: {
+    profile: "个人资料",
+    personalDetails: "个人详情",
+    name: "姓名",
+    email: "电子邮件",
+    phone: "电话",
+    aadhar: "阿达尔",
+    editProfile: "编辑资料",
+    languages: "语言",
+    cancel: "取消",
+    save: "保存",
+    selectLanguage: "选择语言",
+    confirm: "确认",
+    general: "常规",
+    firstName: "名",
+    lastName: "姓",
+    logOut: "登出",
+  },
+  mn: {
+    profile: "Профайл",
+    personalDetails: "Хувийн мэдээлэл",
+    name: "Нэр",
+    email: "Имэйл",
+    phone: "Утас",
+    aadhar: "Аадхар",
+    editProfile: "Профайл засах",
+    languages: "Хэлүүд",
+    cancel: "Цуцлах",
+    save: "Хадгалах",
+    selectLanguage: "Хэлийг сонгох",
+    confirm: "Баталгаажуулах",
+    general: "Ерөнхий",
+    firstName: "Нэр",
+    lastName: "Овог",
+    logOut: "Гарах",
+  },
+  pl: {
+    profile: "PROFIL",
+    personalDetails: "DANE OSOBOWE",
+    name: "Imię",
+    email: "Email",
+    phone: "Telefon",
+    aadhar: "Aadhar",
+    editProfile: "Edytuj profil",
+    languages: "Języki",
+    cancel: "Anuluj",
+    save: "Zapisz",
+    selectLanguage: "Wybierz język",
+    confirm: "Potwierdź",
+    general: "Ogólne",
+    firstName: "Imię",
+    lastName: "Nazwisko",
+    logOut: "Wyloguj się",
+  },
+  bg: {
+    profile: "ПРОФИЛ",
+    personalDetails: "ЛИЧНИ ДАННИ",
+    name: "Име",
+    email: "Имейл",
+    phone: "Телефон",
+    aadhar: "Аадхар",
+    editProfile: "Редактиране на профил",
+    languages: "Езици",
+    cancel: "Отказ",
+    save: "Запази",
+    selectLanguage: "Изберете език",
+    confirm: "Потвърди",
+    general: "Общо",
+    firstName: "Първо име",
+    lastName: "Фамилия",
+    logOut: "Изход",
+  },
+  fr: {
+    profile: "PROFIL",
+    personalDetails: "DÉTAILS PERSONNELS",
+    name: "Nom",
+    email: "Email",
+    phone: "Téléphone",
+    aadhar: "Aadhar",
+    editProfile: "Modifier le profil",
+    languages: "Langues",
+    cancel: "Annuler",
+    save: "Enregistrer",
+    selectLanguage: "Choisir la langue",
+    confirm: "Confirmer",
+    general: "Général",
+    firstName: "Prénom",
+    lastName: "Nom de famille",
+    logOut: "Déconnexion",
+  },
+  de: {
+    profile: "PROFIL",
+    personalDetails: "PERSÖNLICHE DETAILS",
+    name: "Name",
+    email: "E-Mail",
+    phone: "Telefon",
+    aadhar: "Aadhar",
+    editProfile: "Profil bearbeiten",
+    languages: "Sprachen",
+    cancel: "Abbrechen",
+    save: "Speichern",
+    selectLanguage: "Sprache auswählen",
+    confirm: "Bestätigen",
+    general: "Allgemein",
+    firstName: "Vorname",
+    lastName: "Nachname",
+    logOut: "Abmelden",
+  },
+  nl: {
+    profile: "PROFIEL",
+    personalDetails: "PERSOONLIJKE GEGEVENS",
+    name: "Naam",
+    email: "E-mail",
+    phone: "Telefoon",
+    aadhar: "Aadhar",
+    editProfile: "Profiel bewerken",
+    languages: "Talen",
+    cancel: "Annuleren",
+    save: "Opslaan",
+    selectLanguage: "Selecteer taal",
+    confirm: "Bevestigen",
+    general: "Algemeen",
+    firstName: "Voornaam",
+    lastName: "Achternaam",
+    logOut: "Uitloggen",
+  },
+  it: {
+    profile: "PROFILO",
+    personalDetails: "DETTAGLI PERSONALI",
+    name: "Nome",
+    email: "Email",
+    phone: "Telefono",
+    aadhar: "Aadhar",
+    editProfile: "Modifica profilo",
+    languages: "Lingue",
+    cancel: "Annulla",
+    save: "Salva",
+    selectLanguage: "Seleziona lingua",
+    confirm: "Conferma",
+    general: "Generale",
+    firstName: "Nome",
+    lastName: "Cognome",
+    logOut: "Disconnettersi",
+  },
+  pt: {
+    profile: "PERFIL",
+    personalDetails: "DETALHES PESSOAIS",
+    name: "Nome",
+    email: "Email",
+    phone: "Telefone",
+    aadhar: "Aadhar",
+    editProfile: "Editar perfil",
+    languages: "Idiomas",
+    cancel: "Cancelar",
+    save: "Salvar",
+    selectLanguage: "Selecionar idioma",
+    confirm: "Confirmar",
+    general: "Geral",
+    firstName: "Primeiro nome",
+    lastName: "Último nome",
+    logOut: "Sair",
+  },
+  ja: {
+    profile: "プロフィール",
+    personalDetails: "個人情報",
+    name: "名前",
+    email: "メール",
+    phone: "電話",
+    aadhar: "アーダール",
+    editProfile: "プロフィールを編集",
+    languages: "言語",
+    cancel: "キャンセル",
+    save: "保存",
+    selectLanguage: "言語を選択",
+    confirm: "確認",
+    general: "一般",
+    firstName: "名",
+    lastName: "姓",
+    logOut: "ログアウト",
+  },
+};
+
+
+  function handleLogout() {
+    const userId = localStorage.getItem("userId"); // Make sure you're saving the device token in localStorage after login or FCM registration
+    localStorage.clear();
+
+    axios
+      .patch(logout, { userId })
+      .then((response) => {
+        console.log(response, "response");
+      })
+      .catch((error) => {
+        console.log("Logout API error:", error.response?.data || error.message);
+      });
+    // =====
+
+    navigate("/login");
+  }
+
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      try {
+        setIsLoading(true);
+        const response = await axios.get(`${getUser}/${userId}`);
+        setUserDetails(response.data.data);
+        // Initialize form data with current user details
+        setFormData({
+          firstName: response.data.data.first_name || "",
+          lastName: response.data.data.last_name || "",
+          aadhar: response.data.data.aadhar || "",
+        });
+      } catch (err) {
+        setError("Failed to fetch user details");
+        console.error("Error fetching user details:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchUserDetails();
+  }, [userId]);
 
   const handleConfirm = () => {
     if (language) {
-      console.log(language, "language");
-
       localStorage.setItem("language", language);
-      setLanguage(language);
       setShowDropdown(false);
-    } else {
-      alert("Please select a language!");
     }
   };
 
   const openEditModal = () => setEditCard(true);
   const closeEditModal = () => setEditCard(false);
-  const saveEditedDetails = () => {
-    localStorage.setItem("username", name.trim());
-    localStorage.setItem("phone", phone.trim());
-    localStorage.setItem("aadhar", aadhar.trim());
-    setEditCard(false);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
-  // Type guard to ensure the language key exists in translations
-  const getTranslation = (key: keyof Translations["en"]) => {
-    if (language in translations) {
-      return translations[language][key];
+  const saveEditedDetails = async () => {
+    try {
+      const response = await axios.patch(`${updateUser}/${userId}`, {
+        first_name: formData.firstName, // changed from firstName to first_name
+        last_name: formData.lastName, // changed from lastName to last_name
+        aadhar: formData.aadhar,
+      });
+
+      console.log("🚀 ~ saveEditedDetails ~ response:", response);
+
+      // Update local user details
+      if (userDetails) {
+        setUserDetails({
+          ...userDetails,
+          first_name: formData.firstName,
+          last_name: formData.lastName,
+          aadhar: formData.aadhar,
+        });
+      }
+
+      setEditCard(false);
+    } catch (error) {
+      console.error("❌ Error updating user:", error);
+      setError("Failed to update user details");
     }
-    return translations["en"][key]; // fallback to English
   };
 
-  // useEffect(() => {
-  //   const savedLang = localStorage.getItem("language");
-  //   if (savedLang) setLanguage(savedLang);
-  // }, []);
+  const getTranslation = (key: keyof Translations["en"]): string => {
+    return translations[language]?.[key] || translations["en"][key];
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-[70vh]">
+        Loading...
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex justify-center items-center h-[70vh] text-red-500">
+        {error}
+      </div>
+    );
+  }
+
+  if (!userDetails) {
+    return (
+      <div className="flex justify-center items-center h-[70vh]">
+        No user data available
+      </div>
+    );
+  }
 
   return (
     <div className="h-auto md:min-h-[70vh] px-4 py-8">
@@ -431,44 +607,35 @@ function Profile() {
       {editCard && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="flex flex-col gap-4 bg-white p-6 rounded-lg shadow-lg w-[90%] max-w-2xl relative font-poppins">
-            <h3
-              className="pl-2 text-lg font-semibold font-poppins "
-              style={{ borderLeft: "5px solid black" }}
-            >
+            <h3 className="pl-2 text-lg font-semibold border-l-4 border-black">
               {getTranslation("personalDetails")}
             </h3>
 
-            {/* Input Fields */}
             <input
-              className="py-2 px-4 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 font-poppins "
+              className="py-2 px-4 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
               type="text"
-              placeholder={getTranslation("name")}
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              name="firstName"
+              placeholder={getTranslation("firstName")}
+              value={formData.firstName}
+              onChange={handleInputChange}
             />
-            {/* <input
-              className="py-2 px-4 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
-              type="text"
-              placeholder={getTranslation("email")}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            /> */}
-            {/* <input
-              className="py-2 px-4 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
-              type="number"
-              placeholder={getTranslation("phone")}
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-            /> */}
             <input
               className="py-2 px-4 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
               type="text"
+              name="lastName"
+              placeholder={getTranslation("lastName")}
+              value={formData.lastName}
+              onChange={handleInputChange}
+            />
+            <input
+              className="py-2 px-4 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              type="text"
+              name="aadhar"
               placeholder={getTranslation("aadhar")}
-              value={aadhar}
-              onChange={(e) => setAadhar(e.target.value)}
+              value={formData.aadhar}
+              onChange={handleInputChange}
             />
 
-            {/* Buttons */}
             <div className="flex justify-end gap-4 mt-6">
               <button
                 className="bg-red-500 hover:bg-red-600 px-6 py-2 rounded-full text-white transition"
@@ -493,59 +660,57 @@ function Profile() {
       </h2>
 
       <div className="bg-white rounded-lg p-4 max-w-3xl mx-auto mb-4">
-        <h3
-          className="pl-2 text-lg font-semibold"
-          style={{ borderLeft: "5px solid black" }}
-        >
+        <h3 className="pl-2 text-lg font-semibold border-l-4 border-black">
           {getTranslation("personalDetails")}
         </h3>
 
         <ul className="mt-4 space-y-4">
           <li className="flex items-center py-2 border-b border-gray-300">
             <PersonOutlineIcon className="mr-2" /> {getTranslation("name")}:{" "}
-            {name}
+            {userDetails.first_name} {userDetails.last_name}
           </li>
+
           <li className="flex items-center py-2 border-b border-gray-300">
             <MailOutlineIcon className="mr-2" /> {getTranslation("email")}:{" "}
-            {email}
+            {userDetails.email}
           </li>
           <li className="flex items-center py-2 border-b border-gray-300">
             <MobileFriendlyIcon className="mr-2" /> {getTranslation("phone")}:{" "}
-            {phone}
+            {userDetails.phone}
           </li>
           <li className="flex items-center py-2">
             <CardMembershipIcon className="mr-2" /> {getTranslation("aadhar")}:{" "}
-            {aadhar}
+            {userDetails.aadhar}
           </li>
         </ul>
       </div>
 
       {/* General Section */}
       <div className="bg-white rounded-lg p-4 max-w-3xl mx-auto">
-        <h3
-          className="pl-2 text-lg font-semibold"
-          style={{ borderLeft: "5px solid black" }}
-        >
+        <h3 className="pl-2 text-lg font-semibold border-l-4 border-black">
           {getTranslation("general")}
         </h3>
 
         <ul className="mt-4 space-y-4">
           <li className="flex items-center py-2 border-b border-gray-300">
-            <button onClick={openEditModal} className="flex items-center">
+            <button
+              onClick={openEditModal}
+              className="flex items-center hover:text-blue-500 transition"
+            >
               <EditIcon className="mr-2" /> {getTranslation("editProfile")}
             </button>
           </li>
-          <li className="relative list-none">
+          <li className=" relative list-none py-2 border-b border-gray-300">
             <button
               onClick={() => setShowDropdown(true)}
-              className="flex items-center"
+              className="flex items-center hover:text-blue-500 transition"
             >
               <GTranslateIcon className="mr-2" /> {getTranslation("languages")}
             </button>
 
             {showDropdown && (
               <div
-                className="fixed top-0 left-0 h-screen w-screen bg-black/50 flex items-center justify-center z-50"
+                className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
                 onClick={() => setShowDropdown(false)}
               >
                 <div
@@ -555,7 +720,7 @@ function Profile() {
                   <h2 className="text-2xl font-semibold mb-6">
                     {getTranslation("selectLanguage")}
                   </h2>
-                  <ul className="space-y-4 text-left h-[15rem] overflow-y-scroll">
+                  <ul className="space-y-4 text-left h-[15rem] overflow-y-auto">
                     {languages.map((lang) => (
                       <li
                         key={lang.code}
@@ -578,7 +743,7 @@ function Profile() {
                   </ul>
                   <button
                     onClick={handleConfirm}
-                    className="mt-6 w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded"
+                    className="mt-6 w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded transition"
                   >
                     {getTranslation("confirm")}
                   </button>
@@ -586,10 +751,15 @@ function Profile() {
               </div>
             )}
           </li>
+          <li className="flex items-center py-2 ">
+            <button onClick={handleLogout} className="flex items-center ">
+              <LogoutIcon className="mr-2" /> {getTranslation("logOut")}
+            </button>
+          </li>
         </ul>
       </div>
     </div>
   );
-}
+};
 
 export default Profile;

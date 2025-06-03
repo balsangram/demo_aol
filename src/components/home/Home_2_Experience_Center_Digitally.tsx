@@ -266,7 +266,12 @@ function Home_2_Experience_Center_Digitally() {
         </div>
       ) : (
         <div className="text-center px-4">
-          <h2 className="text-[24px] sm:text-3xl font-bold font-[Cinzel] mb-12">
+          <h2
+            className="text-[24px] sm:text-3xl font-bold font-[Cinzel] "
+            style={{
+              lineHeight: "2rem",
+            }}
+          >
             {translations[selectedLanguage] || translations["en"]}
           </h2>
 

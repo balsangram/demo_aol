@@ -1,4 +1,4 @@
-// src/components/Home_1_TopCards.tsx
+// src/components/StaticFavourite.tsx
 import React, { useState, useEffect } from "react";
 import { useLanguage } from "../../context/LanguageContext";
 import img1 from "../../assets/images/guruji1.jpg";
@@ -139,8 +139,9 @@ const items: Item[] = [
 ];
 
 const FAVORITES_STORAGE_KEY = "favoriteCards";
+// ... (keep all your existing imports)
 
-const Home_1_TopCards: React.FC = () => {
+const StaticFavourite: React.FC = () => {
   const { language } = useLanguage();
   const [loading, setLoading] = useState<boolean>(true);
   const [favorites, setFavorites] = useState<{ [key: number]: boolean }>({});
@@ -182,11 +183,14 @@ const Home_1_TopCards: React.FC = () => {
     console.log(`Card clicked: ${title}`);
   };
 
+  // Filter items to only show favorites
+  const favoriteItems = items.filter((_, index) => favorites[index]);
+
   return (
-    <div className="px-4 pt-10 lg:pt-0">
-      <div className="flex flex-wrap justify-center gap-6">
-        {loading ? (
-          items.map((_, index) => (
+    <div className="px-4 pt-10 lg:pt-0 mt-10">
+      {loading ? (
+        <div className="flex flex-wrap justify-center gap-6">
+          {items.map((_, index) => (
             <div
               key={index}
               className="flex flex-col items-center justify-center p-4 bg-white/50 rounded-2xl w-[140px] h-[140px] sm:w-[200px] sm:h-[200px] md:w-[240px] md:h-[240px]"
@@ -202,64 +206,67 @@ const Home_1_TopCards: React.FC = () => {
                 />
               </div>
             </div>
-          ))
-        ) : (
-          <div className="flex flex-wrap justify-center gap-6 pb-12 m-auto">
-            {items.map((item, index) => {
-              const name = item.Contents[language] || item.Contents.en;
-              const maxChar = 15;
+          ))}
+        </div>
+      ) : (
+        <>
+          {favoriteItems.length === 0 ? (
+            <div className="text-center py-10">
+              <p className="text-gray-500">No favorites selected yet</p>
+            </div>
+          ) : (
+            <div className="flex flex-wrap justify-center gap-6 pb-12 m-auto">
+              {favoriteItems.map((item, originalIndex) => {
+                // Find the original index since we filtered the array
+                const originalItemIndex = items.findIndex(
+                  (i) => i.Contents.en === item.Contents.en
+                );
+                const name = item.Contents[language] || item.Contents.en;
+                const maxChar = 15;
 
-              return (
-                <div
-                  key={index}
-                  className="flex sm:p-10 p-2 bg-[#ffffff7e] text-[#06202B] 
-                            hover:font-bold hover:scale-105 hover:px-8 
-                            flex-col cursor-pointer min-w-6 h-[140px] 
-                            w-[140px] sm:w-[15rem] sm:h-[15rem] 
-                            md:rounded-[4px] rounded-[16px] transition-all duration-500 ease-in-out"
-                  onClick={() => {
-                    handleClick(item.Links);
-                    logCardClick(name);
-                  }}
-                >
-                  <div className="flex flex-row-reverse">
-                    {favorites[index] ? (
+                return (
+                  <div
+                    key={originalItemIndex}
+                    className="flex sm:p-10 p-2 bg-[#ffffff7e] text-[#06202B] 
+                              hover:font-bold hover:scale-105 hover:px-8
+                              flex-col cursor-pointer min-w-6 h-[140px] 
+                              w-[140px] sm:w-[15rem] sm:h-[15rem] 
+                              md:rounded-[4px] rounded-[16px] transition-all duration-500 ease-in-out "
+                    onClick={() => {
+                      handleClick(item.Links);
+                      logCardClick(name);
+                    }}
+                  >
+                    <div className="flex flex-row-reverse">
                       <FavoriteIcon
                         className="text-red-500"
                         onClick={(e) => {
                           e.stopPropagation();
-                          toggleFavorite(index);
+                          toggleFavorite(originalItemIndex);
                         }}
                       />
-                    ) : (
-                      <FavoriteBorderIcon
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          toggleFavorite(index);
-                        }}
-                      />
-                    )}
+                    </div>
+
+                    <img
+                      src={item.img}
+                      alt={name}
+                      className="h-20 w-20 mx-auto rounded-full"
+                    />
+
+                    <p className="text-center m-auto text-[14px] sm:text-[16px] sm:mt-4 mt-1 flex justify-center items-center font-bold h-[1rem]">
+                      {name.length > maxChar
+                        ? name.slice(0, maxChar) + "..."
+                        : name}
+                    </p>
                   </div>
-
-                  <img
-                    src={item.img}
-                    alt={name}
-                    className="h-20 w-20 mx-auto rounded-full"
-                  />
-
-                  <p className="text-center m-auto text-[14px] sm:text-[16px] sm:mt-4 mt-1 flex justify-center items-center font-bold h-[1rem]">
-                    {name.length > maxChar
-                      ? name.slice(0, maxChar) + "..."
-                      : name}
-                  </p>
-                </div>
-              );
-            })}
-          </div>
-        )}
-      </div>
+                );
+              })}
+            </div>
+          )}
+        </>
+      )}
     </div>
   );
 };
 
-export default Home_1_TopCards;
+export default StaticFavourite;

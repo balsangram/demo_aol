@@ -69,6 +69,8 @@ const Home_6_Peace_Of_Mind: React.FC = () => {
         const response = await axios.get<{ links: YouTubeVideo[] }>(
           youtubeLink
         );
+        console.log(response, "response");
+
         setSriVideos(response.data.links);
       } catch (error) {
         console.error("Error fetching YouTube videos:", error);

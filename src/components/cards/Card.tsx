@@ -84,8 +84,8 @@ const Card: React.FC<CardProps> = ({
   return (
     <>
       <div
-        className="flex sm:p-10 p-2 bg-[#ffffff7e] text-[#06202B] 
-                   hover:font-bold hover:scale-105 hover:px-2 
+        className="flex sm:p-10 p-2 bg-[#ffffff7e] text-[#06202B] hover:px-8
+                   hover:font-bold hover:scale-105 
                    flex-col cursor-pointer min-w-6 h-[140px] 
                    w-[140px] sm:w-[15rem] sm:h-[15rem] 
                    md:rounded-[4px] rounded-[16px] transition-all duration-500 ease-in-out"
@@ -107,7 +107,7 @@ const Card: React.FC<CardProps> = ({
 
         <img src={img} alt={name} className="h-20 w-20 mx-auto rounded-full" />
 
-        <p className="text-center m-auto text-[14px] sm:text-[16px] sm:mt-4 mt-1 flex justify-center items-center font-bold h-[1rem]">
+        <p className="text-center m-auto text-[14px] sm:text-[16px] sm:mt-4 flex justify-center items-center font-bold h-[1rem]">
           {name.length > maxChar ? name.slice(0, maxChar) + "..." : name}
         </p>
       </div>

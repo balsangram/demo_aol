@@ -131,7 +131,7 @@ const Home_4_Stay_Updated: React.FC = () => {
         </div>
       ) : (
         <div className="text-center px-4">
-          <h2 className="text-2xl sm:text-3xl font-bold font-cinzel mb-12">
+          <h2 className="text-2xl sm:text-3xl font-bold font-cinzel ">
             {stayUpdatedTranslations[language] || stayUpdatedTranslations.en}
           </h2>
           <div className="flex flex-wrap justify-center gap-3 py-12">

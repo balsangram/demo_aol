@@ -7,6 +7,9 @@ const API_URL = import.meta.env.VITE_API_URL;
 // user login 
 
 export const LoginUser = `${API_URL}/aol/userLogin`;
+export const getUser = `${API_URL}/aol/getdetails`;
+export const updateUser = `${API_URL}/aol/updateUserDetails`;
+
 
 export const otpCheck = `${API_URL}/aol/OTPCheck`;
 

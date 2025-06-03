@@ -195,14 +195,15 @@ const Sidebar = () => {
 
   function handleLogout() {
     const userId = localStorage.getItem("userId"); // Make sure you're saving the device token in localStorage after login or FCM registration
+    localStorage.clear();
 
-    localStorage.removeItem("userId");
-    localStorage.removeItem("email");
-    localStorage.removeItem("username");
-    localStorage.removeItem("userLoggedIn");
-    localStorage.removeItem("phone");
-    localStorage.removeItem("aadhar");
-    localStorage.removeItem("aolfcmToken"); // remove token from localStorage
+    // localStorage.removeItem("userId");
+    // localStorage.removeItem("email");
+    // localStorage.removeItem("username");
+    // localStorage.removeItem("userLoggedIn");
+    // localStorage.removeItem("phone");
+    // localStorage.removeItem("aadhar");
+    // localStorage.removeItem("aolfcmToken"); // remove token from localStorage
     //  clearToken();
     // console.log("Logged out successfully");
     // console.log(token, "token");
@@ -322,14 +323,14 @@ const Sidebar = () => {
                   </li>
                 </ul>
               </li>
-              <div className="flex justify-center py-2 h-[50vh]">
+              {/* <div className="flex justify-center py-2 h-[50vh]">
                 <button
                   className="bg-[#A7E6F8] hover:bg-[#88def5] px-6 rounded-lg py-3 font-bold font-poppins absolute bottom-0"
                   onClick={handleLogout}
                 >
                   {t("Log Out")}
                 </button>
-              </div>
+              </div> */}
             </ul>
           </PerfectScrollbar>
         </div>
