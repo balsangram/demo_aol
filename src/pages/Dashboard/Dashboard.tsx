@@ -64,49 +64,48 @@ const sampleDataGraph = [
 ];
 
 const data = [
-    { label: 'NEW FINT USERS', value: 710, icon: <UserPlus />, iconBgColor: 'bg-blue-600' },
-    { label: 'FINT USERS', value: 915, icon: <Users />, iconBgColor: 'bg-green-600' },
-    { label: 'VENTURES USERS', value: 580, icon: <Building2 />, iconBgColor: 'bg-yellow-500' },
+    { label: 'NEW FINT USERS', value: 710, icon: <UserPlus />, iconBgColor: 'bg-orange-400' },
+    { label: 'FINT USERS', value: 915, icon: <Users />, iconBgColor: 'bg-blue-600' },
+    { label: 'VENTURES USERS', value: 580, icon: <Building2 />, iconBgColor: 'bg-green-500' },
 ];
 
 const insuranceData = [
-  {
-    id: 1,
-    clientName: 'ABC Corp',
-    patientName: 'John Doe',
-    petName: 'Buddy',
-    insuranceType: 'Health',
-  },
-  {
-    id: 2,
-    clientName: 'XYZ Ltd',
-    patientName: 'Jane Smith',
-    petName: 'Whiskers',
-    insuranceType: 'Life',
-  },
-  {
-    id: 3,
-    clientName: 'XYZ Ltd',
-    patientName: 'Jane Smith',
-    petName: 'Coco',
-    insuranceType: 'Life',
-  },
-  {
-    id: 4,
-    clientName: 'XYZ Ltd',
-    patientName: 'Jane Smith',
-    petName: 'Simba',
-    insuranceType: 'Life',
-  },
-  {
-    id: 5,
-    clientName: 'XYZ Ltd',
-    patientName: 'Jane Smith',
-    petName: 'Luna',
-    insuranceType: 'Life',
-  },
+    {
+        id: 1,
+        clientName: 'ABC Corp',
+        patientName: 'John Doe',
+        petName: 'Buddy',
+        insuranceType: 'Health',
+    },
+    {
+        id: 2,
+        clientName: 'XYZ Ltd',
+        patientName: 'Jane Smith',
+        petName: 'Whiskers',
+        insuranceType: 'Life',
+    },
+    {
+        id: 3,
+        clientName: 'XYZ Ltd',
+        patientName: 'Jane Smith',
+        petName: 'Coco',
+        insuranceType: 'Life',
+    },
+    {
+        id: 4,
+        clientName: 'XYZ Ltd',
+        patientName: 'Jane Smith',
+        petName: 'Simba',
+        insuranceType: 'Life',
+    },
+    {
+        id: 5,
+        clientName: 'XYZ Ltd',
+        patientName: 'Jane Smith',
+        petName: 'Luna',
+        insuranceType: 'Life',
+    },
 ];
-
 
 const Dashboard: React.FC = () => {
     const [requests, setRequests] = useState<BloodRequest[]>([
