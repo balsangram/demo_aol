@@ -3,6 +3,7 @@
   "name": "VRISTO - Multipurpose Tailwind Dashboard Template",
   "icons": [
     {
+<<<<<<< HEAD
       "src": "favicon.ico",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
@@ -16,6 +17,9 @@
       "src": "logo512.png",
       "type": "image/png",
       "sizes": "512x512"
+=======
+      
+>>>>>>> 6a0b4c9e69ef0c92143a74e5066c1bbee222661c
     }
   ],
   "start_url": ".",

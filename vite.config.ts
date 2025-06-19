@@ -11,6 +11,7 @@ export default defineConfig({
         },
     },
 });
+<<<<<<< HEAD
 
 
 // import { defineConfig } from 'vite';
@@ -25,3 +26,5 @@ export default defineConfig({
 //     },
 //   },
 // });
+=======
+>>>>>>> 6a0b4c9e69ef0c92143a74e5066c1bbee222661c
